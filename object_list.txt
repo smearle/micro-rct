@@ -1,1 +1,5 @@
-BobsleighCoaster, (5,5),
+BobsleighCoaster,0,0,50,30,10,0,45,20,10,10
+CorkscrewRollerCoaster,0,0,50,30,10,0,50,20,10,10
+JuniorRollerCoaster,0,0,50,30,10,0,40,20,10,10
+ReverserRollerCoaster,0,0,48,28,7,0,37,20,10,10
+WoodenRollerCoaster,0,0,52,33,8,0,50,20,10,10
