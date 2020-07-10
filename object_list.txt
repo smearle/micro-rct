@@ -1,4 +1,4 @@
-#thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y
+#name,thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y
 #coster
 BobsleighCoaster,		0,0,50,30,10,0,45,20,10,10
 CorkscrewRollerCoaster,	0,0,50,30,10,0,50,20,10,10
