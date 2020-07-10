@@ -30,7 +30,7 @@ class Ride_and_Store:
 	@classmethod
 	def alt_init(cls,arr):
 		name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y = arr
-		tmp = cls(name,thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y)
+		tmp = cls(name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y)
 		return tmp
 
 		
@@ -38,7 +38,7 @@ class Ride_and_Store:
 		return "object: {}".format(self.name)
 	def __str__(self):
 		rtn = "id: {}\nsize: {}\tbuilding cost: {}\n".format(self.name,self.size,self.building_cost)
-		rtn += "excitement: {}\tintensity: {}\tnausea: {}\tthirst: {}\thunger: {}\ttoilet: {}\n".format(self.excitement,self.intensity,self.nausea,self.thirst,self.hunger,self.toilet)
+		rtn += "excitement: {}\tintensity: {}\tnausea: {}\nthirst: {}\thunger: {}\ttoilet: {}\n".format(self.excitement,self.intensity,self.nausea,self.thirst,self.hunger,self.toilet)
 		# rtn += "peep react: {}\n".format(self.peepReact)
 		rtn += "consume time: {}\tposition: {}\n".format(self.consume_time,self.position)
 		return rtn
