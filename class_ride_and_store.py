@@ -8,7 +8,7 @@
 # 		self.energy = arr[5]
 
 class Ride_and_Store:
-	def __init__(self,name,thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
+	def __init__(self,name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
 		self.name = name
 		self.size = (size_x,size_y)
 		self.consume_time = time*size_y*size_x
@@ -19,6 +19,7 @@ class Ride_and_Store:
 		self.intensity = intensity
 		self.nausea = nausea
 		self.thirst = thirst
+		self.toilet = toilet
 		self.hunger = hunger
 		self.queue = []		#queue is not implement yet
 		
@@ -28,7 +29,7 @@ class Ride_and_Store:
 		
 	@classmethod
 	def alt_init(cls,arr):
-		name,thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y = arr
+		name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y = arr
 		tmp = cls(name,thirst,hunger,excitement,intensity,nausea,time,cost,price,size_x,size_y)
 		return tmp
 
@@ -37,7 +38,7 @@ class Ride_and_Store:
 		return "object: {}".format(self.name)
 	def __str__(self):
 		rtn = "id: {}\nsize: {}\tbuilding cost: {}\n".format(self.name,self.size,self.building_cost)
-		rtn += "excitement: {}\tintensity: {}\tnausea: {}\tthirst: {}\thunger: {}\n".format(self.excitement,self.intensity,self.nausea,self.thirst,self.hunger)
+		rtn += "excitement: {}\tintensity: {}\tnausea: {}\tthirst: {}\thunger: {}\ttoilet: {}\n".format(self.excitement,self.intensity,self.nausea,self.thirst,self.hunger,self.toilet)
 		# rtn += "peep react: {}\n".format(self.peepReact)
 		rtn += "consume time: {}\tposition: {}\n".format(self.consume_time,self.position)
 		return rtn
