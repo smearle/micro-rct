@@ -1,12 +1,3 @@
-# class PeepStatus:
-# 	def __init__(self,arr):
-# 		self.thirst = arr[0]
-# 		self.hunger = arr[1]
-# 		self.nausea = arr[2]
-# 		self.happiness = arr[3]
-# 		self.angeriness = arr[4]
-# 		self.energy = arr[5]
-
 class Ride_and_Store:
 	def __init__(self,name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
 		self.name = name
@@ -22,10 +13,6 @@ class Ride_and_Store:
 		self.toilet = toilet
 		self.hunger = hunger
 		self.queue = []		#queue is not implement yet
-		
-		#happiness: this is temperay measure
-		# happiness = nausea*0.5+intensity*0.5
-		# self.peepReact = PeepStatus([thirst,hunger,nausea,happiness,0,0]) #peep status object
 		
 	@classmethod
 	def alt_init(cls,arr):
