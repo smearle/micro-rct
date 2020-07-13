@@ -1,20 +1,30 @@
 import class_ride_and_store as RS
-class Peeps(self):
-    def __init__(self,intensity, nauseaTolerance):
-        self.intensity = intensity
-        self.happiness = 0
-        self.happinessTarget = 0
+class Peeps:
+    def __init__(self):
+        self.intensity = [random.randint(8,15),random.randrange(0,7)]
+        self.happiness = 128
+        self.happinessTarget = 128
         self.nausea = 0
         self.nauseaTarget = 0
-        self.hunger = 0
-        self.nauseaTolerance = nauseaTolerance
-        self.thirst = thirst
+        self.hunger = random.randint(0,255)
+        self.nauseaTolerance = distributeTolerance()
+        self.thirst = random.randint(0,255)
+        self.angriness = 0
         self.toilet = 0
         self.timeToConsume = 0
-        self.cash = 500
-        self.energy = 0
-        self.energyTarget = 0
+        self.cash = random.randint(400,600)
+        self.energy = random.randint(65,128)
+        self.energyTarget = self.energy
+        self.timeInPark = -1
+        self.headingTo = (None,None)
+        self.hasMap = False
 
-
-
-    def __str__(self):
+    def distributeTolerance():
+        tolerance = random.randint(0,11)
+        if tolerance > 0 and tolerance <= 2:
+            tolerance = 1
+        elif tolerance > 2 and tolerance <=5:
+            tolerance =2
+        else:
+            tolerance = 3 
+        return tolerance
