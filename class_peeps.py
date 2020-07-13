@@ -1,3 +1,4 @@
+import random
 import class_ride_and_store as RS
 class Peeps:
     def __init__(self):
@@ -7,7 +8,7 @@ class Peeps:
         self.nausea = 0
         self.nauseaTarget = 0
         self.hunger = random.randint(0,255)
-        self.nauseaTolerance = distributeTolerance()
+        self.nauseaTolerance = self.distributeTolerance()
         self.thirst = random.randint(0,255)
         self.angriness = 0
         self.toilet = 0
@@ -19,7 +20,7 @@ class Peeps:
         self.headingTo = (None,None)
         self.hasMap = False
 
-    def distributeTolerance():
+    def distributeTolerance(self):
         tolerance = random.randint(0,11)
         if tolerance > 0 and tolerance <= 2:
             tolerance = 1
