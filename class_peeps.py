@@ -1,7 +1,8 @@
 import random
 import class_ride_and_store as RS
 class Peeps:
-    def __init__(self):
+    def __init__(self,name,posX=None,posY=None):
+        self.id = name
         self.intensity = [random.randint(8,15),random.randrange(0,7)]
         self.happiness = 128
         self.happinessTarget = 128
@@ -17,8 +18,10 @@ class Peeps:
         self.energy = random.randint(65,128)
         self.energyTarget = self.energy
         self.timeInPark = -1
-        self.headingTo = (None,None)
+        self.headingTo = (posX,posY)
         self.hasMap = False
+    
+    # def updateHappiness(self,intensity,nausea):
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)

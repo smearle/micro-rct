@@ -12,7 +12,7 @@ try:
 			arr = line.replace("\t", "").split(",")
 			arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr))]
 			newObj = RS.alt_init(arr)
-			print(newObj)
+			# print(newObj)
 			object_list[arr[0]] = newObj
 finally:
 	fp.close()
