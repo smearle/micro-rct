@@ -1,5 +1,5 @@
 import random
-import class_ride_and_store as RS
+from class_ride_and_store import Ride_and_Store as RS
 
 maxValue = 255
 class Peeps:
@@ -76,6 +76,9 @@ class Peeps:
                 self.happinessTarget = min(self.happinessTarget-50,maxValue)
             else:
                 self.happinessTarget = min(self.happinessTarget-60,maxValue)
+    
+    def findClosetRide():
+
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
