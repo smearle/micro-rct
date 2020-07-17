@@ -1,5 +1,7 @@
 import random
 import class_ride_and_store as RS
+
+maxValue = 255
 class Peeps:
     def __init__(self,name,posX=None,posY=None):
         self.id = name
@@ -8,9 +10,9 @@ class Peeps:
         self.happinessTarget = 128
         self.nausea = 0
         self.nauseaTarget = 0
-        self.hunger = random.randint(0,255)
+        self.hunger = random.randint(0,maxValue)
         self.nauseaTolerance = self.distributeTolerance()
-        self.thirst = random.randint(0,255)
+        self.thirst = random.randint(0,maxValue)
         self.angriness = 0
         self.toilet = 0
         self.timeToConsume = 0
@@ -21,7 +23,56 @@ class Peeps:
         self.headingTo = (posX,posY)
         self.hasMap = False
     
-    # def updateHappiness(self,intensity,nausea):
+    def happinessUpdate(self,r_intensity,r_nausea):
+        intensitySatisfaction = nauseaSatisfaction = 3
+        maxIntensity = self.intensity[0]*100
+        minIntensity = self.intensity[1]*100
+        if minIntensity <= r_intensity and maxIntensity >= r_intensity:
+            intensitySatisfaction -= 1
+        minIntensity -= self.happiness * 2
+        maxIntensity += self.happiness
+        if self.nauseaTolerance == 0:
+            minNausea = 0
+            maxNausea = 10
+        elif self.nauseaTolerance == 1:
+            minNausea = 0
+            maxNausea = 20
+        elif self.nauseaTolerance == 2:
+            minNausea = 20
+            maxNausea = 35
+        else:
+            minNausea = 25
+            maxNausea = 55
+        if minNausea <= r_nausea and maxNausea >= r_nausea:
+            nauseaSatisfaction -= 1
+        for _ in range(2):
+            minNausea -= self.happiness*2
+            maxNausea += self.happiness
+            if minNausea <= r_nausea and maxNausea >= r_nausea:
+                nauseaSatisfaction -= 1
+        highestSatisfaction = max(intensitySatisfaction,nauseaSatisfaction)
+        lowestSatisfaction = min(nauseaSatisfaction,intensitySatisfaction)
+        if highestSatisfaction == 0:
+            self.happinessTarget = max(self.happinessTarget+70,maxValue)
+        elif highestSatisfaction == 1:
+            if lowestSatisfaction == 0:
+                self.happinessTarget = max(self.happinessTarget+50,maxValue)
+            if lowestSatisfaction == 1:
+                self.happinessTarget = max(self.happinessTarget+30,maxValue)
+        elif highestSatisfaction == 2:
+            if lowestSatisfaction == 0:
+                self.happinessTarget = max(self.happinessTarget+35,maxValue)
+            if lowestSatisfaction == 1:
+                self.happinessTarget = max(self.happinessTarget+20,maxValue)
+            if lowestSatisfaction == 2:
+                self.happinessTarget = max(self.happinessTarget+10,maxValue)
+        elif highestSatisfaction == 3:
+            if lowestSatisfaction == 0:
+                self.happinessTarget = max(self.happinessTarget-35,maxValue)
+            if lowestSatisfaction == 1:
+                self.happinessTarget = max(self.happinessTarget-50,maxValue)
+            else:
+                self.happinessTarget = max(self.happinessTarget-60,maxValue)
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
