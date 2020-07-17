@@ -3,7 +3,7 @@ from class_ride_and_store import Ride_and_Store as RS
 
 maxValue = 255
 class Peeps:
-    def __init__(self,name,posX=None,posY=None):
+    def __init__(self,name):
         self.id = name
         self.intensity = [random.randint(8,15),random.randrange(0,7)]
         self.happiness = 128
@@ -20,8 +20,9 @@ class Peeps:
         self.energy = random.randint(65,128)
         self.energyTarget = self.energy
         self.timeInPark = -1
-        self.headingTo = (posX,posY)
+        self.headingTo = None
         self.hasMap = False
+        self.position = (0,1)
     
     def interactWithRide(self,ride):
         self.happinessUpdate(ride.intensity,ride.nausea)
@@ -77,8 +78,13 @@ class Peeps:
             else:
                 self.happinessTarget = min(self.happinessTarget-60,maxValue)
     
-    def findClosetRide():
-
+    def findClosesetRide(self,lst:list):
+        if  self.position == (-1,-1) or not lst:
+            return
+        pos = self.position
+        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1])for i in lst]
+        closetRide = lst[distance.index(min(distance))]
+        self.headingTo = closetRide.position
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
