@@ -23,6 +23,9 @@ class Peeps:
         self.headingTo = (posX,posY)
         self.hasMap = False
     
+    def interactWithRide(self,ride):
+        self.happinessUpdate(ride.intensity,ride.nausea)
+    
     def happinessUpdate(self,r_intensity,r_nausea):
         intensitySatisfaction = nauseaSatisfaction = 3
         maxIntensity = self.intensity[0]*100
@@ -53,24 +56,24 @@ class Peeps:
         highestSatisfaction = max(intensitySatisfaction,nauseaSatisfaction)
         lowestSatisfaction = min(nauseaSatisfaction,intensitySatisfaction)
         if highestSatisfaction == 0:
-            self.happinessTarget = max(self.happinessTarget+70,maxValue)
+            self.happinessTarget = min(self.happinessTarget+70,maxValue)
         elif highestSatisfaction == 1:
             if lowestSatisfaction == 0:
-                self.happinessTarget = max(self.happinessTarget+50,maxValue)
+                self.happinessTarget = min(self.happinessTarget+50,maxValue)
             if lowestSatisfaction == 1:
-                self.happinessTarget = max(self.happinessTarget+30,maxValue)
+                self.happinessTarget = min(self.happinessTarget+30,maxValue)
         elif highestSatisfaction == 2:
             if lowestSatisfaction == 0:
-                self.happinessTarget = max(self.happinessTarget+35,maxValue)
+                self.happinessTarget = min(self.happinessTarget+35,maxValue)
             if lowestSatisfaction == 1:
-                self.happinessTarget = max(self.happinessTarget+20,maxValue)
+                self.happinessTarget = min(self.happinessTarget+20,maxValue)
             if lowestSatisfaction == 2:
-                self.happinessTarget = max(self.happinessTarget+10,maxValue)
+                self.happinessTarget = min(self.happinessTarget+10,maxValue)
         elif highestSatisfaction == 3:
             if lowestSatisfaction == 0:
-                self.happinessTarget = max(self.happinessTarget-35,maxValue)
+                self.happinessTarget = min(self.happinessTarget-35,maxValue)
             if lowestSatisfaction == 1:
-                self.happinessTarget = max(self.happinessTarget-50,maxValue)
+                self.happinessTarget = min(self.happinessTarget-50,maxValue)
             else:
                 self.happinessTarget = max(self.happinessTarget-60,maxValue)
 
