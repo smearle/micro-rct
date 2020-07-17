@@ -2,7 +2,7 @@ import collections
 from class_ride_and_store import Ride_and_Store as RS
 
 
-object_list = collections.defaultdict()
+object_list = []
 
 try:
 	fp = open('object_list.txt', 'r')
@@ -13,7 +13,7 @@ try:
 			arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr))]
 			newObj = RS.alt_init(arr)
 			# print(newObj)
-			object_list[arr[0]] = newObj
+			object_list.append(newObj)
 finally:
 	fp.close()
 
