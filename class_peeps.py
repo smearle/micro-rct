@@ -75,7 +75,7 @@ class Peeps:
             if lowestSatisfaction == 1:
                 self.happinessTarget = min(self.happinessTarget-50,maxValue)
             else:
-                self.happinessTarget = max(self.happinessTarget-60,maxValue)
+                self.happinessTarget = min(self.happinessTarget-60,maxValue)
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
