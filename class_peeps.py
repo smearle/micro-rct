@@ -1,11 +1,12 @@
 import random
 from class_ride_and_store import Ride_and_Store as RS
 
+
 maxValue = 255
 class Peeps:
     def __init__(self,name):
         self.id = name
-        self.intensity = [random.randint(8,15),random.randrange(0,7)]
+        self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
         self.happiness = 128
         self.happinessTarget = 128
         self.nausea = 0
@@ -23,6 +24,17 @@ class Peeps:
         self.headingTo = None
         self.hasMap = False
         self.position = (0,1)
+    
+    def updatePosition(self,goodSet):
+        pos = self.position
+        target = self.headingTo
+        direction = (target[0]-pos[0],target[1]-pos[1])
+        direction = (direction[0]//abs(direction[0]),direction[1]//abs(direction[1]))
+        choice = random.randint(0,1)
+        if choice:
+            if pos + (direction,0) in goodSet:
+                self.position += (direction,0)
+        return
     
     def interactWithRide(self,ride):
         self.happinessUpdate(ride.intensity,ride.nausea)
@@ -82,8 +94,8 @@ class Peeps:
         if  self.position == (-1,-1) or not lst:
             return
         pos = self.position
-        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1])for i in lst]
-        closetRide = lst[distance.index(min(distance))]
+        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1])for mark,i in lst]
+        closetRide = lst[distance.index(min(distance))][1]
         self.headingTo = closetRide.position
 
     def distributeTolerance(self):
