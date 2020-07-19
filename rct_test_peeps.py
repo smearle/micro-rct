@@ -15,4 +15,7 @@ def main():
         peeps[tmp].interactWithRide(ride[1])
         print('after {}'.format(peeps[tmp].happinessTarget))
 
+# peeps[0].headingTo = (5,5)
+# peeps[0].position = (9,9)
+# peeps[0].updatePosition()
 # main()
