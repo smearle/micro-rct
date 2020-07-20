@@ -36,33 +36,38 @@ def main_path_finding(peep,space):
     availablePath = space
     maxTilesChecked = len(availablePath)//1.2
     counter = maxCounter
-    goal = peep.headingTo
+    goal = peep.headingTo.position
     start = peep.position
     valid = valid_direction(start)
     ans = sorted([(i,path_finding_dfs(i))for i in valid],key = lambda x: x[1])
-    # print("ans: ",ans[0][0])
-    return ans[0][0]
+    # print('current goal: {} next ideal pos: {}'.format(goal,ans))
+    if ans:
+        return ans[0][0]
+    else:
+        return start
 
 def path_finding_dfs(node):
     if node in checked:
         return checked[node]
+    if node == goal:
+        return 0
     global counter
     valid = valid_direction(node)
     if not valid or counter <= 0 or len(checked) >= maxTilesChecked:
         return heuristic_from_goal(node)
     counter -= 1
-    checked[node] = min([path_finding_dfs(i)for i in valid])
+    checked[node] = min([path_finding_dfs(i)+1for i in valid])
     return checked[node]    
 
 def valid_direction(loc:tuple):
     ans = []
-    if (loc[0]+1,loc[1]) in availablePath:
+    if (loc[0]+1,loc[1]) in availablePath or (loc[0]+1,loc[1]) == goal:
         ans.append((loc[0]+1,loc[1]))
-    if (loc[0]-1,loc[1]) in availablePath:
+    if (loc[0]-1,loc[1]) in availablePath or (loc[0]-1,loc[1]) == goal:
         ans.append((loc[0]-1,loc[1]))
-    if (loc[0],loc[1]+1) in availablePath:
+    if (loc[0],loc[1]+1) in availablePath or (loc[0],loc[1]+1) == goal:
         ans.append((loc[0],loc[1]+1))
-    if (loc[0],loc[1]-1) in availablePath:
+    if (loc[0],loc[1]-1) in availablePath or (loc[0],loc[1]-1) == goal:
         ans.append((loc[0],loc[1]-1))
     return ans
 

@@ -27,9 +27,14 @@ class Peeps:
         self.position = (0,1)
     
     def updatePosition(self,space):
+        if not self.headingTo:
+            return
         ans =  PF.main_path_finding(self,space)
         self.position = ans
-        return
+        if self.position == self.headingTo.position:
+            self.headingTo.queue.append(self)
+            self.headingTo = None
+        return 
     
     def interactWithRide(self,ride):
         self.happinessUpdate(ride.intensity,ride.nausea)
@@ -91,7 +96,7 @@ class Peeps:
         pos = self.position
         distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1])for mark,i in lst]
         closetRide = lst[distance.index(min(distance))][1]
-        self.headingTo = closetRide.position
+        self.headingTo = closetRide
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)

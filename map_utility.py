@@ -8,7 +8,8 @@ from rct_test_peeps import peeps
 printCount = 1
 parkSize = (0,0)
 freeSpace = defaultdict(str)
-usedSpace = defaultdict(str)
+fixedSpace = defaultdict(str)
+interactiveSpace = defaultdict(str)
 humanMark = 'O'
 enterMark = "_"
 emptyMark = ' '
@@ -22,8 +23,9 @@ def initPark(parkSizeX,parkSizeY):
     for i in range(parkSize[1]):
         for j in range(parkSize[0]):
             if i == 0 or j == 0 or j == parkSize[0]-1 or i == parkSize[1]-1:
-                usedSpace[(i,j)] = wallMark
-            freeSpace[(i,j)] = ' '
+                fixedSpace[(i,j)] = wallMark
+            else:
+                freeSpace[(i,j)] = emptyMark
     updatedMap((0,1),(2,1),enterMark)
 
 def printPark():
@@ -32,10 +34,12 @@ def printPark():
     for i in range(parkSize[1]):
         line = ''
         for j in range(parkSize[0]):
-            if (i,j) in usedSpace:
-                line += usedSpace[(i,j)]
-            else:
+            if (i,j) in interactiveSpace:
+                line += interactiveSpace[(i,j)]
+            elif (i,j) in freeSpace:
                 line += freeSpace[(i,j)]
+            else:
+                line += fixedSpace[(i,j)]
         line += '\n'
         res += line
     res+='\n'
@@ -49,24 +53,39 @@ def printPark():
 def updatedMap(start,size,mark:str):
     for i in range(start[0],start[0]+size[1]):
         for j in range(start[1],start[1]+size[0]):
-            if mark == ' ':
-                if (i,j) in usedSpace:
-                    usedSpace.pop((i,j))
-                    freeSpace[(i,j)] == ' '
-            elif (i,j) in freeSpace:
-                freeSpace.pop((i,j))
-            usedSpace[(i,j)] = mark
+            if mark == emptyMark:
+                if (i,j) in interactiveSpace:
+                    interactiveSpace.pop((i,j))
+                    freeSpace[(i,j)] = emptyMark
+            else:
+                if (i,j) in freeSpace:
+                    freeSpace.pop((i,j))
+                if mark == enterMark or mark == humanMark:
+                    interactiveSpace[(i,j)] = mark
+                else:
+                    if i==start[0] and j==start[1]:
+                        fixedSpace[(i,j)] = enterMark
+                    else:
+                        fixedSpace[(i,j)] = mark
+
+def updatedHuman(peep:Peeps):
+    updatedMap(peep.position,(1,1),emptyMark)
+    peep.updatePosition(freeSpace)
+    if peep.headingTo:
+        updatedMap(peep.position,(1,1),humanMark)
 
 
-def placeRide(_ride: RS,mark:str):
+def placeRide(_ride: RS,mark:str,padding=None):
     size = _ride.size
     placed = False
+    if not padding:
+        padding = 0
     while not placed:
         placed = True
         rand = random.choice(list(freeSpace.keys()))
-        for i in range(rand[0]-1,rand[0]+size[1]):
-            for j in range(rand[1]-1,rand[1]+size[0]):
-                if (i,j) in usedSpace:
+        for i in range(rand[0]-padding,rand[0]+size[1]+padding):
+            for j in range(rand[1]-padding,rand[1]+size[0]+padding):
+                if (i,j) in fixedSpace:
                     placed = False
         if placed:
             _ride.position = rand
@@ -74,7 +93,4 @@ def placeRide(_ride: RS,mark:str):
             updatedMap(rand,size,mark)
     return
 
-def path_building():
-
-    return
 
