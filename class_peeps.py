@@ -1,6 +1,7 @@
 import random
+from collections import *
 from class_ride_and_store import Ride_and_Store as RS
-
+import peeps_path_finding as PF
 
 maxValue = 255
 class Peeps:
@@ -25,15 +26,9 @@ class Peeps:
         self.hasMap = False
         self.position = (0,1)
     
-    def updatePosition(self,goodSet):
-        pos = self.position
-        target = self.headingTo
-        direction = (target[0]-pos[0],target[1]-pos[1])
-        direction = (direction[0]//abs(direction[0]),direction[1]//abs(direction[1]))
-        choice = random.randint(0,1)
-        if choice:
-            if pos + (direction,0) in goodSet:
-                self.position += (direction,0)
+    def updatePosition(self,space):
+        ans =  PF.main_path_finding(self,space)
+        self.position = ans
         return
     
     def interactWithRide(self,ride):

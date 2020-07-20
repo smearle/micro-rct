@@ -5,11 +5,15 @@ from class_peeps import Peeps
 from rct_test_objects import object_list as ride
 from rct_test_peeps import peeps
 
+printCount = 1
 parkSize = (0,0)
 freeSpace = defaultdict(str)
 usedSpace = defaultdict(str)
 humanMark = 'O'
 enterMark = "_"
+emptyMark = ' '
+pathMark = '*'
+wallMark = '#'
 listOfRides = []
 
 def initPark(parkSizeX,parkSizeY):
@@ -18,12 +22,13 @@ def initPark(parkSizeX,parkSizeY):
     for i in range(parkSize[1]):
         for j in range(parkSize[0]):
             if i == 0 or j == 0 or j == parkSize[0]-1 or i == parkSize[1]-1:
-                usedSpace[(i,j)] = '#'
+                usedSpace[(i,j)] = wallMark
             freeSpace[(i,j)] = ' '
     updatedMap((0,1),(2,1),enterMark)
 
 def printPark():
-    res = ''
+    global printCount
+    res = 'print count: '+str(printCount)+'\n'
     for i in range(parkSize[1]):
         line = ''
         for j in range(parkSize[0]):
@@ -39,11 +44,16 @@ def printPark():
     res += 'human: '+humanMark+"\n"
     res += 'enter: '+enterMark+'\n'
     print(res)
+    printCount += 1
 
 def updatedMap(start,size,mark:str):
     for i in range(start[0],start[0]+size[1]):
         for j in range(start[1],start[1]+size[0]):
-            if (i,j) in freeSpace:
+            if mark == ' ':
+                if (i,j) in usedSpace:
+                    usedSpace.pop((i,j))
+                    freeSpace[(i,j)] == ' '
+            elif (i,j) in freeSpace:
                 freeSpace.pop((i,j))
             usedSpace[(i,j)] = mark
 
@@ -63,3 +73,8 @@ def placeRide(_ride: RS,mark:str):
             listOfRides.append((mark,_ride))
             updatedMap(rand,size,mark)
     return
+
+def path_building():
+
+    return
+
