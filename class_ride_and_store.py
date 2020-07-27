@@ -12,6 +12,8 @@ class Ride_and_Store:
 		self.thirst = thirst
 		self.toilet = toilet
 		self.hunger = hunger
+		self.enter = (0,0) #current just place the enterence at the top left
+		self.exit = (size_x-1,size_y-1) #current just place the exit at the bottom right
 		self.queue = []		#append peep here
 		
 	@classmethod
