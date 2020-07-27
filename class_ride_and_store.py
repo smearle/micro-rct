@@ -8,11 +8,11 @@ class Ride_and_Store:
 		self.position = (position_x,position_y) #can assign later
 		self.excitement = excitement
 		self.intensity = intensity
-		self.nausea = nausea
+		self.nausea = nausea 
 		self.thirst = thirst
 		self.toilet = toilet
 		self.hunger = hunger
-		self.queue = []		#queue is not implement yet
+		self.queue = []		#append peep here
 		
 	@classmethod
 	def alt_init(cls,arr):
