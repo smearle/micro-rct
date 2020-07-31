@@ -10,11 +10,10 @@ parkSize = (0,0)
 freeSpace = defaultdict(str)
 fixedSpace = defaultdict(str)
 interactiveSpace = defaultdict(str)
-humanMark = 'O'
-enterMark = "_"
+humanMark = 'Ü'
 emptyMark = ' '
-pathMark = '*'
-wallMark = '#'
+pathMark = '░'
+wallMark = '▓'
 listOfRides = []
 
 def initPark(parkSizeX,parkSizeY):
@@ -26,7 +25,26 @@ def initPark(parkSizeX,parkSizeY):
                 fixedSpace[(i,j)] = wallMark
             else:
                 freeSpace[(i,j)] = emptyMark
-    updatedMap((0,1),(2,1),enterMark)
+
+def placePath(margin):
+    global parkSize
+    if margin >= parkSize[0] or margin >= parkSize[1]:
+        return
+    for i in range(margin+1):
+        for j in range(1,margin+1):
+            if i==0 and j==1:
+                fixedSpace.pop((i,j))
+                interactiveSpace[(i,j)] = pathMark
+            elif j == 1 or (i==margin and j!=margin):
+                freeSpace.pop((i,j))
+                interactiveSpace[(i,j)] = pathMark
+
+    for i in range(margin,parkSize[1]-margin):
+        for j in range(margin,parkSize[0]-margin):
+            if i == margin or i == parkSize[1]-margin-1 or j == margin or j == parkSize[0]-margin-1:
+                freeSpace.pop((i,j))
+                interactiveSpace[(i,j)] = pathMark
+    return
 
 def printPark():
     global printCount
@@ -46,7 +64,7 @@ def printPark():
     for mark,ride in listOfRides:
         res += ride.name +': '+mark+'\n'
     res += 'human: '+humanMark+"\n"
-    res += 'enter: '+enterMark+'\n'
+    res += 'enter: '+pathMark+'\n'
     print(res)
     printCount += 1
 
@@ -60,11 +78,11 @@ def updatedMap(start,size,mark:str):
             else:
                 if (i,j) in freeSpace:
                     freeSpace.pop((i,j))
-                if mark == enterMark or mark == humanMark:
+                if mark == pathMark or mark == humanMark:
                     interactiveSpace[(i,j)] = mark
                 else:
                     if i==start[0] and j==start[1]:
-                        fixedSpace[(i,j)] = enterMark
+                        fixedSpace[(i,j)] = pathMark
                     else:
                         fixedSpace[(i,j)] = mark
 
