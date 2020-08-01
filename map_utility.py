@@ -93,22 +93,33 @@ def updatedHuman(peep:Peeps):
         updatedMap(peep.position,(1,1),humanMark)
 
 
-def placeRide(_ride: RS,mark:str,padding=None):
+def placeRide(_ride: RS,mark:str):
     size = _ride.size
     placed = False
-    if not padding:
-        padding = 0
-    while not placed:
+    potentialPlace = freeSpaceNextToInteractiveSpace()
+    seen = set()
+    while not placed and len(seen) != len(potentialPlace):
         placed = True
-        rand = random.choice(list(freeSpace.keys()))
-        for i in range(rand[0]-padding,rand[0]+size[1]+padding):
-            for j in range(rand[1]-padding,rand[1]+size[0]+padding):
-                if (i,j) in fixedSpace:
+        rand = random.choice(list(potentialPlace.keys()))
+        seen.add(rand)
+        for i in range(rand[0],rand[0]+size[1]):
+            for j in range(rand[1],rand[1]+size[0]):
+                if (i,j) in fixedSpace or (i,j) in interactiveSpace:
                     placed = False
+                    break
         if placed:
             _ride.position = rand
             listOfRides.append((mark,_ride))
             updatedMap(rand,size,mark)
     return
 
+def freeSpaceNextToInteractiveSpace():
+    ans = defaultdict(str)
+    neighbors = [(1,0),(0,1),(-1,0),(0,-1)]
+    for x,y in interactiveSpace:
+        for _x,_y in neighbors:
+            neighbor = (_x+x,_y+y)
+            if neighbor in freeSpace:
+                ans[neighbor] = freeSpace[neighbor]
+    return ans
 
