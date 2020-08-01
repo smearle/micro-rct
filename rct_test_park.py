@@ -3,12 +3,13 @@ from map_utility import *
 from peeps_path_finding import *
 
 def main():
-    initPark(20,14)
+    initPark(28,20)
     #place the path
     placePath(3)
     printPark()
-    #place the ride
-
+    #place the ride (ride object, marks)
+    placeRide(ride[0],'&')
+    printPark()
     #place the guest
 
     #testing
