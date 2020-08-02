@@ -3,7 +3,7 @@ from map_utility import *
 from peeps_path_finding import *
 
 def main():
-    initPark(28,20)
+    initPark(40,20)
     #place the path
     placePath(3)
     printPark()
@@ -11,8 +11,14 @@ def main():
     placeRide(ride[0],'&')
     printPark()
     #place the guest
-
+    guest1 = peeps[0]
+    updatedHuman(guest1)
+    guest1.findClosesetRide(listOfRides)
+    printPark()
     #testing
+    for _ in range(20):
+        updatedHuman(guest1)
+        printPark()
 
     return
     
