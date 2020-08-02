@@ -10,6 +10,7 @@ parkSize = (0,0)
 freeSpace = defaultdict(str)
 fixedSpace = defaultdict(str)
 interactiveSpace = defaultdict(str)
+peepsList = set()
 humanMark = 'Ü'
 emptyMark = ' '
 pathMark = '░'
@@ -48,7 +49,7 @@ def placePath(margin):
 
 def printPark():
     global printCount
-    res = 'print count: '+str(printCount)+'\n'
+    res = '\nprint count: '+str(printCount)+'\n'
     for i in range(parkSize[1]):
         line = ''
         for j in range(parkSize[0]):
@@ -71,26 +72,27 @@ def printPark():
 def updatedMap(start,size,mark:str):
     for i in range(start[0],start[0]+size[1]):
         for j in range(start[1],start[1]+size[0]):
-            if mark == emptyMark:
-                if (i,j) in interactiveSpace:
-                    interactiveSpace.pop((i,j))
-                    freeSpace[(i,j)] = emptyMark
-            else:
-                if (i,j) in freeSpace:
-                    freeSpace.pop((i,j))
-                if mark == pathMark or mark == humanMark:
+            if (i,j) in freeSpace:
+                freeSpace.pop((i,j))
+                if mark == pathMark:
                     interactiveSpace[(i,j)] = mark
                 else:
                     if i==start[0] and j==start[1]:
-                        fixedSpace[(i,j)] = pathMark
+                        interactiveSpace[(i,j)] = pathMark
                     else:
                         fixedSpace[(i,j)] = mark
+            elif (i,j) in interactiveSpace:
+                interactiveSpace[(i,j)] = mark
+                
+                
 
 def updatedHuman(peep:Peeps):
-    updatedMap(peep.position,(1,1),emptyMark)
-    peep.updatePosition(freeSpace)
-    if peep.headingTo:
-        updatedMap(peep.position,(1,1),humanMark)
+    if peep not in peepsList:
+        peepsList.add(peep)
+    else:
+        updatedMap(peep.position,(1,1),pathMark)
+        peep.updatePosition(interactiveSpace)
+    updatedMap(peep.position,(1,1),humanMark)
 
 
 def placeRide(_ride: RS,mark:str):
