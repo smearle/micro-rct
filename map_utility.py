@@ -77,13 +77,21 @@ def updatedMap(start,size,mark:str):
                 if mark == pathMark:
                     interactiveSpace[(i,j)] = mark
                 else:
-                    if i==start[0] and j==start[1]:
+                    if i==start[0] and j==start[1]: #ride entrence
                         interactiveSpace[(i,j)] = pathMark
                     else:
                         fixedSpace[(i,j)] = mark
             elif (i,j) in interactiveSpace:
                 interactiveSpace[(i,j)] = mark
-                
+    return
+
+def updateRides():
+    for _,ride in listOfRides:
+        if ride.queue:
+            curPeep = ride.queue.pop(0)
+            curPeep.interactWithRide(ride)
+    return
+
                 
 
 def updatedHuman(peep:Peeps):
@@ -91,7 +99,7 @@ def updatedHuman(peep:Peeps):
         peepsList.add(peep)
     else:
         updatedMap(peep.position,(1,1),pathMark)
-        peep.updatePosition(interactiveSpace)
+        peep.updatePosition(interactiveSpace,listOfRides)
     updatedMap(peep.position,(1,1),humanMark)
 
 
