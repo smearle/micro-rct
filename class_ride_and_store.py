@@ -1,6 +1,10 @@
 class Ride_and_Store:
 	def __init__(self,name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
 		self.name = name
+		if thirst!=0 or hunger!=0 or toilet!=0:
+			self.isShop = True
+		else:
+			self.isShop = False
 		self.size = (size_x,size_y)
 		self.consume_time = time*size_y*size_x
 		self.building_cost = cost*size_y*size_x
@@ -31,3 +35,5 @@ class Ride_and_Store:
 		# rtn += "peep react: {}\n".format(self.peepReact)
 		rtn += "consume time: {}\tposition: {}\n".format(self.consume_time,self.position)
 		return rtn
+	
+
