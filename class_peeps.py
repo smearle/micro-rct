@@ -25,18 +25,25 @@ class Peeps:
         self.headingTo = None
         self.hasMap = False
         self.position = (0,1)
+        self.visited = set()
     
-    def updatePosition(self,space):
+    def updatePosition(self,space,lst):
         if not self.headingTo:
+            self.findClosesetRide(lst)
             return
+        target = self.headingTo
         ans =  PF.main_path_finding(self,space)
         self.position = ans
-        if self.position == self.headingTo.position:
-            self.headingTo.queue.append(self)
+        if self.position == target.position:
+            print('Peep {} arrived at {}'.format(self.id,target.name))
+            target.queue.append(self)
+            if not target.isShop:
+                self.visited.add(target.name)
             self.headingTo = None
         return 
     
     def interactWithRide(self,ride):
+        print('Peep {} is on {}'.format(self.id,ride.name))
         self.happinessUpdate(ride.intensity,ride.nausea)
     
     def happinessUpdate(self,r_intensity,r_nausea):
@@ -94,8 +101,12 @@ class Peeps:
         if  self.position == (-1,-1) or not lst:
             return
         pos = self.position
-        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1])for mark,i in lst]
+        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
+        if not distance:
+            return
         closetRide = lst[distance.index(min(distance))][1]
+        print('Peep {} new goal is {}'.format(self.id,closetRide.name))
+        print(distance)
         self.headingTo = closetRide
 
     def distributeTolerance(self):
