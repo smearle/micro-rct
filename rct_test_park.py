@@ -9,17 +9,17 @@ def main():
     printPark()
     #place the ride (ride object, marks)
     placeRide(ride[0],'&')
+    placeRide(ride[1],'+')
     printPark()
     #place the guest
     guest1 = peeps[0]
     updatedHuman(guest1)
-    guest1.findClosesetRide(listOfRides)
     printPark()
     #testing
     for _ in range(20):
         updatedHuman(guest1)
+        updateRides()
         printPark()
-
     return
     
 
