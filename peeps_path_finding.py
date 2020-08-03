@@ -32,15 +32,17 @@ goal = (0,0)
 start = (0,0)
 
 def main_path_finding(peep,space):
-    global goal,start,counter,maxTilesChecked,availablePath
+    global goal,start,counter,maxTilesChecked,availablePath,checked
     availablePath = space
-    maxTilesChecked = len(availablePath)//1.2
+    maxTilesChecked = len(availablePath)
     counter = maxCounter
+    checked = defaultdict(int)
+    print('Peep {} is on the way to {}'.format(peep.id,peep.headingTo.name))
     goal = peep.headingTo.position
     start = peep.position
     valid = valid_direction(start)
     ans = sorted([(i,path_finding_dfs(i))for i in valid],key = lambda x: x[1])
-    # print('current goal: {} next ideal pos: {}'.format(goal,ans))
+    print('current goal: {}\tcurrent position: {}\tnext ideal pos: {}'.format(goal,start,ans))
     if ans:
         return ans[0][0]
     else:
