@@ -9,19 +9,20 @@ def main():
     printPark()
     #place the ride (ride object, marks)
     placeRide(ride[0],'&')
-    placeRide(ride[1],'+')
+    placeRide(ride[7],'+')
     printPark()
     #place the guest
-    guest1 = peeps[0]
+    guest1 = peeps[1]
     updatedHuman(guest1)
     printPark()
     #testing
-    for _ in range(20):
+    for _ in range(1):
         updatedHuman(guest1)
         updateRides()
         printPark()
     return
     
+main()
 
 # def main():
 #     initPark(14,14)
@@ -47,5 +48,5 @@ def main():
 #         for peep in rid.queue:
 #             print('peep {} on ride {}'.format(peep.id,rid.name))
 #     return 
-main()
+
 

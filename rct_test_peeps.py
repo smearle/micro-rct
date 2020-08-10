@@ -3,8 +3,11 @@ import random
 from class_peeps import Peeps
 from rct_test_objects import object_list as ride
 
-peeps = [Peeps(i) for i in range(10)]
-# print(vars(peeps[0]))
+peeps = [Peeps(i) for i in range(3)]
+peeps[0].intensity = [15,7]
+peeps[1].intensity = [8,0]
+print(vars(peeps[0]))
+print(vars(peeps[1]))
 
 def main():
     tmp2 = random.randint(0,len(ride)-7)
