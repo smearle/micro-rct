@@ -29,7 +29,7 @@ class Peeps:
     
     def updatePosition(self,space,lst):
         if not self.headingTo:
-            self.findClosesetRide(lst)
+            self.findNextRide(lst)
             return
         target = self.headingTo
         ans =  PF.main_path_finding(self,space)
@@ -54,18 +54,9 @@ class Peeps:
             intensitySatisfaction -= 1
         minIntensity -= self.happiness * 2
         maxIntensity += self.happiness
-        if self.nauseaTolerance == 0:
-            minNausea = 0
-            maxNausea = 10
-        elif self.nauseaTolerance == 1:
-            minNausea = 0
-            maxNausea = 20
-        elif self.nauseaTolerance == 2:
-            minNausea = 20
-            maxNausea = 35
-        else:
-            minNausea = 25
-            maxNausea = 55
+
+        minNausea,maxNausea= self.nauseaToleranceConvert()
+
         if minNausea <= r_nausea and maxNausea >= r_nausea:
             nauseaSatisfaction -= 1
         for _ in range(2):
@@ -97,16 +88,74 @@ class Peeps:
             else:
                 self.happinessTarget = min(self.happinessTarget-60,maxValue)
     
-    def findClosesetRide(self,lst:list):
+    def nauseaToleranceConvert(self):
+        if self.nauseaTolerance == 0:
+            minNausea = 0
+            maxNausea = 10
+        elif self.nauseaTolerance == 1:
+            minNausea = 0
+            maxNausea = 20
+        elif self.nauseaTolerance == 2:
+            minNausea = 20
+            maxNausea = 35
+        else:
+            minNausea = 25
+            maxNausea = 55
+        return minNausea,maxNausea
+    
+    def nauseaMaximumThresholds(self):
+        if self.nauseaTolerance == 0:
+            return 300
+        elif self.nauseaTolerance == 1:
+            return 600
+        elif self.nauseaTolerance == 2:
+            return 800
+        else:
+            return 1000
+
+    
+    def findNextRide(self,lst:list):
+        def filterLst(): 
+            #this code will filter unwanted ride for the peep
+            #[difference] didn't deal with ride's popularity 
+            #[difference] didn't consider the situation the peep is at the ride
+            #[problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+            #           not ideal...?
+            alterNumber = 33
+            newLst = []
+            maxIntensity = (min(self.intensity[0]*100,1000)+self.happiness)//alterNumber
+            minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
+            maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
+            print('peeps raw intensity: {}\tmax intensity: {}\tmin intensity: {}\tmax nausea:{}'.format(self.intensity,maxIntensity,minIntensity,maxNausea))
+            for mark,ride in lst:
+                goodIntensity = goodNausea = False
+                if maxIntensity >= ride.intensity >= minIntensity:
+                    goodIntensity = True
+                
+                if ride.nausea <= maxNausea:
+                    goodNausea = True
+                # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
+                if self.nausea > 160 and ride.nausea >= 10:
+                    goodNausea = False
+                print('ride name: {}\tride intensity: {}\tride nausea: {}'.format(ride.name,ride.intensity,ride.nausea))
+                
+                if goodIntensity and goodNausea:
+                    newLst.append((mark,ride))
+            return newLst
+
         if  self.position == (-1,-1) or not lst:
             return
         pos = self.position
+        print("old list: ",lst)
+        lst = filterLst()
+        print("new list: ",lst)
+        #[difference] didn't contain the function makes peeps repeat visiting same ride 
+        #               so we didn't consider visiting same ride at this moment
         distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
         if not distance:
             return
         closetRide = lst[distance.index(min(distance))][1]
         print('Peep {} new goal is {}'.format(self.id,closetRide.name))
-        print(distance)
         self.headingTo = closetRide
 
     def distributeTolerance(self):
