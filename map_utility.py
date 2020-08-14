@@ -69,7 +69,7 @@ def printPark():
     print(res)
     printCount += 1
 
-def updatedMap(start,size,mark:str):
+def updatedMap(start,size,mark:str,entrence=None):
     for i in range(start[0],start[0]+size[1]):
         for j in range(start[1],start[1]+size[0]):
             if (i,j) in freeSpace:
@@ -77,7 +77,9 @@ def updatedMap(start,size,mark:str):
                 if mark == pathMark:
                     interactiveSpace[(i,j)] = mark
                 else:
-                    if i==start[0] and j==start[1]: #ride entrence
+                    if entrence and i == entrence[0] and j == entrence[1]: #ride entrence
+                        interactiveSpace[(i,j)] = pathMark
+                    elif not entrence and i==start[0] and j==start[1]: #ride entrence
                         interactiveSpace[(i,j)] = pathMark
                     else:
                         fixedSpace[(i,j)] = mark
@@ -104,26 +106,38 @@ def updatedHuman(peep:Peeps):
 
 
 def placeRide(_ride: RS,mark:str):
+    # print('try to place {}'.format(_ride.name))
+    def checkCanPlaceOrNot(startX,startY,width,length):
+        # print("check ({},{}) to ({},{})".format(startX,startY,startX+width-1,startY+length-1))
+        for i in range(startX,startX+width):
+            for j in range(startY,startY+length):
+                if (i,j) in fixedSpace or (i,j) in interactiveSpace:
+                    return False
+        return True
+
     size = _ride.size
     placed = False
     potentialPlace = freeSpaceNextToInteractiveSpace()
     seen = set()
     while not placed and len(seen) != len(potentialPlace):
-        placed = True
+        placed = False
         rand = random.choice(list(potentialPlace.keys()))
         while rand in seen:
             rand = random.choice(list(potentialPlace.keys()))
         seen.add(rand)
         potentialPlace.pop(rand)
-        for i in range(rand[0],rand[0]+size[1]):
-            for j in range(rand[1],rand[1]+size[0]):
-                if (i,j) in fixedSpace or (i,j) in interactiveSpace:
-                    placed = False
-                    break
+        enter = rand
+        startList = [(rand[0],rand[1]),(rand[0]-size[0]+1,rand[1]-size[1]+1),(rand[0]-size[0]+1,rand[1]),(rand[0],rand[1]-size[1]+1)]
+        startList = [(x,y)for x,y in startList if x>0 and y>0]
+        while startList and not placed:
+            rand = startList.pop()
+            placed = checkCanPlaceOrNot(rand[0],rand[1],size[0],size[1])
+        
         if placed:
+            _ride.enter = enter
             _ride.position = rand
             listOfRides.append((mark,_ride))
-            updatedMap(rand,size,mark)
+            updatedMap(rand,size,mark,_ride.enter)
     return
 
 def freeSpaceNextToInteractiveSpace():
