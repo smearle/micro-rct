@@ -126,7 +126,7 @@ class Peeps:
             maxIntensity = (min(self.intensity[0]*100,1000)+self.happiness)//alterNumber
             minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
             maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
-            print('peeps raw intensity: {}\tmax intensity: {}\tmin intensity: {}\tmax nausea:{}'.format(self.intensity,maxIntensity,minIntensity,maxNausea))
+            # print('peeps raw intensity: {}\tmax intensity: {}\tmin intensity: {}\tmax nausea:{}'.format(self.intensity,maxIntensity,minIntensity,maxNausea))
             for mark,ride in lst:
                 goodIntensity = goodNausea = False
                 if maxIntensity >= ride.intensity >= minIntensity:
@@ -137,7 +137,7 @@ class Peeps:
                 # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
                 if self.nausea > 160 and ride.nausea >= 10:
                     goodNausea = False
-                print('ride name: {}\tride intensity: {}\tride nausea: {}'.format(ride.name,ride.intensity,ride.nausea))
+                # print('ride name: {}\tride intensity: {}\tride nausea: {}'.format(ride.name,ride.intensity,ride.nausea))
                 
                 if goodIntensity and goodNausea:
                     newLst.append((mark,ride))
@@ -146,7 +146,7 @@ class Peeps:
         if  self.position == (-1,-1) or not lst:
             return
         pos = self.position
-        print("old list: ",lst)
+        print("\nnon-filter list: ",lst)
         lst = filterLst()
         print("new list: ",lst)
         #[difference] didn't contain the function makes peeps repeat visiting same ride 

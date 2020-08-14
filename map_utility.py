@@ -111,7 +111,10 @@ def placeRide(_ride: RS,mark:str):
     while not placed and len(seen) != len(potentialPlace):
         placed = True
         rand = random.choice(list(potentialPlace.keys()))
+        while rand in seen:
+            rand = random.choice(list(potentialPlace.keys()))
         seen.add(rand)
+        potentialPlace.pop(rand)
         for i in range(rand[0],rand[0]+size[1]):
             for j in range(rand[1],rand[1]+size[0]):
                 if (i,j) in fixedSpace or (i,j) in interactiveSpace:
