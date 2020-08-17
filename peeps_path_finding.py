@@ -38,7 +38,7 @@ def main_path_finding(peep,space):
     counter = maxCounter
     checked = defaultdict(int)
     print('Peep {} is on the way to {}'.format(peep.id,peep.headingTo.name))
-    goal = peep.headingTo.position
+    goal = peep.headingTo.enter
     start = peep.position
     valid = valid_direction(start)
     ans = sorted([(i,path_finding_dfs(i))for i in valid],key = lambda x: x[1])

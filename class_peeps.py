@@ -34,7 +34,7 @@ class Peeps:
         target = self.headingTo
         ans =  PF.main_path_finding(self,space)
         self.position = ans
-        if self.position == target.position:
+        if self.position == target.position or self.position == target.enter:
             print('Peep {} arrived at {}'.format(self.id,target.name))
             target.queue.append(self)
             if not target.isShop:
