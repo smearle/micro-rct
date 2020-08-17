@@ -14,6 +14,8 @@ try:
 			newObj = RS.alt_init(arr)
 			# print(newObj)
 			object_list.append(newObj)
+	# for i,obj in enumerate(object_list):
+		# print(i,obj)
 finally:
 	fp.close()
 

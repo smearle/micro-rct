@@ -9,11 +9,7 @@ def main():
     printPark()
     #place the ride (ride object, marks)
     placeRide(ride[0],'&')
-    placeRide(ride[1],'K')
-    placeRide(ride[2],'@')
-    placeRide(ride[3],'A')
-    placeRide(ride[4],'V')
-    placeRide(ride[5],'R')
+    placeRide(ride[25],'F')#first aid
     printPark()
     #place the guest
     # guest1 = peeps[1]
