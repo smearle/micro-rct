@@ -41,10 +41,36 @@ class Peeps:
                 self.visited.add(target.name)
             self.headingTo = None
         return 
+
+    #call every frame to update peep's current status
+    # now only update nausea status
+    def updateStatus(self):
+        #update nausea
+        newNausea = self.nausea
+        newNauseaGrowth = self.nauseaTarget
+        if newNausea >= newNauseaGrowth:
+            newNausea = max(newNausea-4,0)
+            if newNausea < newNauseaGrowth:
+                newNausea = newNauseaGrowth
+        else:
+            newNausea = min(255,newNausea+4)
+            if newNausea > newNauseaGrowth:
+                newNausea = newNauseaGrowth
+        
+        if newNausea!=newNauseaGrowth:
+            self.nausea = newNausea
+
+        return
     
+    #currently only update hapiness and Nausea Target
     def interactWithRide(self,ride):
-        print('Peep {} is on {}'.format(self.id,ride.name))
+        print('\nPeep {} is on {}'.format(self.id,ride.name))
+        print('before')
+        print(vars(self))
         self.happinessUpdate(ride.intensity,ride.nausea)
+        self.updateRideNauseaGrowth(ride)
+        print('after')
+        print(vars(self))
     
     def happinessUpdate(self,r_intensity,r_nausea):
         intensitySatisfaction = nauseaSatisfaction = 3
@@ -112,7 +138,26 @@ class Peeps:
             return 800
         else:
             return 1000
-
+    
+    #base on:
+    #   The nausea rating of the ride
+    #   Their new happiness growth rate (the higher, the less nauseous)
+    #   How hungry the peep is (+0% nausea at 50% hunger up to +100% nausea at 100% hunger)
+    #   The peep's nausea tolerance (Final modifier: none: 100%, low: 50%, average: 25%, high: 12.5%)
+    def updateRideNauseaGrowth(self,ride):
+        nauseaMultiplier = max(min(256-self.happinessTarget,200),64)
+        #original code is /512 but we /16 in our case
+        nauseaGrowthRateChange = (ride.nausea*nauseaMultiplier)//16
+        nauseaGrowthRateChange *= max(128,self.hunger)/64
+        print(nauseaGrowthRateChange,ride.nausea*nauseaMultiplier)
+        if self.nauseaTolerance == 1:
+            nauseaGrowthRateChange *= 0.5
+        elif self.nauseaTolerance == 2:
+            nauseaGrowthRateChange *= 0.25
+        elif self.nauseaTolerance == 3:
+            nauseaGrowthRateChange *= 0.125
+        self.nauseaTarget = min(255,self.nauseaTarget+nauseaGrowthRateChange)
+        return
     
     def findNextRide(self,lst:list):
         def filterLst(): 
