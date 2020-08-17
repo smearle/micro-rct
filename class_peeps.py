@@ -44,8 +44,20 @@ class Peeps:
 
     #call every frame to update peep's current status
     # now only update nausea status
-    def updateStatus(self):
+    def updateStatus(self,lst:list):
         #update nausea
+        self.updateNausea()
+        if self.nausea >= 140:
+            #currently not dealing with "normal sick"
+            if self.nausea >= 200:
+                #very sick will go to first aid
+                if not self.headingTo or (self.headingTo and self.headingTo.name != 'FirstAid'):
+                    firstAids = [(mark,ride) for mark,ride in lst if ride.name == 'FirstAid']
+                    # print(firstAids)
+                    self.findNextRide(firstAids,True)
+        return
+    
+    def updateNausea(self):
         newNausea = self.nausea
         newNauseaGrowth = self.nauseaTarget
         if newNausea >= newNauseaGrowth:
@@ -59,7 +71,6 @@ class Peeps:
         
         if newNausea!=newNauseaGrowth:
             self.nausea = newNausea
-
         return
     
     #currently only update hapiness and Nausea Target
@@ -159,7 +170,7 @@ class Peeps:
         self.nauseaTarget = min(255,self.nauseaTarget+nauseaGrowthRateChange)
         return
     
-    def findNextRide(self,lst:list):
+    def findNextRide(self,lst:list,specialCase=False):
         def filterLst(): 
             #this code will filter unwanted ride for the peep
             #[difference] didn't deal with ride's popularity 
@@ -191,9 +202,10 @@ class Peeps:
         if  self.position == (-1,-1) or not lst:
             return
         pos = self.position
-        print("\nnon-filter list: ",lst)
-        lst = filterLst()
-        print("new list: ",lst)
+        if not specialCase:
+            print("\nnon-filter list: ",lst)
+            lst = filterLst()
+            print("new list: ",lst)
         #[difference] didn't contain the function makes peeps repeat visiting same ride 
         #               so we didn't consider visiting same ride at this moment
         distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]

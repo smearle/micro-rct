@@ -6,6 +6,8 @@ from rct_test_objects import object_list as ride
 peeps = [Peeps(i) for i in range(3)]
 peeps[0].intensity = [15,7]
 peeps[1].intensity = [8,0]
+ride[25].position = (5,10)
+lst = [('#',ride[0]),('Q',ride[25])]
 
 
 # def main():
@@ -20,10 +22,14 @@ peeps[1].intensity = [8,0]
 
 orig_stdout = sys.stdout
 f = open('testPeep.txt', 'w')
-sys.stdout = f  
-peeps[0].interactWithRide(ride[0])
-for _ in range(100):
-    peeps[0].updateStatus()
+sys.stdout = f
+peeps[0].position = (0,0)  
+peeps[0].happiness = 0
+peeps[0].nauseaTolerance = 0
+for i in range(100):
+    if i == 20:
+        peeps[0].interactWithRide(ride[0])
+    peeps[0].updateStatus(lst)
     print('peep nausea is {}'.format(peeps[0].nausea))
 sys.stdout = orig_stdout
 f.close()

@@ -102,6 +102,7 @@ def updatedHuman(peep:Peeps):
     else:
         updatedMap(peep.position,(1,1),pathMark)
         peep.updatePosition(interactiveSpace,listOfRides)
+        peep.updateStatus(listOfRides)
     updatedMap(peep.position,(1,1),humanMark)
 
 
