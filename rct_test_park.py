@@ -1,14 +1,15 @@
-import random
+import random,sys
 from map_utility import *
 from peeps_path_finding import *
 
 def main():
-    initPark(80,30)
+    initPark(70,25)
     #place the path
     placePath(3)
     printPark()
     #place the ride (ride object, marks)
     placeRide(ride[0],'&')
+    placeRide(ride[1],'K')
     placeRide(ride[20],'@')
     placeRide(ride[7],'+')
     placeRide(ride[15],'-')
@@ -20,14 +21,19 @@ def main():
     updatedHuman(guest2)
     printPark()
     #testing
-    for _ in range(1):
+    for _ in range(40):
         updatedHuman(guest1)
         updatedHuman(guest2)
         updateRides()
         printPark()
     return
-    
+
+orig_stdout = sys.stdout
+f = open('out.txt', 'w')
+sys.stdout = f    
 main()
+sys.stdout = orig_stdout
+f.close()
 
 # def main():
 #     initPark(14,14)
