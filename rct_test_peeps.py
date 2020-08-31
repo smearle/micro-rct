@@ -19,17 +19,17 @@ lst = [('#',ride[0]),('Q',ride[25])]
 #         peeps[tmp].interactWithRide(ride[1])
 #         print('after {}'.format(peeps[tmp].happinessTarget))
 
-
-orig_stdout = sys.stdout
-f = open('testPeep.txt', 'w')
-sys.stdout = f
-peeps[0].position = (0,0)  
-peeps[0].happiness = 0
-peeps[0].nauseaTolerance = 0
-for i in range(100):
-    if i == 20:
-        peeps[0].interactWithRide(ride[0])
-    peeps[0].updateStatus(lst)
-    print('peep nausea is {}'.format(peeps[0].nausea))
-sys.stdout = orig_stdout
-f.close()
+def main():
+    orig_stdout = sys.stdout
+    f = open('testPeep.txt', 'w')
+    sys.stdout = f
+    peeps[0].position = (0,0)  
+    peeps[0].happiness = 0
+    peeps[0].nauseaTolerance = 0
+    for i in range(100):
+        if i == 20:
+            peeps[0].interactWithRide(ride[0])
+        peeps[0].updateStatus(lst)
+        print('peep nausea is {}'.format(peeps[0].nausea))
+    sys.stdout = orig_stdout
+    f.close()

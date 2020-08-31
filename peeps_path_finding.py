@@ -37,12 +37,12 @@ def main_path_finding(peep,space):
     maxTilesChecked = len(availablePath)
     counter = maxCounter
     checked = defaultdict(int)
-    print('Peep {} is on the way to {}'.format(peep.id,peep.headingTo.name))
+    # print('Peep {} is on the way to {}'.format(peep.id,peep.headingTo.name))
     goal = peep.headingTo.enter
     start = peep.position
     valid = valid_direction(start)
     ans = sorted([(i,path_finding_dfs(i))for i in valid],key = lambda x: x[1])
-    print('current goal: {}\tcurrent position: {}\tnext ideal pos: {}'.format(goal,start,ans))
+    # print('current goal: {}\tcurrent position: {}\tnext ideal pos: {}'.format(goal,start,ans))
     if ans:
         return ans[0][0]
     else:

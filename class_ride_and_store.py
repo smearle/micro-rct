@@ -1,7 +1,7 @@
 class Ride_and_Store:
 	def __init__(self,name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
 		self.name = name
-		if thirst!=0 or hunger!=0 or toilet!=0:
+		if thirst!=0 or hunger!=0 or toilet!=0 or name == 'FirstAid' or name =='InformationKiosk' or name=='Shop':
 			self.isShop = True
 		else:
 			self.isShop = False

@@ -1,9 +1,11 @@
-import random
+import random,time,datetime
 from collections import *
 from class_ride_and_store import Ride_and_Store as RS
 from class_peeps import Peeps 
 from rct_test_objects import object_list as ride
 from rct_test_peeps import peeps
+
+startTime = 0
 
 printCount = 1
 parkSize = (0,0)
@@ -18,8 +20,9 @@ wallMark = '▓'
 listOfRides = []
 
 def initPark(parkSizeX,parkSizeY):
-    global parkSize
+    global parkSize,startTime
     parkSize = (parkSizeX,parkSizeY)
+    startTime = time.time()
     for i in range(parkSize[1]):
         for j in range(parkSize[0]):
             if i == 0 or j == 0 or j == parkSize[0]-1 or i == parkSize[1]-1:
@@ -47,9 +50,9 @@ def placePath(margin):
                 interactiveSpace[(i,j)] = pathMark
     return
 
-def printPark():
-    global printCount
-    res = '\nprint count: '+str(printCount)+'\n'
+def printPark(frame=0):
+    global printCount,startTime
+    res = 'print count: {} at {} frame\n'.format(printCount,frame)
     for i in range(parkSize[1]):
         line = ''
         for j in range(parkSize[0]):
@@ -77,10 +80,11 @@ def updatedMap(start,size,mark:str,entrence=None):
                 if mark == pathMark:
                     interactiveSpace[(i,j)] = mark
                 else:
-                    if entrence and i == entrence[0] and j == entrence[1]: #ride entrence
-                        interactiveSpace[(i,j)] = pathMark
-                    elif not entrence and i==start[0] and j==start[1]: #ride entrence
-                        interactiveSpace[(i,j)] = pathMark
+                    if (entrence and i == entrence[0] and j == entrence[1]) or (not entrence and i==start[0] and j==start[1]): #ride entrence
+                        if size != (1,1):
+                            interactiveSpace[(i,j)] = pathMark
+                        else:
+                            interactiveSpace[(i,j)] = mark
                     else:
                         fixedSpace[(i,j)] = mark
             elif (i,j) in interactiveSpace:
@@ -88,22 +92,37 @@ def updatedMap(start,size,mark:str,entrence=None):
     return
 
 def updateRides():
+    res = []
     for _,ride in listOfRides:
-        if ride.queue:
+        if ride.name == 'FirstAid': #peep will remove themselves when the criterial meets
+            for curPeep in ride.queue:
+                res += curPeep.interactWithRide(ride)
+        elif ride.queue:    #otherwise, ride remove peeps
             curPeep = ride.queue.pop(0)
-            curPeep.interactWithRide(ride)
-    return
+            res += curPeep.interactWithRide(ride)
+    return  res
 
+def updatePark(frame):
+    res = []
+    for peep in peepsList:
+        res += updatedHuman(peep)
+    res += updateRides()
+    if res != []:
+        printPark(frame)
+        for line in res:
+            print(line)
                 
 
 def updatedHuman(peep:Peeps):
+    res = []
     if peep not in peepsList:
         peepsList.add(peep)
     else:
         updatedMap(peep.position,(1,1),pathMark)
-        peep.updatePosition(interactiveSpace,listOfRides)
-        peep.updateStatus(listOfRides)
+        res += peep.updatePosition(interactiveSpace,listOfRides)
+        res += peep.updateStatus(listOfRides)
     updatedMap(peep.position,(1,1),humanMark)
+    return res
 
 
 def placeRide(_ride: RS,mark:str):
@@ -139,6 +158,7 @@ def placeRide(_ride: RS,mark:str):
             _ride.position = rand
             listOfRides.append((mark,_ride))
             updatedMap(rand,size,mark,_ride.enter)
+            print('ride {} is placed at {}'.format(_ride.name,_ride.position))
     return
 
 def freeSpaceNextToInteractiveSpace():
