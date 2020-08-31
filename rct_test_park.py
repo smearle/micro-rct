@@ -16,7 +16,9 @@ def main():
     printPark()
     #place the guest
     for p in peeps:
-        updatedHuman(p)
+        res = updatedHuman(p)
+        for line in res:
+            print(line)
     printPark()
     #testing
     frame = 0

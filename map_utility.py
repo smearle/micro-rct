@@ -3,10 +3,10 @@ from collections import *
 from class_ride_and_store import Ride_and_Store as RS
 from class_peeps import Peeps 
 from rct_test_objects import object_list as ride
-from rct_test_peeps import peeps
+from peeps_generator import generate
 
 startTime = 0
-
+peeps = generate(5,0.2,0.2)
 printCount = 1
 parkSize = (0,0)
 freeSpace = defaultdict(str)
@@ -117,6 +117,7 @@ def updatedHuman(peep:Peeps):
     res = []
     if peep not in peepsList:
         peepsList.add(peep)
+        print(vars(peep))
     else:
         updatedMap(peep.position,(1,1),pathMark)
         res += peep.updatePosition(interactiveSpace,listOfRides)
