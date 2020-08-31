@@ -26,36 +26,41 @@ class Peeps:
         self.hasMap = False
         self.position = (0,1)
         self.visited = set()
+        self.inFirstAid = False
     
     def updatePosition(self,space,lst):
+        res = ''
+        if self.inFirstAid:#don't update position when peep interact with first aid
+            return res
         if not self.headingTo:
             self.findNextRide(lst)
-            return
+            return res
         target = self.headingTo
         ans =  PF.main_path_finding(self,space)
         self.position = ans
         if self.position == target.position or self.position == target.enter:
-            print('Peep {} arrived at {}'.format(self.id,target.name))
+            res += 'Peep {} arrived at {}\n'.format(self.id,target.name)
             target.queue.append(self)
             if not target.isShop:
                 self.visited.add(target.name)
             self.headingTo = None
-        return 
+        return res
 
     #call every frame to update peep's current status
     # now only update nausea status
     def updateStatus(self,lst:list):
         #update nausea
+        res = ''
         self.updateNausea()
         if self.nausea >= 140:
             #currently not dealing with "normal sick"
             if self.nausea >= 200:
                 #very sick will go to first aid
                 if not self.headingTo or (self.headingTo and self.headingTo.name != 'FirstAid'):
+                    res += 'Peep {} needs to go to first Aid'.format(self.id)
                     firstAids = [(mark,ride) for mark,ride in lst if ride.name == 'FirstAid']
-                    # print(firstAids)
                     self.findNextRide(firstAids,True)
-        return
+        return res
     
     def updateNausea(self):
         newNausea = self.nausea
@@ -75,13 +80,22 @@ class Peeps:
     
     #currently only update hapiness and Nausea Target
     def interactWithRide(self,ride):
-        print('\nPeep {} is on {}'.format(self.id,ride.name))
-        print('before')
-        print(vars(self))
-        self.happinessUpdate(ride.intensity,ride.nausea)
-        self.updateRideNauseaGrowth(ride)
-        print('after')
-        print(vars(self))
+        res = tmp = 'Peep {} is on {}\n'.format(self.id,ride.name)
+        if not ride.isShop:     #peep on the ride
+            res += 'before the ride:\n\tnausea target:{}\happiness Target:{}\n'.format(self.nauseaTarget,self.happinessTarget)
+            self.happinessUpdate(ride.intensity,ride.nausea)
+            self.updateRideNauseaGrowth(ride)
+            res += 'after the ride:\n\tnausea target:{}\happiness Target:{}\n'.format(self.nauseaTarget,self.happinessTarget)
+
+        if ride.name == 'FirstAid':
+            if self.nausea <= 35:   #leave first aid when nausea below 35
+                res += 'Peep {} is recovered from nausea\n'.format(self.id)
+                self.inFirstAid = False
+                ride.queue.remove(self)
+            else:
+                self.nausea -= 1
+                self.nauseaTarget = self.nausea
+        return res if res != tmp else ''
     
     def happinessUpdate(self,r_intensity,r_nausea):
         intensitySatisfaction = nauseaSatisfaction = 3
@@ -160,7 +174,6 @@ class Peeps:
         #original code is /512 but we /16 in our case
         nauseaGrowthRateChange = (ride.nausea*nauseaMultiplier)//16
         nauseaGrowthRateChange *= max(128,self.hunger)/64
-        print(nauseaGrowthRateChange,ride.nausea*nauseaMultiplier)
         if self.nauseaTolerance == 1:
             nauseaGrowthRateChange *= 0.5
         elif self.nauseaTolerance == 2:
@@ -171,6 +184,7 @@ class Peeps:
         return
     
     def findNextRide(self,lst:list,specialCase=False):
+        res = ''
         def filterLst(): 
             #this code will filter unwanted ride for the peep
             #[difference] didn't deal with ride's popularity 
@@ -182,7 +196,6 @@ class Peeps:
             maxIntensity = (min(self.intensity[0]*100,1000)+self.happiness)//alterNumber
             minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
             maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
-            # print('peeps raw intensity: {}\tmax intensity: {}\tmin intensity: {}\tmax nausea:{}'.format(self.intensity,maxIntensity,minIntensity,maxNausea))
             for mark,ride in lst:
                 goodIntensity = goodNausea = False
                 if maxIntensity >= ride.intensity >= minIntensity:
@@ -193,7 +206,6 @@ class Peeps:
                 # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
                 if self.nausea > 160 and ride.nausea >= 10:
                     goodNausea = False
-                # print('ride name: {}\tride intensity: {}\tride nausea: {}'.format(ride.name,ride.intensity,ride.nausea))
                 
                 if goodIntensity and goodNausea:
                     newLst.append((mark,ride))
@@ -203,17 +215,18 @@ class Peeps:
             return
         pos = self.position
         if not specialCase:
-            print("\nnon-filter list: ",lst)
+            res += 'non-filter list: {}\n'.format(lst)
             lst = filterLst()
-            print("new list: ",lst)
+            res += 'new list: {}\n'.format(lst)
         #[difference] didn't contain the function makes peeps repeat visiting same ride 
         #               so we didn't consider visiting same ride at this moment
         distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
         if not distance:
             return
         closetRide = lst[distance.index(min(distance))][1]
-        print('Peep {} new goal is {}'.format(self.id,closetRide.name))
+        res += 'Peep {} new goal is {}'.format(self.id,closetRide.name)
         self.headingTo = closetRide
+        return res
 
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
