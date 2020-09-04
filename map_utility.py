@@ -18,6 +18,7 @@ emptyMark = ' '
 pathMark = '░'
 wallMark = '▓'
 listOfRides = []
+parkScore = 0
 
 def initPark(parkSizeX,parkSizeY):
     global parkSize,startTime
@@ -51,7 +52,7 @@ def placePath(margin):
     return
 
 def printPark(frame=0):
-    global printCount,startTime
+    global printCount,startTime, parkScore
     res = 'print count: {} at {} frame\n'.format(printCount,frame)
     for i in range(parkSize[1]):
         line = ''
@@ -69,6 +70,7 @@ def printPark(frame=0):
         res += ride.name +': '+mark+'\n'
     res += 'human: '+humanMark+"\n"
     res += 'enter: '+pathMark+'\n'
+    res += '\npark score: {}\n'.format(parkScore) 
     print(res)
     printCount += 1
 
@@ -103,10 +105,12 @@ def updateRides():
     return  res
 
 def updatePark(frame):
+    global parkScore
     res = []
     for peep in peepsList:
         res += updatedHuman(peep)
     res += updateRides()
+    parkScore = scorePark()
     if res != []:
         printPark(frame)
         for line in res:
@@ -172,3 +176,11 @@ def freeSpaceNextToInteractiveSpace():
                 ans[neighbor] = freeSpace[neighbor]
     return ans
 
+def scorePark():
+    ''' Calculates the score of the park as the average guest happiness. '''
+    score = 0
+    for peep in peepsList:
+        score += peep.happiness
+    score = score / len(peepsList)
+    return score
+        
