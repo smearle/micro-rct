@@ -1,1715 +1,455 @@
-
-print count: 1
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░                                                              ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓                                                                    ▓
-▓                                                                    ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+print count: 1 at 0 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░                                ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 human: Ü
 enter: ░
 
+park score: 0
 
-print count: 2
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+ride BobsleighCoaster is placed at (4, 14)
+ride CorkscrewRollerCoaster is placed at (6, 4)
+ride Circus is placed at (4, 30)
+ride CrookedHouse is placed at (14, 28)
+ride FirstAid is placed at (15, 20)
+print count: 2 at 0 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
+park score: 0
 
-print count: 3
-▓Ü▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+{'id': 0, 'intensity': [8, 0], 'happiness': 128, 'happinessTarget': 128, 'nausea': 0, 'nauseaTarget': 0, 'hunger': 230, 'nauseaTolerance': 1, 'thirst': 194, 'angriness': 0, 'toilet': 0, 'timeToConsume': 0, 'cash': 537, 'energy': 86, 'energyTarget': 86, 'timeInPark': -1, 'headingTo': None, 'hasMap': False, 'position': (0, 1), 'visited': set(), 'inFirstAid': False}
+{'id': 1, 'intensity': [15, 7], 'happiness': 128, 'happinessTarget': 128, 'nausea': 0, 'nauseaTarget': 0, 'hunger': 60, 'nauseaTolerance': 3, 'thirst': 202, 'angriness': 0, 'toilet': 0, 'timeToConsume': 0, 'cash': 471, 'energy': 112, 'energyTarget': 112, 'timeInPark': -1, 'headingTo': None, 'hasMap': False, 'position': (0, 1), 'visited': set(), 'inFirstAid': False}
+{'id': 2, 'intensity': [12, 5], 'happiness': 128, 'happinessTarget': 128, 'nausea': 0, 'nauseaTarget': 0, 'hunger': 132, 'nauseaTolerance': 3, 'thirst': 239, 'angriness': 0, 'toilet': 0, 'timeToConsume': 0, 'cash': 416, 'energy': 124, 'energyTarget': 124, 'timeInPark': -1, 'headingTo': None, 'hasMap': False, 'position': (0, 1), 'visited': set(), 'inFirstAid': False}
+{'id': 3, 'intensity': [11, 0], 'happiness': 128, 'happinessTarget': 128, 'nausea': 0, 'nauseaTarget': 0, 'hunger': 33, 'nauseaTolerance': 1, 'thirst': 151, 'angriness': 0, 'toilet': 0, 'timeToConsume': 0, 'cash': 589, 'energy': 128, 'energyTarget': 128, 'timeInPark': -1, 'headingTo': None, 'hasMap': False, 'position': (0, 1), 'visited': set(), 'inFirstAid': False}
+{'id': 4, 'intensity': [14, 4], 'happiness': 128, 'happinessTarget': 128, 'nausea': 0, 'nauseaTarget': 0, 'hunger': 236, 'nauseaTolerance': 3, 'thirst': 15, 'angriness': 0, 'toilet': 0, 'timeToConsume': 0, 'cash': 417, 'energy': 96, 'energyTarget': 96, 'timeInPark': -1, 'headingTo': None, 'hasMap': False, 'position': (0, 1), 'visited': set(), 'inFirstAid': False}
+print count: 3 at 0 frame
+▓Ü▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
+park score: 0
 
-non-filter list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster), ('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-new list:  [('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-Peep 1 new goal is CrookedHouse
-
-non-filter list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster), ('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-new list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster)]
-Peep 0 new goal is BobsleighCoaster
-
-print count: 4
-▓Ü▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+print count: 4 at 1 frame
+▓Ü▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (0, 1)	next ideal pos: [((1, 1), 26)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (0, 1)	next ideal pos: [((1, 1), 18)]
+park score: 127.0
 
-print count: 5
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓Ü                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+Peep 0 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('C', object: Circus), ('G', object: CrookedHouse)]
+
+Peep 0 new goal is Circus
+
+Peep 1 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster)]
+
+Peep 1 new goal is CorkscrewRollerCoaster
+
+Peep 3 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse)]
+
+Peep 3 new goal is CorkscrewRollerCoaster
+
+Peep 4 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse)]
+
+Peep 4 new goal is CorkscrewRollerCoaster
+
+Peep 2 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster)]
+
+Peep 2 new goal is CorkscrewRollerCoaster
+print count: 5 at 10 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░ÜTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (1, 1)	next ideal pos: [((2, 1), 25), ((0, 1), 27)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (1, 1)	next ideal pos: [((2, 1), 17), ((0, 1), 19)]
+park score: 128.0
 
-print count: 6
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓Ü                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+Peep 1 arrived at CorkscrewRollerCoaster
+
+Peep 3 arrived at CorkscrewRollerCoaster
+
+Peep 4 arrived at CorkscrewRollerCoaster
+
+Peep 2 arrived at CorkscrewRollerCoaster
+
+Peep 1 is on CorkscrewRollerCoaster
+
+before the ride:
+	nausea target:0	happiness Target:128
+
+after the ride:
+	nausea target:27.75	happiness Target:78
+
+print count: 6 at 11 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░ÜTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (2, 1)	next ideal pos: [((3, 1), 24), ((1, 1), 26)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (2, 1)	next ideal pos: [((3, 1), 16), ((1, 1), 18)]
+park score: 127.0
 
-print count: 7
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+Peep 1 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster)]
+
+Peep 1 new goal is BobsleighCoaster
+
+Peep 3 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse)]
+
+Peep 3 new goal is BobsleighCoaster
+
+Peep 4 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse)]
+
+Peep 4 new goal is BobsleighCoaster
+
+Peep 2 is finding next ride
+
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
+
+new list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster)]
+
+Peep 2 new goal is BobsleighCoaster
+Peep 3 is on CorkscrewRollerCoaster
+
+before the ride:
+	nausea target:0	happiness Target:128
+
+after the ride:
+	nausea target:58.0	happiness Target:163
+
+print count: 7 at 12 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  Ü░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (3, 1)	next ideal pos: [((3, 2), 23), ((2, 1), 25)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (3, 1)	next ideal pos: [((3, 2), 15), ((2, 1), 17)]
+park score: 127.6
 
-print count: 8
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+Peep 4 is on CorkscrewRollerCoaster
+
+before the ride:
+	nausea target:0	happiness Target:128
+
+after the ride:
+	nausea target:51.1640625	happiness Target:78
+
+print count: 8 at 13 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      C░    ░  ▓
+▓  Ü          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (3, 2)	next ideal pos: [((3, 3), 22), ((3, 1), 24)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (3, 2)	next ideal pos: [((3, 3), 14), ((3, 1), 16)]
+park score: 127.0
 
-print count: 9
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+Peep 2 is on CorkscrewRollerCoaster
+
+before the ride:
+	nausea target:0	happiness Target:128
+
+after the ride:
+	nausea target:28.6171875	happiness Target:78
+
+print count: 9 at 35 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  ░          &&&&&&&&&░      CÜ    ░  ▓
+▓  Ü          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (3, 3)	next ideal pos: [((4, 3), 21), ((3, 4), 21), ((3, 2), 23)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (3, 3)	next ideal pos: [((4, 3), 13), ((3, 4), 13), ((3, 2), 15)]
+park score: 118.2
 
-print count: 10
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  Ü                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+Peep 0 arrived at Circus
+
+Peep 0 is on Circus
+
+before the ride:
+	nausea target:0	happiness Target:128
+
+after the ride:
+	nausea target:0.0	happiness Target:163
+
+print count: 10 at 36 frame
+▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓░                                     ▓
+▓░                                     ▓
+▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓  Ü          &&&&&&&&&░      CÜ    ░  ▓
+▓  ░          &&&&&&&&&&      CC    ░  ▓
+▓  ░░TTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT&&&&&&&&&&            ░  ▓
+▓  ░TTTTTTTTTT              GG      ░  ▓
+▓  ░TTTTTTTTTT      F       ░G      ░  ▓
+▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
+▓                                      ▓
+▓                                      ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
+CorkscrewRollerCoaster: T
+Circus: C
+CrookedHouse: G
+FirstAid: F
 human: Ü
 enter: ░
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (4, 3)	next ideal pos: [((5, 3), 20), ((3, 3), 22)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (4, 3)	next ideal pos: [((5, 3), 12), ((3, 3), 14)]
+park score: 118.0
 
-print count: 11
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  Ü                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
+Peep 0 is finding next ride
 
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (5, 3)	next ideal pos: [((6, 3), 19), ((4, 3), 21)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (5, 3)	next ideal pos: [((6, 3), 11), ((4, 3), 13)]
+non-filter list: [('&', object: BobsleighCoaster), ('T', object: CorkscrewRollerCoaster), ('C', object: Circus), ('G', object: CrookedHouse), ('F', object: FirstAid)]
 
-print count: 12
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  Ü                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+new list: [('C', object: Circus), ('G', object: CrookedHouse)]
 
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (6, 3)	next ideal pos: [((7, 3), 18), ((5, 3), 20)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (6, 3)	next ideal pos: [((7, 3), 10), ((5, 3), 12)]
-
-print count: 13
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (7, 3)	next ideal pos: [((8, 3), 17), ((6, 3), 19)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (7, 3)	next ideal pos: [((8, 3), 9), ((6, 3), 11)]
-
-print count: 14
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (8, 3)	next ideal pos: [((9, 3), 16), ((7, 3), 18)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (8, 3)	next ideal pos: [((9, 3), 8), ((7, 3), 10)]
-
-print count: 15
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (9, 3)	next ideal pos: [((10, 3), 15), ((8, 3), 17)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (9, 3)	next ideal pos: [((10, 3), 7), ((8, 3), 9)]
-
-print count: 16
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (10, 3)	next ideal pos: [((11, 3), 14), ((9, 3), 16)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (10, 3)	next ideal pos: [((11, 3), 6), ((9, 3), 8)]
-
-print count: 17
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (11, 3)	next ideal pos: [((12, 3), 13), ((10, 3), 15)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (11, 3)	next ideal pos: [((12, 3), 5), ((10, 3), 7)]
-
-print count: 18
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (12, 3)	next ideal pos: [((13, 3), 12), ((11, 3), 14)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (12, 3)	next ideal pos: [((13, 3), 4), ((11, 3), 6)]
-
-print count: 19
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (13, 3)	next ideal pos: [((14, 3), 11), ((12, 3), 13)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (13, 3)	next ideal pos: [((14, 3), 3), ((12, 3), 5)]
-
-print count: 20
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (14, 3)	next ideal pos: [((15, 3), 10), ((13, 3), 12)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (14, 3)	next ideal pos: [((15, 3), 2), ((13, 3), 4)]
-
-print count: 21
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (15, 3)	next ideal pos: [((16, 3), 9), ((14, 3), 11)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (15, 3)	next ideal pos: [((16, 3), 1), ((14, 3), 3)]
-
-print count: 22
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (16, 3)	next ideal pos: [((17, 3), 8), ((16, 4), 8), ((15, 3), 10)]
-Peep 0 is on the way to BobsleighCoaster
-current goal: (16, 4)	current position: (16, 3)	next ideal pos: [((16, 4), 0), ((17, 3), 2), ((15, 3), 2)]
-Peep 0 arrived at BobsleighCoaster
-Peep 0 is on BobsleighCoaster
-
-print count: 23
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░Ü&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (17, 3)	next ideal pos: [((18, 3), 7), ((16, 3), 9)]
-
-non-filter list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster), ('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-new list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster)]
-Peep 0 new goal is CorkscrewRollerCoaster
-
-print count: 24
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░Ü&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (18, 3)	next ideal pos: [((19, 3), 6), ((17, 3), 8)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (16, 4)	next ideal pos: [((16, 3), 50)]
-
-print count: 25
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (19, 3)	next ideal pos: [((20, 3), 5), ((18, 3), 7)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (16, 3)	next ideal pos: [((15, 3), 49), ((16, 4), 49), ((17, 3), 51)]
-
-print count: 26
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (20, 3)	next ideal pos: [((21, 3), 4), ((19, 3), 6)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (15, 3)	next ideal pos: [((14, 3), 48), ((16, 3), 50)]
-
-print count: 27
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (21, 3)	next ideal pos: [((21, 4), 3), ((20, 3), 5)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (14, 3)	next ideal pos: [((13, 3), 47), ((15, 3), 49)]
-
-print count: 28
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (21, 4)	next ideal pos: [((21, 5), 2), ((21, 3), 4)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (13, 3)	next ideal pos: [((12, 3), 46), ((14, 3), 48)]
-
-print count: 29
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (21, 5)	next ideal pos: [((21, 6), 1), ((21, 4), 3)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (12, 3)	next ideal pos: [((11, 3), 45), ((13, 3), 47)]
-
-print count: 30
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to CrookedHouse
-current goal: (22, 6)	current position: (21, 6)	next ideal pos: [((22, 6), 0), ((21, 7), 2), ((21, 5), 2)]
-Peep 1 arrived at CrookedHouse
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (11, 3)	next ideal pos: [((10, 3), 44), ((12, 3), 46)]
-Peep 1 is on CrookedHouse
-
-print count: 31
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +Ü                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-
-non-filter list:  [('&', object: BobsleighCoaster), ('K', object: CorkscrewRollerCoaster), ('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-new list:  [('@', object: Chairlift), ('+', object: CrookedHouse), ('-', object: BoatHire)]
-Peep 1 new goal is BoatHire
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (10, 3)	next ideal pos: [((9, 3), 43), ((11, 3), 45)]
-
-print count: 32
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +Ü                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (22, 6)	next ideal pos: [((21, 6), 14)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (9, 3)	next ideal pos: [((8, 3), 42), ((10, 3), 44)]
-
-print count: 33
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 6)	next ideal pos: [((21, 7), 13), ((22, 6), 15), ((21, 5), 15)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (8, 3)	next ideal pos: [((7, 3), 41), ((9, 3), 43)]
-
-print count: 34
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  Ü&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 7)	next ideal pos: [((21, 8), 12), ((21, 6), 14)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (7, 3)	next ideal pos: [((6, 3), 40), ((8, 3), 42)]
-
-print count: 35
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  Ü                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 8)	next ideal pos: [((21, 9), 11), ((21, 7), 13)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (6, 3)	next ideal pos: [((5, 3), 39), ((7, 3), 41)]
-
-print count: 36
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  Ü                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 9)	next ideal pos: [((21, 10), 10), ((21, 8), 12)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (5, 3)	next ideal pos: [((4, 3), 38), ((6, 3), 40)]
-
-print count: 37
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  Ü                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 10)	next ideal pos: [((21, 11), 9), ((21, 9), 11)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (4, 3)	next ideal pos: [((5, 3), 39), ((3, 3), 39)]
-
-print count: 38
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  Ü                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 11)	next ideal pos: [((21, 12), 8), ((21, 10), 10)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (5, 3)	next ideal pos: [((4, 3), 38), ((6, 3), 40)]
-
-print count: 39
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  Ü                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 12)	next ideal pos: [((21, 13), 7), ((21, 11), 9)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (4, 3)	next ideal pos: [((5, 3), 39), ((3, 3), 39)]
-
-print count: 40
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  Ü                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 13)	next ideal pos: [((21, 14), 6), ((21, 12), 8)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (5, 3)	next ideal pos: [((4, 3), 38), ((6, 3), 40)]
-
-print count: 41
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  Ü                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 14)	next ideal pos: [((21, 15), 5), ((21, 13), 7)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (4, 3)	next ideal pos: [((5, 3), 39), ((3, 3), 39)]
-
-print count: 42
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  ░                            KKKKKKKKK░                        ░  ▓
-▓  Ü                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
-Peep 1 is on the way to BoatHire
-current goal: (20, 19)	current position: (21, 15)	next ideal pos: [((21, 16), 4), ((21, 14), 6)]
-Peep 0 is on the way to CorkscrewRollerCoaster
-current goal: (4, 41)	current position: (5, 3)	next ideal pos: [((4, 3), 38), ((6, 3), 40)]
-
-print count: 43
-▓░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-▓░                                                                   ▓
-▓░                                                                   ▓
-▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓  Ü                            KKKKKKKKK░                        ░  ▓
-▓  ░                            KKKKKKKKKK                        ░  ▓
-▓  ░                            KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&                  KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------   KKKKKKKKKK       @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░&&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░░&&&&&&&&&     ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ----------                    @@@@@@@@@@@@@@@  ░  ▓
-▓  ░               ░---------                    @@@@@@@@@@@@@@░  ░  ▓
-▓  ░░░░░░░░░░░░░Ü░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ▓
-▓    +░                                                              ▓
-▓    ++                                                              ▓
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-
-BobsleighCoaster: &
-CorkscrewRollerCoaster: K
-Chairlift: @
-CrookedHouse: +
-BoatHire: -
-human: Ü
-enter: ░
-
+Peep 0 new goal is CrookedHouse
