@@ -2,8 +2,8 @@ import random,sys
 from class_peeps import Peeps
 from rct_test_objects import object_list as ride
 
-def generate(total,cowardRatio=0.3,braveRatio=0.3):
-    peeps = [Peeps(i) for i in range(total)]
+def generate(total,cowardRatio=0.3,braveRatio=0.3, path_finder=None):
+    peeps = [Peeps(i, path_finder) for i in range(total)]
     cap1,cap2 = cowardRatio*total,(cowardRatio+braveRatio)*total
 
     for i in range(total):

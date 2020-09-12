@@ -1,3 +1,9 @@
+class Path:
+    def __init__(self, position):
+        self.name = 'path'
+        self.position = position
+        self.enter = position
+
 class Ride_and_Store:
 	def __init__(self,name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,position_x=None,position_y=None):
 		self.name = name

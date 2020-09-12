@@ -1,11 +1,14 @@
 import random
 from collections import *
 from class_ride_and_store import Ride_and_Store as RS
-import peeps_path_finding as PF
+#from peeps_path_finding import PathFinder
+from path import PathFinder, Path
+
+#PF = PathFinder()
 
 maxValue = 255
 class Peeps:
-    def __init__(self,name):
+    def __init__(self,name, path_finder):
         self.id = name
         self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
         self.happiness = 128
@@ -27,8 +30,13 @@ class Peeps:
         self.position = (0,1)
         self.visited = set()
         self.inFirstAid = False
+        self.time_sick = 0
+        self.traversible_tiles = None
+        self.curr_route = []
+        self.path_finder = path_finder
 
     def updatePosition(self,space,lst):
+        self.traversible_tiles = space
         res = []
 
         if self.inFirstAid:#don't update position when peep interact with first aid
@@ -39,19 +47,27 @@ class Peeps:
 
             return res
         target = self.headingTo
-        ans =  PF.main_path_finding(self,space)
+#       ans =  PF.main_path_finding(self,space)
+        if not self.curr_route:
+#           print('PATHFINDING')
+            self.curr_route = self.path_finder.find(self)
+        else:
+#           print('REUSING ROUTE')
+            pass
+        ans = self.curr_route.pop(0)
         self.position = ans
 
         if self.position == target.position or self.position == target.enter:
             str1 = 'Peep {} arrived at {}\n'.format(self.id,target.name)
             res.append(str1)
+            if not isinstance(target, Path):
 
-            if target.name == 'FirstAid':
-                self.inFirstAid = True
-            target.queue.append(self)
+                if target.name == 'FirstAid':
+                    self.inFirstAid = True
+                target.queue.append(self)
 
-            if not target.isShop:
-                self.visited.add(target.name)
+                if not target.isShop:
+                    self.visited.add(target.name)
             self.headingTo = None
 
         return res
@@ -67,15 +83,28 @@ class Peeps:
             #currently not dealing with "normal sick"
 
             if self.nausea >= 200:
+                if self.time_sick > 60:
+                    self.vomit()
+                    self.time_sick = 0
+                else:
+                    self.time_sick += 1
                 #very sick will go to first aid
 
                 if ((not self.headingTo) or (self.headingTo and self.headingTo.name != 'FirstAid')) and not self.inFirstAid:
-                    res.append('Peep {} needs to go to first Aid\n'.format(self.id))
+                    res.append('Peep {} needs to go to first Aid'.format(self.id))
                     firstAids = [(mark,ride) for mark,ride in lst if ride.name == 'FirstAid']
                     res += self.findNextRide(firstAids,True)
+
         self.updateHappiness()
 
         return res
+
+    def vomit(self):
+        print('Peep {} vomits and recovers from nausea'.format(self.id))
+        self.nauseaTarget = 0
+        self.nausea = 0
+        self.headingTo = None
+
 
 
     def updateHappiness(self):
@@ -281,11 +310,18 @@ class Peeps:
         #               so we didn't consider visiting same ride at this moment
         distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
 
-        if not distance:
+        if not distance or lst == [] or distance ==float('inf'):
+            res.append('Peep {} finds no satisfactory ride.'.format(self.id))
+            if self.traversible_tiles is not None:
+               #self.wander()
+                pass
+            else:
+                res.append('no traversible tiles')
+
             return res
-        closetRide = lst[distance.index(min(distance))][1]
-        res.append('Peep {} new goal is {}'.format(self.id,closetRide.name))
-        self.headingTo = closetRide
+        closestRide = lst[distance.index(min(distance))][1]
+        res.append('Peep {} new goal is {}'.format(self.id,closestRide.name))
+        self.headingTo = closestRide
 
         return res
 
@@ -300,3 +336,11 @@ class Peeps:
             tolerance = 3
 
         return tolerance
+
+    def wander(self):
+        '''Pick a random destination.'''
+       #print('traversible tiles: {}'.format(self.traversible_tiles))
+        goal = random.choice(list(self.traversible_tiles.keys()))
+        #FIXME: do not create new path object every time
+        self.headingTo = self.path_net[goal]
+

@@ -1,6 +1,7 @@
 import random,sys
 from map_utility import *
 from peeps_path_finding import *
+from park import Park
 
 peeps = generate(5,0.2,0.2)
 
