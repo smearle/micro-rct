@@ -110,7 +110,7 @@ class Peeps:
             self.nausea -= 30
         else:
             self.nausea = 0
-        self.headingTo = None
+        # self.headingTo = None
 
 
 
