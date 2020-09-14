@@ -82,6 +82,7 @@ class Peeps:
         if self.nausea > 128:
             # in the orginal code peep will have chance to throw up when walking with nausea>128
             # since current peeps will always be walking we will run this code everytime we update
+            # peeps cannot create vomit litter at the same location
             chance = random.randint(0,maxValue)
             if chance <= (self.nausea-128)/2:   #the higher nausea the higher chance to vomit
                 self.vomit()
