@@ -79,15 +79,17 @@ class Peeps:
         res = []
         self.updateNausea()
 
+        if self.nausea > 128:
+            # in the orginal code peep will have chance to throw up when walking with nausea>128
+            # since current peeps will always be walking we will run this code everytime we update
+            chance = random.randint(0,maxValue)
+            if chance <= (self.nausea-128)/2:   #the higher nausea the higher chance to vomit
+                self.vomit()
+
         if self.nausea >= 140:
             #currently not dealing with "normal sick"
 
             if self.nausea >= 200:
-                if self.time_sick > 60:
-                    self.vomit()
-                    self.time_sick = 0
-                else:
-                    self.time_sick += 1
                 #very sick will go to first aid
 
                 if ((not self.headingTo) or (self.headingTo and self.headingTo.name != 'FirstAid')) and not self.inFirstAid:
@@ -100,9 +102,13 @@ class Peeps:
         return res
 
     def vomit(self):
-        print('Peep {} vomits and recovers from nausea'.format(self.id))
-        self.nauseaTarget = 0
-        self.nausea = 0
+        print('Peep {} vomits '.format(self.id))
+        self.nauseaTarget /=2
+        self.hunger /=2
+        if self.nausea >30:
+            self.nausea -= 30
+        else:
+            self.nausea = 0
         self.headingTo = None
 
 
