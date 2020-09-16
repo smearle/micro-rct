@@ -7,17 +7,13 @@ from collections import *
 
 import numpy as np
 
-from class_peeps import Peeps
+from peep import Peeps
 from map_utility import *
 from path import Path
 #from map import Map
 from tilemap import Map
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
-
-
-
-
 
 class Park():
     humanMark = 'Ü'
@@ -56,7 +52,7 @@ class Park():
         self.path_net = {}
 
     def populate_path_net(self):
-        ''' 
+        '''
         Create graph of Path objects after initial path is placed.
         TODO: A simpler version of this in the case where path changes
         '''
@@ -66,10 +62,13 @@ class Park():
         path_coords_T = path_coords.transpose()
 
         #initialize an object for each
+
         for position in path_coords_T:
             position = tuple(position)
+
             if position not in self.path_net:
                 self.path_net[position] = Path(position, self.map[Map.PATH], self.path_net)
+
         for path in self.path_net.values():
             path.get_connecting()
         print(self.map[Map.PATH])

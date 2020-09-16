@@ -1,7 +1,7 @@
 import random, time, datetime
 from collections import *
-from class_ride_and_store import Ride_and_Store as RS
-from class_peeps import Peeps
+from attraction import Ride_and_Store as RS
+from peep import Peeps
 from rct_test_objects import object_list as ride
 from rct_test_objects import symbol_list, symbol_dict
 from peeps_generator import generate
@@ -85,5 +85,3 @@ def placeRide(park, _ride: RS,mark:str):
             park.listOfRides.append((mark,_ride))
             park.updateMap(rand,size,mark,_ride.enter)
             print('ride {} is placed at {}'.format(_ride.name,_ride.position))
-
-    return
