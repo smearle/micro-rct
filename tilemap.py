@@ -97,8 +97,6 @@ class Map():
                     self.screen.blit(self.path_tile, (i_pix, j_pix))
                 if curr_ride_tile == -1:
                     pass
-               #elif curr_ride_tile == '3':
-               #    self.screen.blit(self.cin_tile, (i_pix, j_pix))
                 elif curr_ride_tile == 's':
                     self.screen.blit(self.shop_tile, (i_pix, j_pix, i_pix+2*tile_width, j_pix+2*tile_height))
                 elif curr_ride_tile == '╬':
@@ -111,19 +109,17 @@ class Map():
                     self.screen.blit(self.food_tile, (i_pix, j_pix))
                 elif curr_ride_tile == 't':
                     self.screen.blit(self.toilet_tile, (i_pix, j_pix))
-                elif curr_ride_tile in '3c/~Tæ§F¶¥':
+                elif curr_ride_tile in '3c/~T§F¶¥':
                     pass
                 else:
                     if curr_ride_tile not in self.ascii_tiles:
                         tile = pygame.font.Font(None, self.tile_height).render(curr_ride_tile, False, (255, 255, 255))
-                       #rect = tile.get_rect()
                         self.ascii_tiles[curr_ride_tile] = tile
                     else:
                         tile = self.ascii_tiles[curr_ride_tile]
                     self.screen.blit(tile, (i_pix, j_pix))
 
                 if curr_peep_tile == 1:
-                   #self.screen.blit(self.path_tile, (i_pix, j_pix))
                     self.screen.blit(self.guest_tile, (i_pix, j_pix))
 
                 j += 1
@@ -159,7 +155,6 @@ class Map():
 
 
     def render_ride(self, map, i, j):
-        pass
         i += 1
         j += 1
         self.render_park(i, j)

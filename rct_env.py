@@ -19,9 +19,9 @@ class RCTEnv():
     N_GUESTS = 3
     RENDER = True
 
-    MAP_WIDTH = 50
-    MAP_HEIGHT = 50
-    N_ACTIONS = 50
+    MAP_WIDTH = 30
+    MAP_HEIGHT = 30
+    N_ACTIONS = 30
     N_RIDES = len(ride_list)
 
     def __init__(self, render=True):
