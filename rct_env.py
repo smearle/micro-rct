@@ -1,13 +1,14 @@
 import random,sys
-from map_utility import placeRide, placePath
+from micro_rct.map_utility import placeRide, placePath
 import random
 import time
-from park import Park
-from path import PathFinder
-from peeps_generator import generate
-from rct_test_objects import object_list as ride_list
-from rct_test_objects import symbol_list
-from tilemap import Map
+from micro_rct.park import Park
+from micro_rct.path import PathFinder
+from micro_rct.peeps_generator import generate
+from micro_rct.rct_test_objects import object_list as ride_list
+from micro_rct.rct_test_objects import symbol_list
+from micro_rct.tilemap import Map
+from gym import core
 import copy
 
 def main():
@@ -15,8 +16,9 @@ def main():
    env.reset()
    env.simulate()
 
+
 class RCTEnv():
-    N_GUESTS = 3
+    N_GUESTS = 100
     RENDER = True
 
     MAP_WIDTH = 30
@@ -35,7 +37,7 @@ class RCTEnv():
             placeRide(self.park, ride_list[ride_i](), str(symbol_list[ride_i]))
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
-        peeps = generate(self.N_GUESTS, 0.2, 0.2, path_finder)
+        peeps = generate(self.N_GUESTS, self.park, 0.2, 0.2, path_finder)
         for p in peeps:
             self.park.updateHuman(p)
 
@@ -46,6 +48,8 @@ class RCTEnv():
             self.park.update(frame)
             park_map.render_park()
             frame += 1
+
+
 
 
 #def run_experiment(self, n_ticks, n_trials=20):
