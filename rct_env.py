@@ -11,15 +11,16 @@ from micro_rct.tilemap import Map
 from gym import core
 import copy
 
+RENDER = False
+
 def main():
-   env = RCTEnv()
+   env = RCTEnv(RENDER)
    env.reset()
    env.simulate()
 
 
 class RCTEnv():
     N_GUESTS = 100
-    RENDER = True
 
     MAP_WIDTH = 30
     MAP_HEIGHT = 30
@@ -28,6 +29,7 @@ class RCTEnv():
 
     def __init__(self, render=True):
         self.park = Park(self.MAP_HEIGHT, self.MAP_WIDTH)
+        self.RENDER = render
 
     def reset(self):
         placePath(self.park, margin=3)
@@ -43,10 +45,11 @@ class RCTEnv():
 
     def simulate(self, n_ticks=-1):
         frame = 0
-        park_map = Map(self.park)
+        park_map = Map(self.park, render=self.RENDER)
         while frame < n_ticks or n_ticks == -1:
             self.park.update(frame)
-            park_map.render_park()
+            if self.RENDER:
+                park_map.render_park()
             frame += 1
 
 
