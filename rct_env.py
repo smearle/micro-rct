@@ -8,7 +8,6 @@ from micro_rct.peeps_generator import generate
 from micro_rct.rct_test_objects import object_list as ride_list
 from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
-from gym import core
 import copy
 
 RENDER = False

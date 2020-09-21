@@ -1,6 +1,6 @@
 from collections import defaultdict
 import numpy as np
-import cv2
+#import cv2
 class PathFinder:
     def __init__(self, path_net):
         self.maxCounter = self.counter = 100
