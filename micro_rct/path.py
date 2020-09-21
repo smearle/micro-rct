@@ -1,6 +1,8 @@
 from collections import defaultdict
 import numpy as np
 #import cv2
+
+
 class PathFinder:
     def __init__(self, path_net):
         self.maxCounter = self.counter = 100
@@ -72,7 +74,7 @@ class PathFinder:
         pos = node.position
         if pos in self.checked:
       #     rend_arr[pos[0], pos[1], 1] = 0
-           #print('FOUND TRACE at {}, distance {}'.format(pos, self.checked[node.position]))
+#           print('FOUND TRACE at {}, distance {}'.format(pos, self.checked[node.position]))
       #     cv2.imshow("pathfinder checking", rend_arr)
       #     cv2.waitKey(1)
             return node, self.checked[pos]

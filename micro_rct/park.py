@@ -32,7 +32,7 @@ class Park():
         self.size = (width,height)
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.empty((3, width, height), dtype=int)
+        self.map = np.zeros((3, width, height), dtype=int)
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
 
@@ -79,7 +79,6 @@ class Park():
 
         for path in self.path_net.values():
             path.get_connecting()
-        print(self.map[Map.PATH])
 
 
     def freeSpaceNextToInteractiveSpace(self):
@@ -125,6 +124,7 @@ class Park():
                             self.fixedSpace[(i,j)] = mark
 
                         if mark != Park.wallMark:
+                            assert isinstance(symbol_dict[mark][0], int)
                             self.map[0, i, j] = symbol_dict[mark][0]
                 elif (i, j) in self.interactiveSpace:
                     self.interactiveSpace[(i,j)] = mark

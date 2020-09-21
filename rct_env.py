@@ -11,26 +11,50 @@ from micro_rct.tilemap import Map
 import copy
 
 RENDER = False
+N_GUESTS = 100
 
 def main():
-   env = RCTEnv(RENDER)
-   env.reset()
-   env.simulate()
+    env = RCTEnv(RENDER)
+    for n_ticks in [500, 1000]:
+        run_experiment(env, n_ticks)
+
+def run_experiment(env, n_ticks, n_trials=20):
+    start_time = time.time()
+    env.reset()
+    for i in range(n_trials):
+        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(N_GUESTS, n_ticks, i)
+        print(log_name)
+        orig_stdout = sys.stdout
+        f = open(log_name, 'w')
+        sys.stdout = f
+        env.simulate(n_ticks)
+        sys.stdout = orig_stdout
+        f.close()
+    print('Experiment log filename: {}\n Time elapsed: {}'.format(log_name, time.time() - start_time))
 
 
 class RCTEnv():
-    N_GUESTS = 100
-
+    N_GUESTS = N_GUESTS
     MAP_WIDTH = 30
     MAP_HEIGHT = 30
     N_ACTIONS = 30
     N_RIDES = len(ride_list)
 
     def __init__(self, render=True):
-        self.park = Park(self.MAP_HEIGHT, self.MAP_WIDTH)
+        if render:
+            import pygame
+            pygame.init()
+            screen_width = 1000
+            screen_height = 1000
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
+        else:
+            self.screen = None
         self.RENDER = render
+        self.render_map = None
 
     def reset(self):
+        print('resetting park')
+        self.park = Park(self.MAP_HEIGHT, self.MAP_WIDTH)
         placePath(self.park, margin=3)
 
         for _ in range(self.N_ACTIONS):
@@ -41,32 +65,23 @@ class RCTEnv():
         peeps = generate(self.N_GUESTS, self.park, 0.2, 0.2, path_finder)
         for p in peeps:
             self.park.updateHuman(p)
+        if not self.render_map:
+            self.render_map = Map(self.park, render=self.RENDER, screen=self.screen)
+        else:
+            self.render_map.reset(self.park)
 
     def simulate(self, n_ticks=-1):
         frame = 0
-        park_map = Map(self.park, render=self.RENDER)
         while frame < n_ticks or n_ticks == -1:
             self.park.update(frame)
             if self.RENDER:
-                park_map.render_park()
+                self.render_map.render_park()
             frame += 1
 
 
 
 
-#def run_experiment(self, n_ticks, n_trials=20):
-#    start_time = time.time()
-#    for i in range(n_trials):
-#        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(self.N_GUESTS, n_ticks, i)
-#        print(log_name)
-#        orig_stdout = sys.stdout
-#        f = open(log_name, 'w')
-#        sys.stdout = f
-#        run_trial(n_ticks)
-#        sys.stdout = orig_stdout
-#        f.close()
-#    print('Experiment log filename: {}\n Time elapsed: {}'.format(log_name, time.time() - start_time))
-#
+
 #def run_trial(n_ticks):
 #    park = Park(MAP_HEIGHT, MAP_WIDTH)
 #    #place the path
