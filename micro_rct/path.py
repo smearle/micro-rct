@@ -39,7 +39,6 @@ class PathFinder:
         next_path = adj_paths[0][0].position
         self.checked[curr_node] = adj_paths[0][1]
         route = self.backtrace([next_path])
-        print(route)
         return route
 
     def backtrace(self, paths):
