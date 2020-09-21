@@ -1,6 +1,14 @@
-
-*.pyc
-.vscode/.ropeproject/config.py
-.vscode/.ropeproject/objectdb
+# testing log files
 out.txt
 testPeep.txt
+
+# Python build files
+*.pyc
+
+# VScode
+.vscode/.ropeproject/config.py
+.vscode/.ropeproject/objectdb
+
+# Vim swap files
+*.swp
+*.swo
