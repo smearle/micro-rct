@@ -5,7 +5,7 @@ import numpy as np
 
 class PathFinder:
     def __init__(self, path_net):
-        self.maxCounter = self.counter = 100
+        self.maxCounter = 100
         #guest path finding line 1172, orignal is 15000 for guest I don't know why 15000
         self.maxTilesChecked = -1
         self.checked = defaultdict(int) #key: (x,y)  val: score #lower is better
@@ -22,6 +22,8 @@ class PathFinder:
 
     def find(self, peep):
         path_net = self.path_net
+        self.maxTilesChecked = len(path_net)
+        self.counter = self.maxCounter
         self.checked = {}
         self.checking = {}
         self.goal = peep.headingTo.enter
@@ -37,6 +39,7 @@ class PathFinder:
         next_path = adj_paths[0][0].position
         self.checked[curr_node] = adj_paths[0][1]
         route = self.backtrace([next_path])
+        print(route)
         return route
 
     def backtrace(self, paths):
@@ -103,12 +106,22 @@ class PathFinder:
         for r in route:
             if r[1] < float('inf'):
                 non_inf += 1
+        if self.counter <= 0 or len(self.checked) >= self.maxTilesChecked:
+            pass
+           #score = self.heuristic_from_goal(node.position)
+           #self.checked[node.position] = score
         if non_inf == 0:
             score = float('inf')
         else:
             score = route[0][1] + 1
             self.checked[node.position] = score
+
+        self.counter -= 1
         return node, score
+
+    def heuristic_from_goal(self, pos:tuple):
+        goal = self.goal
+        return abs(pos[0]-goal[0])+abs(pos[1]-goal[1])
 
 class Path:
     GRASS = 0

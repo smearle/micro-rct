@@ -10,7 +10,7 @@ from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
 import copy
 
-RENDER = False
+RENDER = True
 N_GUESTS = 100
 
 def main():
