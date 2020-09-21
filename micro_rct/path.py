@@ -106,10 +106,10 @@ class PathFinder:
         for r in route:
             if r[1] < float('inf'):
                 non_inf += 1
-        if self.counter <= 0 or len(self.checked) >= self.maxTilesChecked:
-            pass
-           #score = self.heuristic_from_goal(node.position)
-           #self.checked[node.position] = score
+        #FIXME: Make this work!
+       #if self.counter <= 0 or len(self.checked) >= self.maxTilesChecked:
+       #    score = self.heuristic_from_goal(node.position)
+       #   #self.checked[node.position] = score
         if non_inf == 0:
             score = float('inf')
         else:

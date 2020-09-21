@@ -10,7 +10,7 @@ from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
 import copy
 
-RENDER = True
+RENDER = False
 N_GUESTS = 100
 
 def main():
@@ -35,9 +35,9 @@ def run_experiment(env, n_ticks, n_trials=20):
 
 class RCTEnv():
     N_GUESTS = N_GUESTS
-    MAP_WIDTH = 30
-    MAP_HEIGHT = 30
-    N_ACTIONS = 30
+    MAP_WIDTH = 50
+    MAP_HEIGHT = 50
+    N_ACTIONS = 10
     N_RIDES = len(ride_list)
 
     def __init__(self, render=True):

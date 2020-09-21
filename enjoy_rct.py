@@ -2,7 +2,7 @@
 from rct_env import RCTEnv
 
 def main():
-    env = RCTEnv()
+    env = RCTEnv(render=True)
     env.reset()
     env.simulate()
 
