@@ -1,26 +1,29 @@
-import random,sys
-from micro_rct.map_utility import placeRide, placePath
+import copy
 import random
+import sys
 import time
+
+from micro_rct.map_utility import placePath, placeRide
 from micro_rct.park import Park
 from micro_rct.path import PathFinder
 from micro_rct.peeps_generator import generate
 from micro_rct.rct_test_objects import object_list as ride_list
 from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
-import copy
 
 RENDER = False
 N_GUESTS = 100
 
 def main():
     env = RCTEnv(RENDER)
+
     for n_ticks in [500, 1000]:
         run_experiment(env, n_ticks)
 
 def run_experiment(env, n_ticks, n_trials=20):
     start_time = time.time()
     env.reset()
+
     for i in range(n_trials):
         log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(N_GUESTS, n_ticks, i)
         print(log_name)
@@ -39,6 +42,7 @@ class RCTEnv():
     MAP_HEIGHT = 50
     N_ACTIONS = 10
     N_RIDES = len(ride_list)
+
 
     def __init__(self, render=True):
         if render:
@@ -59,12 +63,14 @@ class RCTEnv():
 
         for _ in range(self.N_ACTIONS):
             ride_i = random.randint(0, self.N_RIDES-1)
-            placeRide(self.park, ride_list[ride_i](), str(symbol_list[ride_i]))
+            placeRide(self.park, ride_i)
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
         peeps = generate(self.N_GUESTS, self.park, 0.2, 0.2, path_finder)
+
         for p in peeps:
             self.park.updateHuman(p)
+
         if not self.render_map:
             self.render_map = Map(self.park, render=self.RENDER, screen=self.screen)
         else:
@@ -72,8 +78,10 @@ class RCTEnv():
 
     def simulate(self, n_ticks=-1):
         frame = 0
+
         while frame < n_ticks or n_ticks == -1:
             self.park.update(frame)
+
             if self.RENDER:
                 self.render_map.render_park()
             frame += 1
@@ -91,7 +99,7 @@ class RCTEnv():
 #
 #    for _ in range(10):
 #        ride_i = random.randint(0, N_RIDES-1)
-#        placeRide(park, ride_list[ride_i], str(symbol_list[ride_i])) 
+#        placeRide(park, ride_list[ride_i], str(symbol_list[ride_i]))
 #    park.populate_path_net()
 #    path_finder = PathFinder(park.path_net)
 #    peeps = generate(N_GUESTS, 0.2, 0.2, path_finder)
