@@ -79,7 +79,7 @@ class Park():
 
         for path in self.path_net.values():
             path.get_connecting()
-        print(self.map[Map.PATH])
+       #print('path map: \n{}.format(self.map[Map.PATH]))
 
 
     def freeSpaceNextToInteractiveSpace(self):

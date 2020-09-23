@@ -36,8 +36,6 @@ def placePath(park, margin):
                 interactiveSpace[(i,j)] = Park.pathMark
                 park.map[1, i, j] = 1
 
-    print(park.map[1])
-
     return
 
 
