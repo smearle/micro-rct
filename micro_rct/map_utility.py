@@ -38,8 +38,6 @@ def placePath(park, margin):
                 interactiveSpace[(i,j)] = Park.pathMark
                 park.map[Map.PATH, i, j] = 1
 
-    print(park.map[1])
-
     return
 
 def place_path_tile(park, x, y, type_i=0):
