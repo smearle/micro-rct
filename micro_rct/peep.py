@@ -351,7 +351,7 @@ class Peep:
     def wander(self):
         '''Pick a random destination.'''
         traversible_tiles = self.park.path_net
-        print('traversible tiles: {}'.format(traversible_tiles))
+#       print('traversible tiles: {}'.format(traversible_tiles))
         goal = random.choice(list(traversible_tiles.keys()))
         #FIXME: do not create new path object every time
         self.headingTo = self.park.path_net[goal]
