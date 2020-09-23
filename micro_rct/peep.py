@@ -36,7 +36,8 @@ class Peep:
         self.curr_route = []
         self.path_finder = path_finder
 
-    def updatePosition(self,space,lst):
+    def updatePosition(self,space,rides_by_pos):
+        lst = rides_by_pos.values()
         self.traversible_tiles = space
         res = []
 
@@ -96,7 +97,7 @@ class Peep:
 
                 if ((not self.headingTo) or (self.headingTo and self.headingTo.name != 'FirstAid')) and not self.inFirstAid:
                     res.append('Peep {} needs to go to first Aid'.format(self.id))
-                    firstAids = [(mark,ride) for mark,ride in lst if ride.name == 'FirstAid']
+                    firstAids = [ride for _, ride in lst.items() if ride.name == 'FirstAid']
                     res += self.findNextRide(firstAids,True)
 
         self.updateHappiness()
@@ -104,7 +105,7 @@ class Peep:
         return res
 
     def vomit(self):
-        print('Peep {} vomits '.format(self.id))
+       #print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
@@ -285,7 +286,7 @@ class Peep:
             minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
             maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
 
-            for mark,ride in lst:
+            for ride in lst:
                 goodIntensity = goodNausea = False
 
                 if maxIntensity >= ride.intensity >= minIntensity:
@@ -299,7 +300,7 @@ class Peep:
                     goodNausea = False
 
                 if goodIntensity and goodNausea and not ride.isShop:
-                    newLst.append((mark,ride))
+                    newLst.append((ride))
 
             return newLst
 
@@ -318,7 +319,7 @@ class Peep:
             res.append('special case list: {}\n'.format(lst))
         #[difference] didn't contain the function makes peeps repeat visiting same ride
         #               so we didn't consider visiting same ride at this moment
-        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
+        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for i in lst]
 
         if not distance or lst == [] or distance ==float('inf'):
             res.append('Peep {} finds no satisfactory ride.'.format(self.id))
@@ -330,8 +331,8 @@ class Peep:
                 res.append('no traversible tiles')
 
             return res
-        closestRide = lst[distance.index(min(distance))][1]
-        res.append('Peep {} new goal is {}'.format(self.id,closestRide.name))
+        closestRide = lst[distance.index(min(distance))]
+        res.append('Peep {} new goal is {} at {}'.format(self.id,closestRide.name, closestRide.enter))
         self.headingTo = closestRide
 
         return res
@@ -351,8 +352,11 @@ class Peep:
     def wander(self):
         '''Pick a random destination.'''
         traversible_tiles = self.park.path_net
-#       print('traversible tiles: {}'.format(traversible_tiles))
-        goal = random.choice(list(traversible_tiles.keys()))
+       #print('traversible tiles: {}'.format(traversible_tiles))
+        if len(traversible_tiles) == 0:
+            self.headingTo = self.position
+        else:
+            goal = random.choice(list(traversible_tiles.keys()))
         #FIXME: do not create new path object every time
-        self.headingTo = self.park.path_net[goal]
+            self.headingTo = self.park.path_net[goal]
 
