@@ -103,6 +103,10 @@ class Park():
 
     def updateScore(self):
         ''' Calculates the score of the park as the average guest happiness. '''
+       #print('debug ride dict')
+       #for k in self.rides_by_pos:
+       #    print(self.rides_by_pos[k])
+       #    print(self.path_net[k])
         score = 0
 
         for peep in self.peepsList:
@@ -232,5 +236,5 @@ class Park():
         res += 'human: '+Park.humanMark+"\n"
         res += 'enter: '+Park.pathMark+'\n'
         res += '\npark score: {}\n'.format(self.score)
-       #print(res)
+        print(res)
         self.printCount += 1

@@ -56,6 +56,14 @@ class Peep:
         else:
 #           print('REUSING ROUTE')
             pass
+        if not self.curr_route:
+            self.curr_route = [self.position]
+            self.headingTo = None
+        if self.curr_route == -1:
+            print(self.park.printPark())
+            raise Exception('invalid route {} to goal {} corresponding to ride at position {} with \
+                    entrance at {}'.format(self.curr_route, 
+                    self.headingTo, self.headingTo.position, self.headingTo.enter))
         ans = self.curr_route.pop(0)
         self.position = ans
 

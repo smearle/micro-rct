@@ -31,7 +31,7 @@ class PathFinder:
         #FIXME: this is broken below
     #   assert self.goal in path_net
         if self.goal not in path_net:
-            return [peep.position]
+            return -1
         # if the peep is off the path...
         if peep.position not in path_net:
             return [peep.position]

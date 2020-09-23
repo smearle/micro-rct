@@ -66,8 +66,12 @@ def update_path_net(park, pos):
 #   print('path placed')
 
 def demolish_tile(park, x, y):
+    if park.map[Map.PEEP, x, y] != -1:
+        return
+    print('demolishing tile {} {}'.format(x, y))
     pos = (x, y)
     if pos in park.path_net:
+        print('removing path')
         path = park.path_net.pop(pos)
         for adj_path in path.links:
             if adj_path:
@@ -75,16 +79,19 @@ def demolish_tile(park, x, y):
     if pos in park.interactiveSpace:
         park.interactiveSpace.pop(pos)
     if pos in park.rides_by_pos:
+        print('removing ride')
         ride = park.rides_by_pos.pop(pos)
         park.map[Map.RIDE, x, y] = -1
         for i in range(x, x + ride.size[0]):
             for j in range(y, y + ride.size[1]):
                 if not (0 <= i < park.map.shape[0] and 0 <= j < park.map.shape[1]):
-                    continue
-                demolish_tile(park, x, y)
+                    pass
+                else:
+                    demolish_tile(park, x, y)
 
     park.freeSpace[pos] = Park.emptyMark
     park.map[Map.PATH, x, y] = 0
+    park.map[Map.RIDE, x, y] = -1
 
 def place_ride_tile(park, x, y, ride_i):
     _ride = ride_list[ride_i]()
