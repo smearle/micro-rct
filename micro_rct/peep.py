@@ -22,6 +22,7 @@ class Peep:
         self.angriness = 0
         self.toilet = 0
         self.timeToConsume = 0
+        self.disgustingCount = 0
         self.cash = random.randint(400,600)
         self.energy = random.randint(65,128)
         self.energyTarget = self.energy
@@ -36,7 +37,7 @@ class Peep:
         self.curr_route = []
         self.path_finder = path_finder
 
-    def updatePosition(self,space,rides_by_pos):
+    def updatePosition(self,space,rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
         self.traversible_tiles = space
         res = []
@@ -65,6 +66,9 @@ class Peep:
                     entrance at {}'.format(self.curr_route, 
                     self.headingTo, self.headingTo.position, self.headingTo.enter))
         ans = self.curr_route.pop(0)
+
+        self.passingBy(vomitPath)
+
         self.position = ans
 
         if self.position == target.position or self.position == target.enter:
@@ -89,6 +93,39 @@ class Peep:
         res = []
         self.updateNausea()
 
+        res = self.nauseaCondition(lst)
+
+        self.updateHappiness()
+
+        return res
+    
+    def passingBy(self,vomitPath):
+        sickCount = 0
+        for vo_x,vo_y in vomitPath:
+            dis =  abs(vo_x-self.position[0])+abs(vo_y-self.position[1])
+            if dis <= 16:
+                sickCount +=1
+
+        # I am copying original code, I have no idea what is it about...
+        disgusting_time = self.disgustingCount & 0xC0
+        disgusting_count = ((self.disgustingCount & 0xF)<<2) | sickCount
+        self.disgustingCount = disgusting_count | disgusting_time
+
+        if disgusting_time & 0xc0 and random.randint(0,65534) & 0xffff <= 4369:
+            self.disgustingCount -= 0x40
+        else:
+            totalSick = 0
+            for i in range(3):
+                totalSick += (disgusting_count>>(2*i)) & 0x3
+            
+            if totalSick >= 3 and random.randint(0,65534) & 0xffff <= 10922:
+                self.happinessTarget = max(0, self.happinessTarget-17)
+                self.disgustingCount |= 0xc0
+        
+        return
+    
+    def nauseaCondition(self,lst:list):
+        res = []
         if self.nausea > 128:
             # in the orginal code peep will have chance to throw up when walking with nausea>128
             # since current peeps will always be walking we will run this code everytime we update
@@ -107,9 +144,6 @@ class Peep:
                     res.append('Peep {} needs to go to first Aid'.format(self.id))
                     firstAids = [ride for _, ride in lst.items() if ride.name == 'FirstAid']
                     res += self.findNextRide(firstAids,True)
-
-        self.updateHappiness()
-
         return res
 
     def vomit(self):

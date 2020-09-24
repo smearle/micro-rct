@@ -201,7 +201,7 @@ class Park():
         else:
             self.updateMap(peep.position, (1,1), Park.pathMark)
             self.map[2, peep.position[0], peep.position[1]] = 0
-            res += peep.updatePosition(self.path_net, self.rides_by_pos)
+            res += peep.updatePosition(self.interactiveSpace, self.rides_by_pos, self.vomit_paths)
             res += peep.updateStatus(self.rides_by_pos)
         self.updateMap(peep.position, (1,1), Park.humanMark)
         self.map[2, peep.position[0], peep.position[1]] = 1
