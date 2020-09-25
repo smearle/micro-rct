@@ -1,2 +1,4 @@
-numpy
+certifi==2020.6.20
+mutagen==1.44.0
+numpy==1.19.2
 pygame==2.0.0.dev6
