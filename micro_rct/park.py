@@ -25,6 +25,8 @@ class Park():
             wallMark: 'wall',
             }
     VOMIT_LIFESPAN = 40
+    PATH = 0,
+
     def __init__(self, width, height):
         self.startTime = 0
         self.printCount = 1
@@ -32,7 +34,7 @@ class Park():
         self.size = (width,height)
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.empty((3, width, height), dtype=int)
+        self.map = np.zeros((3, width, height), dtype=int)
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
 
@@ -125,6 +127,7 @@ class Park():
                             self.fixedSpace[(i,j)] = mark
 
                         if mark != Park.wallMark:
+                            assert isinstance(symbol_dict[mark][0], int)
                             self.map[0, i, j] = symbol_dict[mark][0]
                 elif (i, j) in self.interactiveSpace:
                     self.interactiveSpace[(i,j)] = mark

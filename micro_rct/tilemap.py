@@ -25,18 +25,16 @@ class Map():
     PEEP = 2
     curr_dir = os.path.dirname(os.path.abspath(__file__))
     SPRITE_DIR = os.path.join(curr_dir, "tilemap/img")
-    def __init__(self, park=None, render=False):
+    def __init__(self, park=None, render=False, screen=None):
         x = 0
         y = 0
         import os
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
         if render:
-            pygame.init()
-            self.screen_width = 1000
-            self.screen_height = 1000
+            self.screen = screen
+            self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
             self.map_width = park.size[0]
             self.map_height = park.size[1]
-            self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
             self.park = park
             self.map = park.map
             self.tile_width = self.screen_width // self.map_width
@@ -83,6 +81,9 @@ class Map():
             self.freefall_tile = self.load_image(os.path.join(self.SPRITE_DIR, "launched_freefall.png"))
             self.freefall_tile = pygame.transform.scale(self.freefall_tile, (self.tile_width*2, self.tile_height*2))
         self.ascii_tiles = {}
+
+    def reset(self, park):
+        self.park = park
         
 
     def render_park(self, i=0, j=0):
