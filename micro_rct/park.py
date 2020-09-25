@@ -25,6 +25,8 @@ class Park():
             wallMark: 'wall',
             }
     VOMIT_LIFESPAN = 40
+    PATH = 0,
+
     def __init__(self, width, height):
         self.startTime = 0
         self.printCount = 1
