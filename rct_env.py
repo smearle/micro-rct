@@ -23,10 +23,7 @@ def main(settings_path):
 
     for n_ticks in settings['experiments']['ticks']:
         run_experiment(env, n_ticks, settings)
-
-# def reset_output():
-#     if os.path.exists()
-
+        
 def run_experiment(env, n_ticks, settings, n_trials=20):
     start_time = time.time()
     env.reset()
