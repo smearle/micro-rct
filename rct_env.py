@@ -21,7 +21,7 @@ def main(settings_path):
         settings = yaml.load(file, yaml.FullLoader)
     env = RCTEnv(settings)
 
-    for n_ticks in [500, 1000]:
+    for n_ticks in settings['experiments']['ticks']:
         run_experiment(env, n_ticks, settings)
 
 # def reset_output():
@@ -32,7 +32,7 @@ def run_experiment(env, n_ticks, settings, n_trials=20):
     env.reset()
 
     for i in tqdm(range(n_trials)):
-        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(settings['experiments']['n_guests'], n_ticks, i)
+        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(settings['environment']['n_guests'], n_ticks, i)
         orig_stdout = sys.stdout
         f = open(log_name, 'w')
         sys.stdout = f
@@ -62,13 +62,13 @@ class RCTEnv():
         self.park = Park(self.settings)
         placePath(self.park, margin=3)
 
-        for _ in range(self.settings['experiments']['n_actions']):
+        for _ in range(self.settings['environment']['n_actions']):
             ride_i = random.randint(0, self.N_RIDES-1)
             placeRide(self.park, ride_i, verbose=self.settings['general']['verbose'])
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
         peeps = generate(
-            self.settings['experiments']['n_guests'], self.park, 0.2, 0.2, path_finder)
+            self.settings['environment']['n_guests'], self.park, 0.2, 0.2, path_finder)
 
         for p in peeps:
             self.park.updateHuman(p)

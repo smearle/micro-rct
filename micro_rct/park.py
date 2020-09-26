@@ -32,7 +32,7 @@ class Park():
         self.startTime = 0
         self.printCount = 1
         self.parkSize = (0,0)
-        self.size = (settings['experiments']['map_width'],settings['experiments']['map_height'])
+        self.size = (settings['environment']['map_width'],settings['environment']['map_height'])
         self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
