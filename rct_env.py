@@ -2,6 +2,10 @@ import copy
 import random
 import sys
 import time
+import argparse
+import yaml
+
+from tqdm import tqdm
 
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.park import Park
@@ -10,23 +14,25 @@ from micro_rct.peeps_generator import generate
 from micro_rct.rct_test_objects import object_list as ride_list
 from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
+from utils.debug_utils import print_msg
 
-RENDER = False
-N_GUESTS = 100
-
-def main():
-    env = RCTEnv(RENDER)
+def main(settings_path):
+    with open(settings_path) as file:
+        settings = yaml.load(file, yaml.FullLoader)
+    env = RCTEnv(settings)
 
     for n_ticks in [500, 1000]:
-        run_experiment(env, n_ticks)
+        run_experiment(env, n_ticks, settings)
 
-def run_experiment(env, n_ticks, n_trials=20):
+# def reset_output():
+#     if os.path.exists()
+
+def run_experiment(env, n_ticks, settings, n_trials=20):
     start_time = time.time()
     env.reset()
 
-    for i in range(n_trials):
-        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(N_GUESTS, n_ticks, i)
-        print(log_name)
+    for i in tqdm(range(n_trials)):
+        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(settings['experiments']['n_guests'], n_ticks, i)
         orig_stdout = sys.stdout
         f = open(log_name, 'w')
         sys.stdout = f
@@ -37,15 +43,10 @@ def run_experiment(env, n_ticks, n_trials=20):
 
 
 class RCTEnv():
-    N_GUESTS = N_GUESTS
-    MAP_WIDTH = 50
-    MAP_HEIGHT = 50
-    N_ACTIONS = 10
     N_RIDES = len(ride_list)
 
-
-    def __init__(self, render=True):
-        if render:
+    def __init__(self, settings):
+        if settings['general']['render']:
             import pygame
             pygame.init()
             screen_width = 1000
@@ -53,26 +54,27 @@ class RCTEnv():
             self.screen = pygame.display.set_mode((screen_width, screen_height))
         else:
             self.screen = None
-        self.RENDER = render
+        self.settings = settings
         self.render_map = None
 
     def reset(self):
-        print('resetting park')
-        self.park = Park(self.MAP_HEIGHT, self.MAP_WIDTH)
+        print_msg('resetting park', priority=2, verbose=self.settings['general']['verbose'])
+        self.park = Park(self.settings)
         placePath(self.park, margin=3)
 
-        for _ in range(self.N_ACTIONS):
+        for _ in range(self.settings['experiments']['n_actions']):
             ride_i = random.randint(0, self.N_RIDES-1)
-            placeRide(self.park, ride_i)
+            placeRide(self.park, ride_i, verbose=self.settings['general']['verbose'])
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
-        peeps = generate(self.N_GUESTS, self.park, 0.2, 0.2, path_finder)
+        peeps = generate(
+            self.settings['experiments']['n_guests'], self.park, 0.2, 0.2, path_finder)
 
         for p in peeps:
             self.park.updateHuman(p)
 
         if not self.render_map:
-            self.render_map = Map(self.park, render=self.RENDER, screen=self.screen)
+            self.render_map = Map(self.park, render=self.settings['general']['render'], screen=self.screen)
         else:
             self.render_map.reset(self.park)
 
@@ -82,7 +84,7 @@ class RCTEnv():
         while frame < n_ticks or n_ticks == -1:
             self.park.update(frame)
 
-            if self.RENDER:
+            if self.settings['general']['render']:
                 self.render_map.render_park()
             frame += 1
 
@@ -135,4 +137,10 @@ class RCTEnv():
 #    return
 
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--settings-path', '-sp', default='configs/settings.yml', help='path to read the settings yaml file')
+    args = parser.parse_args()
+    settings_path = args.settings_path
+
+    main(settings_path)

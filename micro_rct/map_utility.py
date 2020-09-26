@@ -8,11 +8,12 @@ from .peeps_generator import generate
 import numpy as np
 from .tilemap import Map
 from .path import Path
+from utils.debug_utils import print_msg
 
 from .park import Park
 
 
-def placePath(park, margin):
+def placePath(park, margin, verbose=False):
     freeSpace = park.freeSpace
     interactiveSpace = park.interactiveSpace
     fixedSpace = park.fixedSpace
@@ -40,8 +41,9 @@ def placePath(park, margin):
 
     return
 
-def place_path_tile(park, x, y, type_i=0):
-#   print('place path tile: ', x, y, type_i)
+
+def place_path_tile(park, x, y, type_i=0, verbose=False):
+#   print_msg('place path tile: {} {} {}'.format(x, y, type_i), priority=4, verbose=verbose)
     pos = (x, y)
     if pos in park.fixedSpace:
         park.fixedSpace.pop(pos)
@@ -63,7 +65,7 @@ def place_ride_tile(park, i):
 #   placeRide(park, i)
 
 
-def placeRide(park, ride_i):
+def placeRide(park, ride_i, verbose=False):
     # print('try to place {}'.format(_ride.name))
     _ride = ride_list[ride_i]() 
     mark = str(symbol_list[ride_i])
@@ -108,4 +110,5 @@ def placeRide(park, ride_i):
             _ride.position = rand
             park.listOfRides.append((mark,_ride))
             park.updateMap(rand,size,mark,_ride.enter)
-            print('ride {} is placed at {}'.format(_ride.name,_ride.position))
+            
+            print_msg('ride {} is placed at {}'.format(_ride.name,_ride.position), priority=3, verbose=verbose)
