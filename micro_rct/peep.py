@@ -104,7 +104,7 @@ class Peep:
         return res
 
     def vomit(self):
-        print('Peep {} vomits '.format(self.id))
+#       print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
@@ -350,9 +350,9 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-        traversible_tiles = self.park.path_net
-#       print('traversible tiles: {}'.format(traversible_tiles))
-        goal = random.choice(list(traversible_tiles.keys()))
+        traversible_tiles = [tile for tile in self.park.path_net.items() if tile[1].junction]            
+    #   print('traversible tiles: {}'.format(traversible_tiles))
+        goal = random.choice(list(traversible_tiles))
         #FIXME: do not create new path object every time
-        self.headingTo = self.park.path_net[goal]
+        self.headingTo = self.park.path_net[goal[0]]
 

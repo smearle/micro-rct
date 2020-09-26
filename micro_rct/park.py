@@ -12,6 +12,7 @@ from .map_utility import *
 from .path import Path
 #from .map import Map
 from .tilemap import Map
+from utils.debug_utils import print_msg
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
@@ -27,19 +28,20 @@ class Park():
     VOMIT_LIFESPAN = 40
     PATH = 0,
 
-    def __init__(self, width, height):
+    def __init__(self, settings):
         self.startTime = 0
         self.printCount = 1
         self.parkSize = (0,0)
-        self.size = (width,height)
+        self.size = (settings['environment']['map_width'],settings['environment']['map_height'])
+        self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, width, height), dtype=int)
+        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int)
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
 
-        for i in range(width):
-            for j in range(height):
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
                 if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
                     self.fixedSpace[(i,j)] = Park.wallMark
                     self.map[[0,1], i, j] = -1
@@ -149,7 +151,7 @@ class Park():
             self.printPark(frame)
 
             for line in res:
-                print(line)
+                print_msg(line, priority=3, verbose=self.settings['general']['verbose'])
 
         
         dead_vomit = []
@@ -184,7 +186,7 @@ class Park():
 
         if peep not in self.peepsList:
             self.peepsList.add(peep)
-            print(vars(peep))
+            print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
             self.updateMap(peep.position, (1,1), Park.pathMark)
             self.map[2, peep.position[0], peep.position[1]] = 0
@@ -223,5 +225,5 @@ class Park():
         res += 'human: '+Park.humanMark+"\n"
         res += 'enter: '+Park.pathMark+'\n'
         res += '\npark score: {}\n'.format(self.score)
-        print(res)
+        print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
