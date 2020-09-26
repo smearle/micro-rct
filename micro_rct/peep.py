@@ -104,7 +104,7 @@ class Peep:
         return res
 
     def vomit(self):
-        print('Peep {} vomits '.format(self.id))
+#       print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
