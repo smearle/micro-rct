@@ -144,7 +144,7 @@ def placeRide(park, ride_i):
         if placed:
             _ride.enter = enter
             _ride.position = rand
-            park.listOfRides.append((mark,_ride))
+            park.rides_by_pos[_ride.position] = _ride
             park.updateMap(rand,size,mark,_ride.enter)
             update_path_net(park, enter)
            #print('ride {} is placed at {}'.format(_ride.name,_ride.position))

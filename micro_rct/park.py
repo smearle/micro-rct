@@ -50,7 +50,7 @@ class Park():
 
         self.interactiveSpace = defaultdict(str)
         self.peepsList = set()
-        self.listOfRides = []
+#       self.listOfRides = []
         self.score = 0
         self.path_net = {}
         self.vomit_paths = {}

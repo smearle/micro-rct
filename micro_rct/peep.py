@@ -36,6 +36,7 @@ class Peep:
         self.traversible_tiles = None
         self.curr_route = []
         self.path_finder = path_finder
+        self.hasFood = False
 
     def updatePosition(self,space,rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
@@ -96,6 +97,8 @@ class Peep:
         res = self.nauseaCondition(lst)
 
         self.updateHappiness()
+        self.updateHunger()
+        self.updateToilet()
 
         return res
     
@@ -158,6 +161,26 @@ class Peep:
         # self.headingTo = None
 
 
+    def updateHunger(self):
+        #TODO: I think this is prompted by a particular thought? "PEEP_FLAGS_HUNGER"
+       #if self.hunger >= 15:
+       #    self.hunger -= 15
+        #TODO: need thoughts
+       #if self.hunger <= 10 and not self.hasFood:
+       #    # add possible hunger thought
+        if self.hunger < 10:
+            self.hunger = max(self.hunger - 1, 0)
+        if self.hasFood:
+            self.hunger = min(self.hunger + 7, 255)
+            self.thirst = max(self.thirst -3, 0)
+            self.toilet = min(self.toilet + 2, 255)
+            self.timeToConsume -= 1
+            if self.timeToConsume == 0:
+                self.hasFood = False
+
+    def updateToilet(self):
+        if self.toilet >= 195:
+            self.toilet = self.toilet - 1
 
     def updateHappiness(self):
         ''' Update happiness, which tends toward its target.'''
@@ -192,6 +215,9 @@ class Peep:
         if newNausea!=newNauseaGrowth:
             self.nausea = newNausea
 
+        # TODO: this is in the original code and should probably be in ours as well
+#       self.nauseaTarget = max(self.nauseaTarget - 2, 0)
+
         return
 
     #currently only update hapiness and Nausea Target
@@ -213,6 +239,12 @@ class Peep:
                 self.nausea -= 1
                 # res.append('Peep {} nausea: {}\n'.format(self.id,self.nausea))
                 self.nauseaTarget = self.nausea
+
+        if ride.name == 'FoodStall':
+#           print('peep {} has acquired food'.format(self.id))
+            self.hasFood = True
+            # in OpenRCT2 this is added when timeToConsume==0 and peep.hasFood
+            self.timeToConsume = 3
 
         return res if len(res)>0 else []
 
@@ -342,6 +374,10 @@ class Peep:
                     goodNausea = False
 
                 if goodIntensity and goodNausea and not ride.isShop:
+                    newLst.append((ride))
+
+                #FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
+                if ride.name == 'FoodStall' and self.hunger < 50:
                     newLst.append((ride))
 
             return newLst
