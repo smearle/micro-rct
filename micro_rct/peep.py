@@ -138,7 +138,7 @@ class Peep:
         return res
 
     def vomit(self):
-        print('Peep {} vomits '.format(self.id))
+#       print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
@@ -339,6 +339,7 @@ class Peep:
 
         if  self.position == (-1,-1) or not lst:
             res.append('the ride is not valid\n')
+            self.wander()
 
             return res
         pos = self.position
@@ -356,7 +357,8 @@ class Peep:
         if not distance or lst == [] or distance ==float('inf'):
             res.append('Peep {} finds no satisfactory ride.'.format(self.id))
             if self.traversible_tiles is not None:
-               #self.wander()
+                #FIXME: Make this more true to OpenRCT2
+                self.wander()
                 pass
             else:
                 res.append('no traversible tiles')
@@ -382,8 +384,9 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-       #print('traversible tiles: {}'.format(self.traversible_tiles))
-        goal = random.choice(list(self.traversible_tiles.keys()))
+        traversible_tiles = [tile for tile in self.park.path_net.items() if tile[1].junction]            
+    #   print('traversible tiles: {}'.format(traversible_tiles))
+        goal = random.choice(list(traversible_tiles))
         #FIXME: do not create new path object every time
-        self.headingTo = self.path_net[goal]
+        self.headingTo = self.park.path_net[goal[0]]
 
