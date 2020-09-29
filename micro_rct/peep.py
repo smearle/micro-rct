@@ -150,7 +150,7 @@ class Peep:
         return res
 
     def vomit(self):
-       #print('Peep {} vomits '.format(self.id))
+#       print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
@@ -418,10 +418,10 @@ class Peep:
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
 
-        if tolerance > 0 and tolerance <= 2:
+        if 2 >= tolerance > 0:
             tolerance = 1
-        elif tolerance > 2 and tolerance <=5:
-            tolerance =2
+        elif 5 >= tolerance > 2:
+            tolerance = 2
         else:
             tolerance = 3
 
@@ -437,4 +437,3 @@ class Peep:
             goal = random.choice(list(traversible_tiles.keys()))
         #FIXME: do not create new path object every time
             self.headingTo = self.park.path_net[goal]
-
