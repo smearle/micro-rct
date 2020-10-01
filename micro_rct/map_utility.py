@@ -5,8 +5,6 @@ from collections import *
 
 import numpy as np
 
-from utils.debug_utils import print_msg
-
 from .attraction import Ride_and_Store as RS
 from .park import Park
 from .path import Path
@@ -15,7 +13,7 @@ from .peeps_generator import generate
 from .rct_test_objects import object_list as ride_list
 from .rct_test_objects import symbol_dict, symbol_list
 from .tilemap import Map
-
+from .utils.debug_utils import print_msg
 
 def placePath(park, margin, verbose=False):
     freeSpace = park.freeSpace

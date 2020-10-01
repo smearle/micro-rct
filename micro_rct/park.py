@@ -12,7 +12,7 @@ from .map_utility import *
 from .path import Path
 #from .map import Map
 from .tilemap import Map
-from utils.debug_utils import print_msg
+from .utils.debug_utils import print_msg
 from .rct_test_objects import symbol_dict
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
