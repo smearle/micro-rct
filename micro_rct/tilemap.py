@@ -30,7 +30,7 @@ class Map():
         y = 0
         import os
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
-        if render:
+        if render and screen:
             self.screen = screen
             self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
             self.map_width = park.size[0]
@@ -39,7 +39,7 @@ class Map():
             self.map = park.map
             self.tile_width = self.screen_width // self.map_width
             self.tile_height = self.screen_height // self.map_height
-            self.path_tile = self.load_path(os.path.join(self.SPRITE_DIR, "path_grey.png"))
+            self.path_tile = self.load_image(os.path.join(self.SPRITE_DIR, "path_grey.png"))
             self.path_tile = pygame.transform.scale(self.path_tile, (self.tile_width, self.tile_height))
             self.vomit_tile = self.load_image(os.path.join(self.SPRITE_DIR, "vomit.png"))
             self.vomit_tile = pygame.transform.scale(self.vomit_tile, (self.tile_width-self.tile_width//5,
@@ -135,10 +135,10 @@ class Map():
 
                 j += 1
             i += 1
-        for ride in self.park.listOfRides:
-            ride = ride[1]
-            i_pos = ride.position[0] * self.tile_width
-            j_pos = ride.position[1] * self.tile_height
+        for pos, ride in self.park.rides_by_pos.items():
+#           ride = ride[1]
+            i_pos = pos[0] * self.tile_width
+            j_pos = pos[1] * self.tile_height
             if ride.name == 'Cinema3D':
                 self.screen.blit(self.cin_tile, (i_pos, j_pos))
             elif ride.name == 'CrookedHouse':

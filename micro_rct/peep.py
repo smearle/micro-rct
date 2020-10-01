@@ -22,6 +22,7 @@ class Peep:
         self.angriness = 0
         self.toilet = 0
         self.timeToConsume = 0
+        self.disgustingCount = 0
         self.cash = random.randint(400,600)
         self.energy = random.randint(65,128)
         self.energyTarget = self.energy
@@ -35,8 +36,10 @@ class Peep:
         self.traversible_tiles = None
         self.curr_route = []
         self.path_finder = path_finder
+        self.hasFood = False
 
-    def updatePosition(self,space,lst):
+    def updatePosition(self,space,rides_by_pos, vomitPath):
+        lst = rides_by_pos.values()
         self.traversible_tiles = space
         res = []
 
@@ -55,7 +58,18 @@ class Peep:
         else:
 #           print('REUSING ROUTE')
             pass
+        if not self.curr_route:
+            self.curr_route = [self.position]
+            self.headingTo = None
+        if self.curr_route == -1:
+            print(self.park.printPark())
+            raise Exception('invalid route {} to goal {} corresponding to ride at position {} with \
+                    entrance at {}'.format(self.curr_route, 
+                    self.headingTo, self.headingTo.position, self.headingTo.enter))
         ans = self.curr_route.pop(0)
+
+        self.passingBy(vomitPath)
+
         self.position = ans
 
         if self.position == target.position or self.position == target.enter:
@@ -80,6 +94,41 @@ class Peep:
         res = []
         self.updateNausea()
 
+        res = self.nauseaCondition(lst)
+
+        self.updateHappiness()
+        self.updateHunger()
+        self.updateToilet()
+
+        return res
+    
+    def passingBy(self,vomitPath):
+        sickCount = 0
+        for vo_x,vo_y in vomitPath:
+            dis =  abs(vo_x-self.position[0])+abs(vo_y-self.position[1])
+            if dis <= 16:
+                sickCount +=1
+
+        # I am copying original code, I have no idea what is it about...
+        disgusting_time = self.disgustingCount & 0xC0
+        disgusting_count = ((self.disgustingCount & 0xF)<<2) | sickCount
+        self.disgustingCount = disgusting_count | disgusting_time
+
+        if disgusting_time & 0xc0 and random.randint(0,65534) & 0xffff <= 4369:
+            self.disgustingCount -= 0x40
+        else:
+            totalSick = 0
+            for i in range(3):
+                totalSick += (disgusting_count>>(2*i)) & 0x3
+            
+            if totalSick >= 3 and random.randint(0,65534) & 0xffff <= 10922:
+                self.happinessTarget = max(0, self.happinessTarget-17)
+                self.disgustingCount |= 0xc0
+        
+        return
+    
+    def nauseaCondition(self,lst:list):
+        res = []
         if self.nausea > 128:
             # in the orginal code peep will have chance to throw up when walking with nausea>128
             # since current peeps will always be walking we will run this code everytime we update
@@ -96,15 +145,12 @@ class Peep:
 
                 if ((not self.headingTo) or (self.headingTo and self.headingTo.name != 'FirstAid')) and not self.inFirstAid:
                     res.append('Peep {} needs to go to first Aid'.format(self.id))
-                    firstAids = [(mark,ride) for mark,ride in lst if ride.name == 'FirstAid']
+                    firstAids = [ride for _, ride in lst.items() if ride.name == 'FirstAid']
                     res += self.findNextRide(firstAids,True)
-
-        self.updateHappiness()
-
         return res
 
     def vomit(self):
-        print('Peep {} vomits '.format(self.id))
+#       print('Peep {} vomits '.format(self.id))
         self.nauseaTarget /=2
         self.hunger /=2
         if self.nausea >30:
@@ -115,6 +161,26 @@ class Peep:
         # self.headingTo = None
 
 
+    def updateHunger(self):
+        #TODO: I think this is prompted by a particular thought? "PEEP_FLAGS_HUNGER"
+       #if self.hunger >= 15:
+       #    self.hunger -= 15
+        #TODO: need thoughts
+       #if self.hunger <= 10 and not self.hasFood:
+       #    # add possible hunger thought
+        if self.hunger < 10:
+            self.hunger = max(self.hunger - 1, 0)
+        if self.hasFood:
+            self.hunger = min(self.hunger + 7, 255)
+            self.thirst = max(self.thirst -3, 0)
+            self.toilet = min(self.toilet + 2, 255)
+            self.timeToConsume -= 1
+            if self.timeToConsume == 0:
+                self.hasFood = False
+
+    def updateToilet(self):
+        if self.toilet >= 195:
+            self.toilet = self.toilet - 1
 
     def updateHappiness(self):
         ''' Update happiness, which tends toward its target.'''
@@ -149,6 +215,9 @@ class Peep:
         if newNausea!=newNauseaGrowth:
             self.nausea = newNausea
 
+        # TODO: this is in the original code and should probably be in ours as well
+#       self.nauseaTarget = max(self.nauseaTarget - 2, 0)
+
         return
 
     #currently only update hapiness and Nausea Target
@@ -170,6 +239,12 @@ class Peep:
                 self.nausea -= 1
                 # res.append('Peep {} nausea: {}\n'.format(self.id,self.nausea))
                 self.nauseaTarget = self.nausea
+
+        if ride.name == 'FoodStall':
+#           print('peep {} has acquired food'.format(self.id))
+            self.hasFood = True
+            # in OpenRCT2 this is added when timeToConsume==0 and peep.hasFood
+            self.timeToConsume = 3
 
         return res if len(res)>0 else []
 
@@ -285,7 +360,7 @@ class Peep:
             minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
             maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
 
-            for mark,ride in lst:
+            for ride in lst:
                 goodIntensity = goodNausea = False
 
                 if maxIntensity >= ride.intensity >= minIntensity:
@@ -299,7 +374,11 @@ class Peep:
                     goodNausea = False
 
                 if goodIntensity and goodNausea and not ride.isShop:
-                    newLst.append((mark,ride))
+                    newLst.append((ride))
+
+                #FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
+                if ride.name == 'FoodStall' and self.hunger < 50:
+                    newLst.append((ride))
 
             return newLst
 
@@ -318,7 +397,7 @@ class Peep:
             res.append('special case list: {}\n'.format(lst))
         #[difference] didn't contain the function makes peeps repeat visiting same ride
         #               so we didn't consider visiting same ride at this moment
-        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for _,i in lst]
+        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for i in lst]
 
         if not distance or lst == [] or distance ==float('inf'):
             res.append('Peep {} finds no satisfactory ride.'.format(self.id))
@@ -330,8 +409,8 @@ class Peep:
                 res.append('no traversible tiles')
 
             return res
-        closestRide = lst[distance.index(min(distance))][1]
-        res.append('Peep {} new goal is {}'.format(self.id,closestRide.name))
+        closestRide = lst[distance.index(min(distance))]
+        res.append('Peep {} new goal is {} at {}'.format(self.id,closestRide.name, closestRide.enter))
         self.headingTo = closestRide
 
         return res
@@ -339,10 +418,10 @@ class Peep:
     def distributeTolerance(self):
         tolerance = random.randint(0,11)
 
-        if tolerance > 0 and tolerance <= 2:
+        if 2 >= tolerance > 0:
             tolerance = 1
-        elif tolerance > 2 and tolerance <=5:
-            tolerance =2
+        elif 5 >= tolerance > 2:
+            tolerance = 2
         else:
             tolerance = 3
 
@@ -351,8 +430,10 @@ class Peep:
     def wander(self):
         '''Pick a random destination.'''
         traversible_tiles = self.park.path_net
-#       print('traversible tiles: {}'.format(traversible_tiles))
-        goal = random.choice(list(traversible_tiles.keys()))
+       #print('traversible tiles: {}'.format(traversible_tiles))
+        if len(traversible_tiles) == 0:
+            self.headingTo = self.position
+        else:
+            goal = random.choice(list(traversible_tiles.keys()))
         #FIXME: do not create new path object every time
-        self.headingTo = self.park.path_net[goal]
-
+            self.headingTo = self.park.path_net[goal]

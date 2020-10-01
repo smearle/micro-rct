@@ -28,7 +28,14 @@ class PathFinder:
         self.checked = {}
         self.checking = {}
         self.goal = peep.headingTo.enter
-        assert self.goal in path_net
+#       print('peep heading to {}'.format(self.goal))
+        #FIXME: this is broken below
+    #   assert self.goal in path_net
+        if self.goal not in path_net:
+            return -1
+        # if the peep is off the path...
+        if peep.position not in path_net:
+            return [peep.position]
         curr_node = path_net[peep.position]
         link_scores = []
         self.checking[curr_node.position] = True
@@ -37,6 +44,8 @@ class PathFinder:
                 adj_score = self.dfs(adj)
                 link_scores.append(adj_score)
         adj_paths = sorted(link_scores, key=lambda x:x[1])
+        if not adj_paths:
+            return [peep.position]
         next_path = adj_paths[0][0].position
         self.checked[curr_node] = adj_paths[0][1]
         self.backtrace_hist = {}
@@ -49,6 +58,8 @@ class PathFinder:
         last_pos = paths[-1]
         self.backtrace_hist[last_pos] = True
         if last_pos in self.checked and self.checked[last_pos] == 0:
+            return paths
+        if last_pos not in self.path_net:
             return paths
         last_path = self.path_net[last_pos]
         link_scores = []
@@ -144,6 +155,7 @@ class Path:
         self.position = position
         self.enter = position
         self.path_map = path_map
+        self.links = []
         assert pos_in_map(position, path_map)
 
     def get_connecting(self):

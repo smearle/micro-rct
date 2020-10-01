@@ -20,7 +20,7 @@ with open(obj_list_path, 'r') as fp:
             if line and line[0] != "#":
                 arr = line.replace("\t", "").split(",")
                 symbol = arr[-1]
-                arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr)-1)]
+                arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr)-1)]+arr[-1:]
                 #newObj = RS.alt_init(arr)
                 # print(newObj)
                 object_list.append(create_attraction(arr))
