@@ -1,35 +1,38 @@
 import random
-from collections import *
+#from collections import *
+
 from .attraction import Ride_and_Store as RS
 #from peeps_path_finding import PathFinder
-from .path import PathFinder, Path
+from .path import Path, PathFinder
 
 #PF = PathFinder()
 
 maxValue = 255
+
+
 class Peep:
-    def __init__(self,name, path_finder, park):
+    def __init__(self, name, path_finder, park):
         self.id = name
         self.park = park
-        self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
+        self.intensity = [random.randint(8, 15), random.randrange(0, 7)]
         self.happiness = 128
         self.happinessTarget = 128
         self.nausea = 0
         self.nauseaTarget = 0
-        self.hunger = random.randint(0,maxValue)
+        self.hunger = random.randint(0, maxValue)
         self.nauseaTolerance = self.distributeTolerance()
-        self.thirst = random.randint(0,maxValue)
+        self.thirst = random.randint(0, maxValue)
         self.angriness = 0
         self.toilet = 0
         self.timeToConsume = 0
         self.disgustingCount = 0
-        self.cash = random.randint(400,600)
-        self.energy = random.randint(65,128)
+        self.cash = random.randint(400, 600)
+        self.energy = random.randint(65, 128)
         self.energyTarget = self.energy
         self.timeInPark = -1
         self.headingTo = None
         self.hasMap = False
-        self.position = (0,1)
+        self.position = (0, 1)
         self.visited = set()
         self.inFirstAid = False
         self.time_sick = 0
@@ -38,12 +41,12 @@ class Peep:
         self.path_finder = path_finder
         self.hasFood = False
 
-    def updatePosition(self,space,rides_by_pos, vomitPath):
+    def updatePosition(self, space, rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
         self.traversible_tiles = space
         res = []
 
-        if self.inFirstAid:#don't update position when peep interact with first aid
+        if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
         if not self.headingTo:
@@ -51,21 +54,26 @@ class Peep:
 
             return res
         target = self.headingTo
-#       ans =  PF.main_path_finding(self,space)
+        #       ans =  PF.main_path_finding(self,space)
         if not self.curr_route:
-#           print('PATHFINDING')
+            #           print('PATHFINDING')
             self.curr_route = self.path_finder.find(self)
         else:
-#           print('REUSING ROUTE')
+            #           print('REUSING ROUTE')
             pass
+
         if not self.curr_route:
             self.curr_route = [self.position]
             self.headingTo = None
+
         if self.curr_route == -1:
             print(self.park.printPark())
-            raise Exception('invalid route {} to goal {} corresponding to ride at position {} with \
-                    entrance at {}'.format(self.curr_route, 
-                    self.headingTo, self.headingTo.position, self.headingTo.enter))
+            print(self.park.path_net)
+            raise Exception(
+                'invalid route {} to goal {} corresponding to ride at position {} with \
+                    entrance at {}'.format(self.curr_route, self.headingTo,
+                                           self.headingTo.position,
+                                           self.headingTo.enter))
         ans = self.curr_route.pop(0)
 
         self.passingBy(vomitPath)
@@ -73,8 +81,9 @@ class Peep:
         self.position = ans
 
         if self.position == target.position or self.position == target.enter:
-            str1 = 'Peep {} arrived at {}\n'.format(self.id,target.name)
+            str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
+
             if not isinstance(target, Path):
 
                 if target.name == 'FirstAid':
@@ -87,10 +96,10 @@ class Peep:
 
         return res
 
-    #call every frame to update peep's current status
+    # call every frame to update peep's current status
     # now only update nausea status
-    def updateStatus(self,lst:list):
-        #update nausea
+    def updateStatus(self, lst: list):
+        # update nausea
         res = []
         self.updateNausea()
 
@@ -101,80 +110,97 @@ class Peep:
         self.updateToilet()
 
         return res
-    
-    def passingBy(self,vomitPath):
+
+    def passingBy(self, vomitPath):
         sickCount = 0
-        for vo_x,vo_y in vomitPath:
-            dis =  abs(vo_x-self.position[0])+abs(vo_y-self.position[1])
+
+        for vo_x, vo_y in vomitPath:
+            dis = abs(vo_x - self.position[0]) + abs(vo_y - self.position[1])
+
             if dis <= 16:
-                sickCount +=1
+                sickCount += 1
 
         # I am copying original code, I have no idea what is it about...
         disgusting_time = self.disgustingCount & 0xC0
-        disgusting_count = ((self.disgustingCount & 0xF)<<2) | sickCount
+        disgusting_count = ((self.disgustingCount & 0xF) << 2) | sickCount
         self.disgustingCount = disgusting_count | disgusting_time
 
-        if disgusting_time & 0xc0 and random.randint(0,65534) & 0xffff <= 4369:
+        if disgusting_time & 0xc0 and random.randint(0,
+                                                     65534) & 0xffff <= 4369:
             self.disgustingCount -= 0x40
         else:
             totalSick = 0
+
             for i in range(3):
-                totalSick += (disgusting_count>>(2*i)) & 0x3
-            
-            if totalSick >= 3 and random.randint(0,65534) & 0xffff <= 10922:
-                self.happinessTarget = max(0, self.happinessTarget-17)
+                totalSick += (disgusting_count >> (2 * i)) & 0x3
+
+            if totalSick >= 3 and random.randint(0, 65534) & 0xffff <= 10922:
+                self.happinessTarget = max(0, self.happinessTarget - 17)
                 self.disgustingCount |= 0xc0
-        
+
         return
-    
-    def nauseaCondition(self,lst:list):
+
+    def nauseaCondition(self, lst: list):
         res = []
+
         if self.nausea > 128:
             # in the orginal code peep will have chance to throw up when walking with nausea>128
             # since current peeps will always be walking we will run this code everytime we update
             # peeps cannot create vomit litter at the same location
-            chance = random.randint(0,maxValue)
-            if chance <= (self.nausea-128)/2:   #the higher nausea the higher chance to vomit
+            chance = random.randint(0, maxValue)
+
+            if chance <= (
+                    self.nausea -
+                    128) / 2:  # the higher nausea the higher chance to vomit
                 self.vomit()
 
         if self.nausea >= 140:
-            #currently not dealing with "normal sick"
+            # currently not dealing with "normal sick"
 
             if self.nausea >= 200:
-                #very sick will go to first aid
+                # very sick will go to first aid
 
-                if ((not self.headingTo) or (self.headingTo and self.headingTo.name != 'FirstAid')) and not self.inFirstAid:
-                    res.append('Peep {} needs to go to first Aid'.format(self.id))
-                    firstAids = [ride for _, ride in lst.items() if ride.name == 'FirstAid']
-                    res += self.findNextRide(firstAids,True)
+                if ((not self.headingTo) or
+                    (self.headingTo and self.headingTo.name != 'FirstAid')
+                    ) and not self.inFirstAid:
+                    res.append('Peep {} needs to go to first Aid'.format(
+                        self.id))
+                    firstAids = [
+                        ride for _, ride in lst.items()
+                        if ride.name == 'FirstAid'
+                    ]
+                    res += self.findNextRide(firstAids, True)
+
         return res
 
     def vomit(self):
-#       print('Peep {} vomits '.format(self.id))
-        self.nauseaTarget /=2
-        self.hunger /=2
-        if self.nausea >30:
+        #       print('Peep {} vomits '.format(self.id))
+        self.nauseaTarget /= 2
+        self.hunger /= 2
+
+        if self.nausea > 30:
             self.nausea -= 30
         else:
             self.nausea = 0
         self.park.add_vomit(self.position)
         # self.headingTo = None
 
-
     def updateHunger(self):
-        #TODO: I think this is prompted by a particular thought? "PEEP_FLAGS_HUNGER"
-       #if self.hunger >= 15:
-       #    self.hunger -= 15
-        #TODO: need thoughts
-       #if self.hunger <= 10 and not self.hasFood:
-       #    # add possible hunger thought
+        # TODO: I think this is prompted by a particular thought? "PEEP_FLAGS_HUNGER"
+        # if self.hunger >= 15:
+        #    self.hunger -= 15
+        # TODO: need thoughts
+        # if self.hunger <= 10 and not self.hasFood:
+        #    # add possible hunger thought
         if self.hunger < 10:
             self.hunger = max(self.hunger - 1, 0)
+
         if self.hasFood:
             self.hunger = min(self.hunger + 7, 255)
-            self.thirst = max(self.thirst -3, 0)
+            self.thirst = max(self.thirst - 3, 0)
             self.toilet = min(self.toilet + 2, 255)
             self.timeToConsume -= 1
+
             if self.timeToConsume == 0:
                 self.hasFood = False
 
@@ -192,7 +218,6 @@ class Peep:
 
         return
 
-
     def updateNausea(self):
         newNausea = self.nausea
         newNauseaGrowth = self.nauseaTarget
@@ -200,39 +225,46 @@ class Peep:
         # increment nausea toward target
 
         if newNausea >= newNauseaGrowth:
-            newNausea = max(newNausea-4,0)
+            newNausea = max(newNausea - 4, 0)
 
             # adjust if we've passed the target
 
             if newNausea < newNauseaGrowth:
                 newNausea = newNauseaGrowth
         else:
-            newNausea = min(255,newNausea+4)
+            newNausea = min(255, newNausea + 4)
 
             if newNausea > newNauseaGrowth:
                 newNausea = newNauseaGrowth
 
-        if newNausea!=newNauseaGrowth:
+        if newNausea != newNauseaGrowth:
             self.nausea = newNausea
 
         # TODO: this is in the original code and should probably be in ours as well
+
+
 #       self.nauseaTarget = max(self.nauseaTarget - 2, 0)
 
         return
 
-    #currently only update hapiness and Nausea Target
-    def interactWithRide(self,ride):
-        res = ['Peep {} is on {}\n'.format(self.id,ride.name)]
+    # currently only update hapiness and Nausea Target
+    def interactWithRide(self, ride):
+        res = ['Peep {} is on {}\n'.format(self.id, ride.name)]
 
-        if not ride.isShop and ride.name != 'FirstAid':     #peep on the ride
-            res.append('before the ride:\n\tnausea target:{}\thappiness Target:{}\n'.format(self.nauseaTarget,self.happinessTarget))
-            self.happinessTrgUpdate(ride.intensity,ride.nausea)
+        if not ride.isShop and ride.name != 'FirstAid':  # peep on the ride
+            res.append(
+                'before the ride:\n\tnausea target:{}\thappiness Target:{}\n'.
+                format(self.nauseaTarget, self.happinessTarget))
+            self.happinessTrgUpdate(ride.intensity, ride.nausea)
             self.updateRideNauseaGrowth(ride)
-            res.append('after the ride:\n\tnausea target:{}\thappiness Target:{}\n'.format(self.nauseaTarget,self.happinessTarget))
+            res.append(
+                'after the ride:\n\tnausea target:{}\thappiness Target:{}\n'.
+                format(self.nauseaTarget, self.happinessTarget))
 
         if ride.name == 'FirstAid':
-            if self.nausea <= 35:   #leave first aid when nausea below 35
-                res.append('Peep {} is recovered from nausea\n'.format(self.id))
+            if self.nausea <= 35:  # leave first aid when nausea below 35
+                res.append('Peep {} is recovered from nausea\n'.format(
+                    self.id))
                 self.inFirstAid = False
                 ride.queue.remove(self)
             else:
@@ -241,62 +273,62 @@ class Peep:
                 self.nauseaTarget = self.nausea
 
         if ride.name == 'FoodStall':
-#           print('peep {} has acquired food'.format(self.id))
+            #           print('peep {} has acquired food'.format(self.id))
             self.hasFood = True
             # in OpenRCT2 this is added when timeToConsume==0 and peep.hasFood
             self.timeToConsume = 3
 
-        return res if len(res)>0 else []
+        return res if len(res) > 0 else []
 
-    def happinessTrgUpdate(self,r_intensity,r_nausea):
+    def happinessTrgUpdate(self, r_intensity, r_nausea):
         intensitySatisfaction = nauseaSatisfaction = 3
-        maxIntensity = self.intensity[0]*100
-        minIntensity = self.intensity[1]*100
+        maxIntensity = self.intensity[0] * 100
+        minIntensity = self.intensity[1] * 100
 
         if minIntensity <= r_intensity and maxIntensity >= r_intensity:
             intensitySatisfaction -= 1
         minIntensity -= self.happiness * 2
         maxIntensity += self.happiness
 
-        minNausea,maxNausea= self.nauseaToleranceConvert()
+        minNausea, maxNausea = self.nauseaToleranceConvert()
 
         if minNausea <= r_nausea and maxNausea >= r_nausea:
             nauseaSatisfaction -= 1
 
         for _ in range(2):
-            minNausea -= self.happiness*2
+            minNausea -= self.happiness * 2
             maxNausea += self.happiness
 
             if minNausea <= r_nausea and maxNausea >= r_nausea:
                 nauseaSatisfaction -= 1
-        highestSatisfaction = max(intensitySatisfaction,nauseaSatisfaction)
-        lowestSatisfaction = min(nauseaSatisfaction,intensitySatisfaction)
+        highestSatisfaction = max(intensitySatisfaction, nauseaSatisfaction)
+        lowestSatisfaction = min(nauseaSatisfaction, intensitySatisfaction)
 
         if highestSatisfaction == 0:
-            self.happinessTarget = min(self.happinessTarget+70,maxValue)
+            self.happinessTarget = min(self.happinessTarget + 70, maxValue)
         elif highestSatisfaction == 1:
             if lowestSatisfaction == 0:
-                self.happinessTarget = min(self.happinessTarget+50,maxValue)
+                self.happinessTarget = min(self.happinessTarget + 50, maxValue)
 
             if lowestSatisfaction == 1:
-                self.happinessTarget = min(self.happinessTarget+30,maxValue)
+                self.happinessTarget = min(self.happinessTarget + 30, maxValue)
         elif highestSatisfaction == 2:
             if lowestSatisfaction == 0:
-                self.happinessTarget = min(self.happinessTarget+35,maxValue)
+                self.happinessTarget = min(self.happinessTarget + 35, maxValue)
 
             if lowestSatisfaction == 1:
-                self.happinessTarget = min(self.happinessTarget+20,maxValue)
+                self.happinessTarget = min(self.happinessTarget + 20, maxValue)
 
             if lowestSatisfaction == 2:
-                self.happinessTarget = min(self.happinessTarget+10,maxValue)
+                self.happinessTarget = min(self.happinessTarget + 10, maxValue)
         elif highestSatisfaction == 3:
             if lowestSatisfaction == 0:
-                self.happinessTarget = min(self.happinessTarget-35,maxValue)
+                self.happinessTarget = min(self.happinessTarget - 35, maxValue)
 
             if lowestSatisfaction == 1:
-                self.happinessTarget = min(self.happinessTarget-50,maxValue)
+                self.happinessTarget = min(self.happinessTarget - 50, maxValue)
             else:
-                self.happinessTarget = min(self.happinessTarget-60,maxValue)
+                self.happinessTarget = min(self.happinessTarget - 60, maxValue)
 
     def nauseaToleranceConvert(self):
         if self.nauseaTolerance == 0:
@@ -312,7 +344,7 @@ class Peep:
             minNausea = 25
             maxNausea = 55
 
-        return minNausea,maxNausea
+        return minNausea, maxNausea
 
     def nauseaMaximumThresholds(self):
         if self.nauseaTolerance == 0:
@@ -324,16 +356,16 @@ class Peep:
         else:
             return 1000
 
-    #base on:
+    # base on:
     #   The nausea rating of the ride
     #   Their new happiness growth rate (the higher, the less nauseous)
     #   How hungry the peep is (+0% nausea at 50% hunger up to +100% nausea at 100% hunger)
     #   The peep's nausea tolerance (Final modifier: none: 100%, low: 50%, average: 25%, high: 12.5%)
-    def updateRideNauseaGrowth(self,ride):
-        nauseaMultiplier = max(min(256-self.happinessTarget,200),64)
-        #original code is /512 but we /16 in our case
-        nauseaGrowthRateChange = (ride.nausea*nauseaMultiplier)//16
-        nauseaGrowthRateChange *= max(128,self.hunger)/64
+    def updateRideNauseaGrowth(self, ride):
+        nauseaMultiplier = max(min(256 - self.happinessTarget, 200), 64)
+        # original code is /512 but we /16 in our case
+        nauseaGrowthRateChange = (ride.nausea * nauseaMultiplier) // 16
+        nauseaGrowthRateChange *= max(128, self.hunger) / 64
 
         if self.nauseaTolerance == 1:
             nauseaGrowthRateChange *= 0.5
@@ -341,24 +373,29 @@ class Peep:
             nauseaGrowthRateChange *= 0.25
         elif self.nauseaTolerance == 3:
             nauseaGrowthRateChange *= 0.125
-        self.nauseaTarget = min(255,self.nauseaTarget+nauseaGrowthRateChange)
+        self.nauseaTarget = min(255,
+                                self.nauseaTarget + nauseaGrowthRateChange)
 
         return
 
-    def findNextRide(self,lst:list,specialCase=False):
+    def findNextRide(self, lst: list, specialCase=False):
 
         res = ['\nPeep {} is finding next ride\n'.format(self.id)]
+
         def filterLst():
-            #this code will filter unwanted ride for the peep
-            #[difference] didn't deal with ride's popularity
-            #[difference] didn't consider the situation the peep is at the ride
-            #[problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+            # this code will filter unwanted ride for the peep
+            # [difference] didn't deal with ride's popularity
+            # [difference] didn't consider the situation the peep is at the ride
+            # [problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
             #           not ideal...?
             alterNumber = 33
             newLst = []
-            maxIntensity = (min(self.intensity[0]*100,1000)+self.happiness)//alterNumber
-            minIntensity = (max(self.intensity[1]*100 - self.happiness,0))//alterNumber
-            maxNausea = (self.nauseaMaximumThresholds() + self.happiness)//alterNumber
+            maxIntensity = (min(self.intensity[0] * 100, 1000) +
+                            self.happiness) // alterNumber
+            minIntensity = (max(self.intensity[1] * 100 - self.happiness,
+                                0)) // alterNumber
+            maxNausea = (self.nauseaMaximumThresholds() +
+                         self.happiness) // alterNumber
 
             for ride in lst:
                 goodIntensity = goodNausea = False
@@ -376,13 +413,14 @@ class Peep:
                 if goodIntensity and goodNausea and not ride.isShop:
                     newLst.append((ride))
 
-                #FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
+                # FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
+
                 if ride.name == 'FoodStall' and self.hunger < 50:
                     newLst.append((ride))
 
             return newLst
 
-        if  self.position == (-1,-1) or not lst:
+        if self.position == (-1, -1) or not lst:
             res.append('the ride is not valid\n')
             self.wander()
 
@@ -395,14 +433,18 @@ class Peep:
             res.append('new list: {}\n'.format(lst))
         else:
             res.append('special case list: {}\n'.format(lst))
-        #[difference] didn't contain the function makes peeps repeat visiting same ride
+        # [difference] didn't contain the function makes peeps repeat visiting same ride
         #               so we didn't consider visiting same ride at this moment
-        distance = [abs(i.position[0]-pos[0])+abs(i.position[1]-pos[1]) if not i.name in self.visited else float('inf') for i in lst]
+        distance = [
+            abs(i.enter[0] - pos[0]) + abs(i.enter[1] - pos[1])
+            if not i.name in self.visited else float('inf') for i in lst
+        ]
 
-        if not distance or lst == [] or distance ==float('inf'):
+        if not distance or lst == [] or distance == float('inf'):
             res.append('Peep {} finds no satisfactory ride.'.format(self.id))
+
             if self.traversible_tiles is not None:
-                #FIXME: Make this more true to OpenRCT2
+                # FIXME: Make this more true to OpenRCT2
                 self.wander()
                 pass
             else:
@@ -410,13 +452,14 @@ class Peep:
 
             return res
         closestRide = lst[distance.index(min(distance))]
-        res.append('Peep {} new goal is {} at {}'.format(self.id,closestRide.name, closestRide.enter))
+        res.append('Peep {} new goal is {} at {}'.format(
+            self.id, closestRide.name, closestRide.enter))
         self.headingTo = closestRide
 
         return res
 
     def distributeTolerance(self):
-        tolerance = random.randint(0,11)
+        tolerance = random.randint(0, 11)
 
         if 2 >= tolerance > 0:
             tolerance = 1
@@ -430,10 +473,10 @@ class Peep:
     def wander(self):
         '''Pick a random destination.'''
         traversible_tiles = self.park.path_net
-       #print('traversible tiles: {}'.format(traversible_tiles))
+        #print('traversible tiles: {}'.format(traversible_tiles))
         if len(traversible_tiles) == 0:
             self.headingTo = self.position
         else:
             goal = random.choice(list(traversible_tiles.keys()))
-        #FIXME: do not create new path object every time
+            # FIXME: do not create new path object every time
             self.headingTo = self.park.path_net[goal]
