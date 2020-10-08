@@ -31,7 +31,6 @@ class Map():
         import os
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
         if render and screen:
-    #       print('initializing map for rendering')
             self.screen = screen
             self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
             self.map_width = park.size[0]
@@ -81,9 +80,6 @@ class Map():
             self.twist_tile = pygame.transform.scale(self.twist_tile, (self.tile_width*2, self.tile_height*2))
             self.freefall_tile = self.load_image(os.path.join(self.SPRITE_DIR, "launched_freefall.png"))
             self.freefall_tile = pygame.transform.scale(self.freefall_tile, (self.tile_width*2, self.tile_height*2))
-        else:
-#           print('not initializing map for rendering')
-            pass
         self.ascii_tiles = {}
 
     def reset(self, park):

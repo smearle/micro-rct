@@ -1,22 +1,21 @@
-import argparse
-import copy
 import os
+import copy
 import random
 import sys
 import time
-
+import argparse
 import yaml
+
 from tqdm import tqdm
 
 from .map_utility import placePath, placeRide
 from .park import Park
-from .path import Path, PathFinder
+from .path import PathFinder
 from .peeps_generator import generate
 from .rct_test_objects import object_list as ride_list
 from .rct_test_objects import symbol_list
 from .tilemap import Map
 from .utils.debug_utils import print_msg
-
 
 def main(settings_path):
     with open(settings_path) as file:
@@ -25,24 +24,20 @@ def main(settings_path):
 
     for n_ticks in settings['experiments']['ticks']:
         run_experiment(env, n_ticks, settings)
-
-
+        
 def run_experiment(env, n_ticks, settings, n_trials=20):
     start_time = time.time()
     env.reset()
 
     for i in tqdm(range(n_trials)):
-        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(
-            settings['environment']['n_guests'], n_ticks, i)
+        log_name = 'output_logs/guests_{}_ticks_{}_trial_{}'.format(settings['environment']['n_guests'], n_ticks, i)
         orig_stdout = sys.stdout
         f = open(log_name, 'w')
         sys.stdout = f
         env.simulate(n_ticks)
         sys.stdout = orig_stdout
         f.close()
-    print('Experiment log filename: {}\n Time elapsed: {}'.format(
-        log_name,
-        time.time() - start_time))
+    print('Experiment log filename: {}\n Time elapsed: {}'.format(log_name, time.time() - start_time))
 
 
 class RCTEnv():
@@ -50,27 +45,22 @@ class RCTEnv():
 
     def __init__(self, settings, **kwargs):
         if settings is None:
-            settings_path = os.path.dirname(
-                os.path.dirname(os.path.realpath(__file__)))
+            settings_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
             settings_path = os.path.join(settings_path, 'configs/settings.yml')
             with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
-
+                settings = yaml.load(file,  yaml.FullLoader)
         for kwarg in kwargs:
             print(kwarg)
-
             for s_type in settings:
                 if kwarg in settings[s_type]:
                     settings[s_type][kwarg] = kwargs.get(kwarg)
-
-        if settings['general']['render']:
-            # if kwargs.get('render_gui', False):
+       #if settings['general']['render']:
+        if kwargs.get('render_gui', False):
             import pygame
             pygame.init()
             screen_width = 1000
             screen_height = 1000
-            self.screen = pygame.display.set_mode(
-                (screen_width, screen_height))
+            self.screen = pygame.display.set_mode((screen_width, screen_height))
         else:
             self.screen = None
         self.settings = settings
@@ -78,58 +68,28 @@ class RCTEnv():
         self.park = Park(self.settings)
 
     def reset(self):
-        print_msg('resetting park',
-                  priority=2,
-                  verbose=self.settings['general']['verbose'])
+        print_msg('resetting park', priority=2, verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
         placePath(self.park, margin=3)
 
+       #for _ in range(self.settings['environment']['n_actions']):
+       #    ride_i = random.randint(0, self.N_RIDES-1)
+       #    placeRide(self.park, ride_i, verbose=self.settings['general']['verbose'])
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
-        self.path_finder = path_finder
-        peeps = generate(self.settings['environment']['n_guests'], self.park,
-                         0.2, 0.2, path_finder)
+        peeps = generate(
+            self.settings['environment']['n_guests'], self.park, 0.2, 0.2, path_finder)
         self.park.peepsList = peeps
 
         for p in peeps:
             self.park.updateHuman(p)
 
         if not self.render_map:
-           #print('in rct env, initializing render map')
-            self.render_map = Map(self.park,
-                                  render=self.settings['general']['render'],
-                                  screen=self.screen)
+            self.render_map = Map(self.park, render=self.settings['general']['render'], screen=self.screen)
         else:
-           #print('in rct env, not initializing render map')
             self.render_map.reset(self.park)
 
-    def resetSim(self):
-        ''' This resets the park but leaves the map (path and ride placement) intact.
-        This allows for more efficient mutation during evolution, preventing us from
-        having to store potentially arbitrarily long build sequences. '''
-        for peep in self.park.peepsList:
-            self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = 0
-        for (x, y) in self.park.path_net:
-            self.park.map[Map.PATH, x, y] = Path.PATH
-        self.park.vomit_paths = {}
-        peeps = generate(self.settings['environment']['n_guests'], self.park,
-                         0.2, 0.2, self.path_finder)
-        self.park.peepsList = peeps
-        self.park.populate_path_net()
-
-        for p in peeps:
-            self.park.updateHuman(p)
-
-        self.render_map = Map(self.park,
-                              render=self.settings['general']['render'],
-                              screen=self.screen)
-
     def simulate(self, n_ticks=-1):
-       #for _ in range(self.settings['environment']['n_actions']):
-       #    ride_i = random.randint(0, self.N_RIDES - 1)
-       #    placeRide(self.park,
-       #              ride_i,
-       #              verbose=self.settings['general']['verbose'])
         frame = 0
 
         while frame < n_ticks or n_ticks == -1:
@@ -144,10 +104,7 @@ class RCTEnv():
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--settings-path',
-                        '-sp',
-                        default='configs/settings.yml',
-                        help='path to read the settings yaml file')
+    parser.add_argument('--settings-path', '-sp', default='configs/settings.yml', help='path to read the settings yaml file')
     args = parser.parse_args()
     settings_path = args.settings_path
 

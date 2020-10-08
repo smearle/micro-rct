@@ -105,33 +105,24 @@ def demolish_tile(park, x, y):
     park.map[Map.PATH, x, y] = 0
     park.map[Map.RIDE, x, y] = -1
 
-def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
+def place_ride_tile(park, x, y, ride_i):
     _ride = ride_list[ride_i]()
     mark = str(symbol_list[ride_i])
     size = _ride.size
-    if entrance_pos == 0:
-        entrance = (x, y)
-    elif entrance_pos == 1:
-        entrance = (x + size[0] - 1, y)
-    elif entrance_pos == 2:
-        entrance = (x, y + size[1] - 1)
-    elif entrance_pos == 3:
-        entrance = (x + size[0] - 1, y + size[1] - 1)
-    else:
-        raise Exception('invalid entrance position index')
+    entrance = (x, y)
 
-    if checkCanPlaceOrNot(park, x, y, size[0], size[1]):
-        place_path_tile(park, *entrance)
+    if checkCanPlaceOrNot(park, entrance[0], entrance[1], size[0], size[1]):
+        place_path_tile(park, x, y)
         _ride.enter = entrance
-        _ride.position = (x, y)
-        park.rides_by_pos[(x, y)] = _ride
+        _ride.position = entrance
+        park.rides_by_pos[entrance] = _ride
 
         for i in range(x, x + size[0]):
             for j in range(y, y + size[1]):
                 if (not 0 <= i <= park.map.shape[0]) or (not 0 <= j <= park.map.shape[1]):
                     continue
                 park.map[Map.RIDE, i, j] = ride_i
-        park.updateMap((x, y), size, mark, _ride.enter)
+        park.updateMap(entrance, size, mark, _ride.enter)
         update_path_net(park, entrance)
 
 def placeRide(park, ride_i, verbose=False):

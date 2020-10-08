@@ -22,7 +22,7 @@ class PathFinder:
 
 
     def find(self, peep):
-        path_net = peep.park.path_net
+        path_net = self.path_net
         self.maxTilesChecked = len(path_net)
         self.counter = self.maxCounter
         self.checked = {}
@@ -32,7 +32,6 @@ class PathFinder:
         #FIXME: this is broken below
     #   assert self.goal in path_net
         if self.goal not in path_net:
-            print('goal not in path net:', self.goal)
             return -1
         # if the peep is off the path...
         if peep.position not in path_net:

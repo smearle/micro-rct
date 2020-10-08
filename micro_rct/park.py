@@ -242,4 +242,3 @@ class Park():
         res += '\npark score: {}\n'.format(self.score)
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
-        return res
