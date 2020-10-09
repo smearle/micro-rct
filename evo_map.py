@@ -25,8 +25,9 @@ class LambdaMuEvolver():
         self.mu = 0.2
         self.population_size = 10
         self.n_epochs = 10000
-        self.n_sim_ticks = 500
-        self.n_init_builds = 1
+        self.n_sim_ticks = 200
+        self.n_init_builds = 10
+        self.max_mutate_builds = 10
 
     def main(self):
         population = {}  # hash: (game, score, age)
@@ -86,7 +87,7 @@ class LambdaMuEvolver():
         child = par_game.clone(settings_path='configs/settings.yml', rank=g_hash)
 
         child.resetSim()
-        for i in range(random.randint(1, 3)):
+        for i in range(random.randint(1, self.max_mutate_builds)):
             child.act(child.action_space.sample())
 
         return child
