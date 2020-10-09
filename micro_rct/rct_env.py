@@ -72,6 +72,7 @@ class RCTEnv():
             screen_height = 1000
             self.screen = pygame.display.set_mode(
                 (screen_width, screen_height))
+            self.screen_width, self.screen_height = screen_width, screen_height
         else:
             self.screen = None
         self.settings = settings
@@ -124,10 +125,15 @@ class RCTEnv():
         for p in peeps:
             self.park.updateHuman(p)
 
+        if not self.screen and self.settings['general']['render']:
+            import pygame
+            pygame.init()
+            self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+
         self.render_map = Map(self.park,
                               render=self.settings['general']['render'],
                               screen=self.screen)
-        self.render_map.reset(self.park)
+       #self.render_map.reset(self.park)
 
     def simulate(self, n_ticks=-1):
         if n_ticks != -1:
