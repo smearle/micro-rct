@@ -1,5 +1,6 @@
 from collections import defaultdict
 import numpy as np
+import copy
 # For debugging pathfinding only
 #import cv2
 
@@ -20,6 +21,13 @@ class PathFinder:
        #cv2.namedWindow("pathfinder checking", cv2.WINDOW_NORMAL)
        #cv2.namedWindow("pathfinder checked", cv2.WINDOW_NORMAL)
 
+    def clone(self):
+        new_path_net = {}
+        for pos, path in self.path_net.items():
+            new_path = path.clone()
+            new_path_net[pos] = new_path
+        new_path_finder = PathFinder(new_path_net)
+        return new_path_finder
 
     def find(self, peep):
         path_net = peep.park.path_net
@@ -27,7 +35,7 @@ class PathFinder:
         self.counter = self.maxCounter
         self.checked = {}
         self.checking = {}
-        self.goal = peep.headingTo.enter
+        self.goal = peep.headingTo.entrance
 #       print('peep heading to {}'.format(self.goal))
         #FIXME: this is broken below
     #   assert self.goal in path_net
@@ -150,20 +158,25 @@ class Path:
     def __repr__(self):
         return 'Path at {}'.format(self.position)
 
-    def __init__(self, position, path_map, path_net):
+    def __init__(self, position, path_map, path_net=None):
         self.name = 'path'
-        self.path_net = path_net
+       #self.path_net = path_net
         self.position = position
-        self.enter = position
+        self.entrance = position
         self.path_map = path_map
         self.links = []
         assert pos_in_map(position, path_map)
 
-    def get_connecting(self):
-        self.west = self.get_adjacent((-1, 0))
-        self.north = self.get_adjacent((0, 1))
-        self.east = self.get_adjacent((1, 0))
-        self.south = self.get_adjacent((0, -1))
+    def clone(self):
+        new_path_map = self.path_map.copy()
+        new_path = Path(self.position, new_path_map)
+        return new_path
+
+    def get_connecting(self, path_net):
+        self.west = self.get_adjacent((-1, 0), path_net)
+        self.north = self.get_adjacent((0, 1), path_net)
+        self.east = self.get_adjacent((1, 0), path_net)
+        self.south = self.get_adjacent((0, -1), path_net)
         self.links = [self.west, self.north, self.east, self.south]
         connections = 0
         for l in self.links:
@@ -174,16 +187,16 @@ class Path:
         else:
             self.junction = False
 
-    def get_adjacent(self, direction):
+    def get_adjacent(self, direction, path_net):
         adj_pos = (self.position[0] + direction[0],
                    self.position[1] + direction[1],
                    )
         # FIXME store dict of whether paths have been connected
-        if adj_pos in self.path_net:
-            adj_path = self.path_net[adj_pos]
+        if adj_pos in path_net:
+            adj_path = path_net[adj_pos]
             return adj_path
         elif pos_in_map(adj_pos, self.path_map) and self.path_map[adj_pos] >0:
-            return Path(adj_pos, self.path_map, self.path_net)
+            return Path(adj_pos, self.path_map, path_net)
         return None
 
 def pos_in_map(pos, mp):

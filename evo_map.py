@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 import random
 
 from gym_micro_rct.envs.rct_env import RCT
@@ -22,19 +23,20 @@ class LambdaMuEvolver():
     def __init__(self):
         self.lam = 0.2
         self.mu = 0.2
+        self.population_size = 10
         self.n_epochs = 10000
-        self.population_size = 5
-        self.n_sim_ticks = 100
-        self.n_init_builds = 100
+        self.n_sim_ticks = 500
+        self.n_init_builds = 1
 
     def main(self):
-        population = {}  # hash: (game, score)
+        population = {}  # hash: (game, score, age)
 
         for i in range(self.population_size):
-            game = RCT(settings_path='configs/settings.yml')
+            print(i)
+            game = RCT(settings_path='configs/settings.yml', rank=i)
             game.reset()
             game = self.genRandMap(game)
-            population[i] = (game, None)
+            population[i] = (game, None, 0)
 
         for i in range(self.n_epochs):
             print('epoch {}'.format(i))
@@ -42,32 +44,35 @@ class LambdaMuEvolver():
             n_parents = int(self.population_size * self.lam)
             dead_hashes = []
 
-            for g_hash, game_score in population.items():
-                game = game_score[0]
+            for g_hash, (game, score, age) in population.items():
                 game.resetSim()
-                game.simulate(self.n_sim_ticks)
-                population[g_hash] = (game, game.rct_env.park.score)
+                scores = game.simulate(self.n_sim_ticks)
+                score = np.mean(scores)
+                score = 255 - score # vomit is good
+                population[g_hash] = (game, score, age + 1)
             ranked_pop = sorted(
-                [(g_hash, game_score)
-                 for g_hash, game_score in population.items()],
-                key=lambda hash_game_score: hash_game_score[1][1])
-            print('ranked pop: ', ranked_pop)
+                [(g_hash, game, score, age)
+                 for g_hash, (game, score, age) in population.items()],
+                key=lambda tpl: tpl[2])
+            print('ranked pop: (score, age)')
+            for g_hash, game, score, age in ranked_pop:
+                print('{:2f}, {}'.format(score, age))
 
             for j in range(n_cull):
-                dead_hash = ranked_pop[-(j + 1)][0]
-                population.pop(dead_hash)
+                dead_hash = ranked_pop[j][0]
                 dead_hashes.append(dead_hash)
 
             j = 0
 
             while j < n_cull:
                 n_parent = j % n_parents
-                par_hash = ranked_pop[n_parent][0]
+                par_hash = ranked_pop[-(n_parent + 1)][0]
                 parent = population[par_hash]
                 par_game = parent[0]
-                child_game = self.mutate(par_game)
                 g_hash = dead_hashes.pop()
-                population[g_hash] = (child_game, None)
+                population.pop(g_hash)
+                child_game = self.mutate(par_game, g_hash)
+                population[g_hash] = (child_game, None, 0)
                 j += 1
 
     def genRandMap(self, game):
@@ -77,12 +82,12 @@ class LambdaMuEvolver():
 
         return game
 
-    def mutate(self, par_game):
-        child = par_game.clone(settings_path='configs/settings.yml')
+    def mutate(self, par_game, g_hash):
+        child = par_game.clone(settings_path='configs/settings.yml', rank=g_hash)
 
-        for i in range(random.randint(1, 30)):
+        child.resetSim()
+        for i in range(random.randint(1, 3)):
             child.act(child.action_space.sample())
-       #child.resetSim()
 
         return child
 

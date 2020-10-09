@@ -31,7 +31,7 @@ class Map():
         import os
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
         if render and screen:
-    #       print('initializing map for rendering')
+     #      print('initializing map for rendering')
             self.screen = screen
             self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
             self.map_width = park.size[0]

@@ -22,7 +22,7 @@ from micro_rct.tilemap import Map
 
 def main(settings):
 
-    env = RCT(settings)
+    env = RCT(settings_path=settings, rank=1)
 
     while True:
         env.reset()
@@ -35,19 +35,24 @@ def main(settings):
 
 
 class RCT(core.Env):
-    def __init__(self, settings_path=None, **kwargs):
-        if settings_path is not None:
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
+    RENDER_RANK = 0
+    def __init__(self, **kwargs):
+        settings_path = kwargs.get('settings_path', None)
+        with open(settings_path) as file:
+            settings = yaml.load(file, yaml.FullLoader)
+        self.rank = kwargs.get('rank', 1)
+        render_gui = settings['general']['render']
+        if render_gui :#and self.rank == self.RENDER_RANK:
+            self.render_gui = render_gui = True
+            settings['general']['render'] = True
         else:
-            settings = None
+            self.render_gui = render_gui = False
+            settings['general']['render'] = False
         self.rct_env = RCTEnv(settings, **kwargs)
         core.Env.__init__(self)
         settings = self.rct_env.settings
-        render_gui = settings['general']['render']
-        rank = kwargs.get('rank', 0)
+
         self.max_step = kwargs.get('max_step', 200)
-        self.render_gui = render_gui
 #       print('gym-micro-rct rct_env render gui?', self.render_gui)
         self.MAP_WIDTH = settings['environment']['map_width']
         self.MAP_HEIGHT = settings['environment']['map_height']
@@ -58,16 +63,6 @@ class RCT(core.Env):
 
         self.width = self.map_width = self.MAP_WIDTH
 
-        if render_gui:
-            import pygame
-            pygame.init()
-            screen_width = 1000
-            screen_height = 1000
-            self.screen = pygame.display.set_mode(
-                (screen_width, screen_height))
-        else:
-            self.screen = None
-        self.render_map = None
         self.n_step = 0
         self.metric_trgs = {
             'happiness': 255,
@@ -162,7 +157,6 @@ class RCT(core.Env):
     def act(self, action):
         build, x, y = self.ints_to_actions[action['map']]
         entrance_pos = action['entrance_pos']
-        #print('action', action)
         #x = int(action['position'][0])
         #y = int(action['position'][1])
         #print('x y build', x, y, build)
@@ -170,7 +164,7 @@ class RCT(core.Env):
         #       print('build', x, y, build)
 
         if build < len(ride_list):
-            self.place_ride_tile(x, y, build, entrance_pos)
+            self.park = self.place_ride_tile(x, y, build, entrance_pos)
         elif build < len(ride_list) + 1:
             self.place_path_tile(x, y)
         else:
@@ -198,8 +192,9 @@ class RCT(core.Env):
 #       print('len of pathnet', len(self.rct_env.park.path_net))
 
     def render(self, mode='human', close=False):
-        self.rct_env.render_map.render_park()
-        self.rct_env.park.printPark()
+        if self.render_gui:
+            self.rct_env.render_map.render_park()
+            self.rct_env.park.printPark()
 
     def simulate(self, n_ticks=-1):
         return self.rct_env.simulate(n_ticks)
@@ -231,9 +226,13 @@ class RCT(core.Env):
 
     def resetSim(self):
         self.rct_env.resetSim()
+        self.render()
 
-    def clone(self, settings_path):
-        new_env = RCT(settings_path=settings_path)
-        new_env.rct_env.park = copy.deepcopy(self.rct_env.park)
-        new_env.rct_env.path_finder = copy.deepcopy(self.rct_env.path_finder)
+    def clone(self, settings_path, rank):
+        new_env = RCT(settings_path=settings_path, rank=rank)
+        new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
+       #new_env.path_finder = PathFinder(new_env.park.path_net)
+       #new_env.rct_env.path_finder = self.rct_env.path_finder.clone()
+       #new_env.resetSim()
+#       new_env.rct_env.park.populate_path_net()
         return new_env

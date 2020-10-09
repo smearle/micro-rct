@@ -1,7 +1,6 @@
 import random
 #from collections import *
 
-from .attraction import Ride_and_Store as RS
 #from peeps_path_finding import PathFinder
 from .path import Path, PathFinder
 
@@ -73,14 +72,14 @@ class Peep:
                 'invalid route {} to goal {} corresponding to ride at position {} with \
                     entrance at {}'.format(self.curr_route, self.headingTo,
                                            self.headingTo.position,
-                                           self.headingTo.enter))
+                                           self.headingTo.entrance))
         ans = self.curr_route.pop(0)
 
         self.passingBy(vomitPath)
 
         self.position = ans
 
-        if self.position == target.position or self.position == target.enter:
+        if self.position == target.position or self.position == target.entrance:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
 
@@ -436,7 +435,7 @@ class Peep:
         # [difference] didn't contain the function makes peeps repeat visiting same ride
         #               so we didn't consider visiting same ride at this moment
         distance = [
-            abs(i.enter[0] - pos[0]) + abs(i.enter[1] - pos[1])
+            abs(i.entrance[0] - pos[0]) + abs(i.entrance[1] - pos[1])
             if not i.name in self.visited else float('inf') for i in lst
         ]
 
@@ -453,7 +452,7 @@ class Peep:
             return res
         closestRide = lst[distance.index(min(distance))]
         res.append('Peep {} new goal is {} at {}'.format(
-            self.id, closestRide.name, closestRide.enter))
+            self.id, closestRide.name, closestRide.entrance))
         self.headingTo = closestRide
 
         return res

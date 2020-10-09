@@ -57,7 +57,8 @@ class RCTEnv():
                 settings = yaml.load(file, yaml.FullLoader)
 
         for kwarg in kwargs:
-            print(kwarg)
+            #FIXME: inconsistent
+#           print('kwargs', kwarg)
 
             for s_type in settings:
                 if kwarg in settings[s_type]:
@@ -111,11 +112,14 @@ class RCTEnv():
             self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = 0
         for (x, y) in self.park.path_net:
             self.park.map[Map.PATH, x, y] = Path.PATH
+        for pos, ride in self.park.rides_by_pos.items():
+            self.park.map[Map.RIDE, pos[0], pos[1]] = ride.ride_i
         self.park.vomit_paths = {}
+        self.park.populate_path_net()
+        self.path_finder = PathFinder(self.park.path_net)
         peeps = generate(self.settings['environment']['n_guests'], self.park,
                          0.2, 0.2, self.path_finder)
         self.park.peepsList = peeps
-        self.park.populate_path_net()
 
         for p in peeps:
             self.park.updateHuman(p)
@@ -123,8 +127,11 @@ class RCTEnv():
         self.render_map = Map(self.park,
                               render=self.settings['general']['render'],
                               screen=self.screen)
+        self.render_map.reset(self.park)
 
     def simulate(self, n_ticks=-1):
+        if n_ticks != -1:
+            scores = []
        #for _ in range(self.settings['environment']['n_actions']):
        #    ride_i = random.randint(0, self.N_RIDES - 1)
        #    placeRide(self.park,
@@ -134,11 +141,14 @@ class RCTEnv():
 
         while frame < n_ticks or n_ticks == -1:
             self.park.update(frame)
+            if n_ticks != -1:
+                scores.append(self.park.score)
 
             if self.settings['general']['render']:
                 self.render_map.render_park()
                 self.park.printPark()
             frame += 1
+        return scores
 
 
 if __name__ == "__main__":

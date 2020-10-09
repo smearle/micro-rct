@@ -2,10 +2,11 @@ class Path:
     def __init__(self, position):
         self.name = 'path'
         self.position = position
-        self.enter = position
+        self.entrance = position
 
-class Ride_and_Store:
-    def __init__(self, name, thirst, hunger, toilet, excitement, intensity, nausea, time, cost, price, size_x, size_y, mark, position_x=0, position_y=0):
+class Attraction:
+    def __init__(self, name, thirst, hunger, toilet, excitement, intensity, nausea, time, cost, price, size_x, size_y,
+            mark, position_x=0, position_y=0, ride_i=-1):
         self.name = name
         self.mark = mark
         if thirst!=0 or hunger!=0 or toilet!=0 or name == 'FirstAid' or name =='InformationKiosk' or name=='Shop':
@@ -23,14 +24,15 @@ class Ride_and_Store:
         self.thirst = thirst
         self.toilet = toilet
         self.hunger = hunger
-        self.enter = (0,0) #current just place the enterence at the top left
+        self.entrance = (0,0) #current just place the enterence at the top left
         self.exit = (size_x-1,size_y-1) #current just place the exit at the bottom right
         self.queue = []		#append peep here
+        self.ride_i = ride_i
 
     @classmethod
     def alt_init(cls,arr):
-        name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,mark = arr
-        tmp = cls(name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y, mark)
+        name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y,mark, ride_i = arr
+        tmp = cls(name,thirst,hunger,toilet,excitement,intensity,nausea,time,cost,price,size_x,size_y, mark, ride_i)
         return tmp
 
 

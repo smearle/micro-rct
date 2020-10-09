@@ -5,13 +5,12 @@ from collections import *
 
 import numpy as np
 
-from .attraction import Ride_and_Store as RS
-from .park import Park
+from .rct_test_objects import symbol_dict, symbol_list
+from .park_enums import PARK
 from .path import Path
 from .peep import Peep
 from .peeps_generator import generate
 from .rct_test_objects import object_list as ride_list
-from .rct_test_objects import symbol_dict, symbol_list
 from .tilemap import Map
 from .utils.debug_utils import print_msg
 
@@ -27,18 +26,18 @@ def placePath(park, margin, verbose=False):
         for j in range(1,margin+1):
             if i==0 and j==1:
                 fixedSpace.pop((i,j))
-                interactiveSpace[(i,j)] = Park.pathMark
+                interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
             elif j == 1 or (i==margin and j!=margin):
                 freeSpace.pop((i,j))
-                interactiveSpace[(i,j)] = Park.pathMark
+                interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
 
     for i in range(margin, park.size[1] - margin):
         for j in range(margin, park.size[0] - margin):
             if i == margin or i == park.size[1] - margin-1 or j == margin or j == park.size[0] - margin - 1:
                 freeSpace.pop((i,j))
-                interactiveSpace[(i,j)] = Park.pathMark
+                interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
 
     return
@@ -56,7 +55,7 @@ def place_path_tile(park, x, y, type_i=0, verbose=False):
 
         if pos in park.freeSpace:
             park.freeSpace.pop(pos)
-        park.interactiveSpace[(x, y)] = Park.pathMark
+        park.interactiveSpace[(x, y)] = PARK.pathMark
     update_path_net(park, pos)
 
 def update_path_net(park, pos):
@@ -65,11 +64,11 @@ def update_path_net(park, pos):
         park.map[Map.PATH, x, y] = Path.PATH
         path = Path((x, y), park.map[Map.PATH], park.path_net)
         park.path_net[(x, y)] = path
-        path.get_connecting()
+        path.get_connecting(park.path_net)
 
         for adj_path in path.links:
             if adj_path:
-                adj_path.get_connecting()
+                adj_path.get_connecting(park.path_net)
 #   print('path placed')
 
 def demolish_tile(park, x, y):
@@ -84,7 +83,7 @@ def demolish_tile(park, x, y):
 
         for adj_path in path.links:
             if adj_path:
-                adj_path.get_connecting()
+                adj_path.get_connecting(park.path_net)
 
     if pos in park.interactiveSpace:
         park.interactiveSpace.pop(pos)
@@ -101,7 +100,7 @@ def demolish_tile(park, x, y):
                 else:
                     demolish_tile(park, x, y)
 
-    park.freeSpace[pos] = Park.emptyMark
+    park.freeSpace[pos] = PARK.emptyMark
     park.map[Map.PATH, x, y] = 0
     park.map[Map.RIDE, x, y] = -1
 
@@ -122,8 +121,9 @@ def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
 
     if checkCanPlaceOrNot(park, x, y, size[0], size[1]):
         place_path_tile(park, *entrance)
-        _ride.enter = entrance
+        _ride.entrance = entrance
         _ride.position = (x, y)
+        _ride.entrance_pos = entrance_pos
         park.rides_by_pos[(x, y)] = _ride
 
         for i in range(x, x + size[0]):
@@ -131,8 +131,9 @@ def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
                 if (not 0 <= i <= park.map.shape[0]) or (not 0 <= j <= park.map.shape[1]):
                     continue
                 park.map[Map.RIDE, i, j] = ride_i
-        park.updateMap((x, y), size, mark, _ride.enter)
+        park.updateMap((x, y), size, mark, _ride.entrance)
         update_path_net(park, entrance)
+    return park
 
 def placeRide(park, ride_i, verbose=False):
     # print('try to place {}'.format(_ride.name))
@@ -156,7 +157,7 @@ def placeRide(park, ride_i, verbose=False):
             rand = random.choice(list(potentialPlace.keys()))
         seen.add(rand)
         potentialPlace.pop(rand)
-        enter = rand
+        entrance = rand
         startList = [(rand[0],rand[1]),(rand[0]-size[0]+1,rand[1]-size[1]+1),(rand[0]-size[0]+1,rand[1]),(rand[0],rand[1]-size[1]+1)]
         startList = [(x,y)for x,y in startList if x>0 and y>0]
 
@@ -165,11 +166,8 @@ def placeRide(park, ride_i, verbose=False):
             placed = checkCanPlaceOrNot(park, rand[0], rand[1], size[0], size[1])
 
         if placed:
-            _ride.enter = enter
-            _ride.position = rand
-            park.rides_by_pos[_ride.position] = _ride
-            park.updateMap(rand,size,mark,_ride.enter)
-            update_path_net(park, enter)
+            _ride.entrance = entrance
+            update_path_net(park, entrance)
             print_msg('ride {} is placed at {}'.format(_ride.name,_ride.position), priority=3, verbose=verbose)
 
 def checkCanPlaceOrNot(park, startX,startY,width,length):
