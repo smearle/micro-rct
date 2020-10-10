@@ -68,7 +68,6 @@ class Peep:
         target = self.headingTo
         #       ans =  PF.main_path_finding(self,space)
         if not self.curr_route:
-            #           print('PATHFINDING')
             self.curr_route = self.path_finder.find(self)
         else:
             #           print('REUSING ROUTE')
@@ -78,6 +77,8 @@ class Peep:
             self.curr_route = [self.position]
             self.headingTo = None
 
+        #  when the target is not in the path_net dict,
+        # could be because of deletion
         if self.curr_route == -1:
             print(self.park.printPark())
             print(self.park.path_net)
@@ -86,6 +87,8 @@ class Peep:
                     entrance at {}'.format(self.curr_route, self.headingTo,
                                            self.headingTo.position,
                                            self.headingTo.entrance))
+           #self.curr_route = [self.position]
+           #self.headingTo = None
         ans = self.curr_route.pop(0)
 
         self.passingBy(vomitPath)

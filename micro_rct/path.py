@@ -137,8 +137,8 @@ class PathFinder:
        #    score = self.heuristic_from_goal(node.position)
        #   #self.checked[node.position] = score
         if non_inf == 0:
-            score = self.heuristic_from_goal(pos)
-#           score = float('inf')
+#           score = self.heuristic_from_goal(pos)
+            score = float('inf')
         else:
             score = route[0][1] + 1
         self.checked[node.position] = score
@@ -158,13 +158,14 @@ class Path:
     def __repr__(self):
         return 'Path at {}'.format(self.position)
 
-    def __init__(self, position, path_map, path_net=None):
+    def __init__(self, position, path_map, path_net=None, is_entrance=False):
         self.name = 'path'
        #self.path_net = path_net
         self.position = position
         self.entrance = position
         self.path_map = path_map
         self.links = []
+        self.is_entrance = is_entrance
         assert pos_in_map(position, path_map)
 
     def clone(self):
@@ -194,7 +195,8 @@ class Path:
         # FIXME store dict of whether paths have been connected
         if adj_pos in path_net:
             adj_path = path_net[adj_pos]
-            return adj_path
+            if not (adj_path.is_entrance and self.is_entrance):
+                return adj_path
         elif pos_in_map(adj_pos, self.path_map) and self.path_map[adj_pos] >0:
             return Path(adj_pos, self.path_map, path_net)
         return None

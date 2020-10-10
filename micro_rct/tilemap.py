@@ -141,8 +141,8 @@ class Map():
             i += 1
         for pos, ride in self.park.rides_by_pos.items():
 #           ride = ride[1]
-            i_pos = pos[0] * self.tile_width
-            j_pos = pos[1] * self.tile_height
+            i_pos = ride.position[0] * self.tile_width
+            j_pos = ride.position[1] * self.tile_height
             if ride.name == 'Cinema3D':
                 self.screen.blit(self.cin_tile, (i_pos, j_pos))
             elif ride.name == 'CrookedHouse':

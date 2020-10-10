@@ -32,6 +32,7 @@ class Park():
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
         self.rides_by_pos = {}
+        self.pos_by_rides = {}
 
         for i in range(self.size[0]):
             for j in range(self.size[1]):
@@ -71,6 +72,7 @@ class Park():
                                      new_park.map[Map.RIDE, x, y],
                                      entrance_pos=ride.entrance_pos)
             new_park.rides_by_pos[(x, y)] = ride
+           #new_park.pos_by_rides[ride].append((x, y))
 
         return new_park
 
@@ -255,7 +257,7 @@ class Park():
 
         for _,ride in self.rides_by_pos.items():
             mark =  ride.mark
-            res += ride.name +': '+ mark+'\n'
+           #res += ride.name +': '+ mark+'\n'
         res += 'human: '+ PARK.humanMark + "\n"
         res += 'enter: '+ PARK.pathMark + '\n'
         res += '\npark score: {}\n'.format(self.score)
