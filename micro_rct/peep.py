@@ -4,20 +4,11 @@ import random
 #from peeps_path_finding import PathFinder
 from .path import Path, PathFinder
 
+from .thoughts_enums import *
+
 #PF = PathFinder()
 
-#adding thought types here. Could also just do them as ints or as strings. 
-#original game also creates a struct for thoughts, not sure that's necessary here.
-PEEP_THOUGHT_TYPE_SICK = 2             #"I feel sick"
-PEEP_THOUGHT_TYPE_VERY_SICK = 3        #"I feel very sick"
-PEEP_THOUGHT_TYPE_TIRED = 19           #"I'm tired"
-PEEP_THOUGHT_TYPE_HUNGRY = 20          #"I'm hungry"
-PEEP_THOUGHT_TYPE_THIRSTY = 21         #"I'm thirsty"
-PEEP_THOUGHT_TYPE_TOILET = 22          #"I need to go to the toilet"
-PEEP_THOUGHT_TYPE_NONE = 255
-
 maxValue = 255
-
 
 class Peep:
     def __init__(self, name, path_finder, park):
@@ -49,8 +40,8 @@ class Peep:
         self.curr_route = []
         self.path_finder = path_finder
         self.hasFood = False
-        #not implementing thoughts as a class yet, just a list of thought types and their age
-        self.thoughts = [[PEEP_THOUGHT_TYPE_NONE, 0]]*5
+        #not implementing thoughts as a class yet, just a list of thought types, items, and their age
+        self.thoughts = [[PEEP_THOUGHT_TYPE_NONE, PEEP_THOUGHT_ITEM_NONE, 0]]*5
 
 
     def updatePosition(self, space, rides_by_pos, vomitPath):
@@ -97,7 +88,7 @@ class Peep:
 
         if self.position == target.position or self.position == target.entrance:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
-            res.append(str1)
+            res.append(str1)firstAids
 
             if not isinstance(target, Path):
 
@@ -123,6 +114,59 @@ class Peep:
         self.update_happiness()
         self.update_hunger()
         self.update_toilet()
+
+        #in original code, some updates to thoughts are inside tick128UpdateGuest and some are in a separate update_thoughts function. Keeping updates together for clarity.
+        self.update_thoughts()
+
+        #thoughts block below is inside Tick128UpdateGuest in the original
+        #this only executes if peep state is walking or sitting - so not if they are on a ride.
+        #original game has thoughts that happen if a peep is on a ride or entering ride, and on assessing the surroundings if they are walking or sitting.
+        possible_thoughts = []
+        num_thoughts = 0
+        if self.energy <= 70 and self.happiness < 128:
+            possible_thoughts.append(PEEP_THOUGHT_TYPE_TIRED)
+            num_thoughts+=1
+        if self.hunger<= 10 and not self.hasFood:
+            possible_thoughts.append(PEEP_THOUGHT_TYPE_HUNGRY)
+            num_thoughts+=1
+        if self.thirst <= 25 and not self.hasFood:
+            possible_thoughts.append(PEEP_THOUGHT_TYPE_THIRSTY)
+            num_thoughts+=1
+        if self.toilet >= 160:
+            possible_thoughts.append(PEEP_THOUGHT_TYPE_TOILET)
+            num_thoughts+=1
+        # adding check on money levels. original game also checks that gParkFlags includes money levels. Not including that here as we do not have gParkFlags implemented.
+        if self.cash <= 9 and self.happiness >= 105 and self.energy >= 70:
+            possible_thoughts.append(PEEP_THOUGHT_TYPE_RUNNING_OUT)
+            num_thoughts+=1
+
+        if possible_thoughts:
+            choice = random.randint(0, num_thoughts-1)
+            chosen_thought = possible_thoughts[choice]
+            self.insertNewThought(chosen_thought, PEEP_THOUGHT_ITEM_NONE)
+
+            if chosen_thought == PEEP_THOUGHT_TYPE_HUNGRY:
+                foodStalls = [
+                    ride for _, ride in lst.items()
+                    if ride.name == 'FoodStall'
+                ]
+                res += findNextRide(foodStalls, True)
+                # original code: peep_head_for_nearest_ride_with_flags(this, RIDE_TYPE_FLAG_SELLS_FOOD)
+            elif chosen_thought == PEEP_THOUGHT_TYPE_THIRSTY:
+                pass
+                # original code: peep_head_for_nearest_ride_with_flags(this, RIDE_TYPE_FLAG_SELLS_DRINKS)
+            elif chosen_thought == PEEP_THOUGHT_TYPE_TOILET:
+                pass
+                # original code: peep_head_for_nearest_ride_with_flags(this, RIDE_TYPE_FLAG_IS_TOILET)
+            elif chosen_thought == PEEP_THOUGHT_TYPE_RUNNING_OUT:
+                pass
+                #original code: peep_head_for_nearest_ride_type(this, RIDE_TYPE_CASH_MACHINE);
+        
+        elif self.nausea>=200:
+            self.insertNewThought(PEEP_THOUGHT_TYPE_VERY_SICK, PEEP_THOUGHT_ITEM_NONE)
+        elif self.nausea>=140:
+            self.insertNewThought(PEEP_THOUGHT_TYPE_SICK, PEEP_THOUGHT_ITEM_NONE)
+        # end thoughts block
 
         return res
 
@@ -185,9 +229,6 @@ class Peep:
                         if ride.name == 'FirstAid'
                     ]
                     res += self.findNextRide(firstAids, True)
-        
-        #in original code, some updates to thoughts are inside tick128UpdateGuest and some are in a separate update_thoughts function. Keeping updates together for clarity.
-        self.update_thoughts()
 
         return res
 
@@ -265,46 +306,19 @@ class Peep:
 
         return
 
-    # MARIA: currently only updates according to age of each thought and to add new thoughts according to peep's needs
-    # combining updates from original code's Tick128UpdateGuest and update_thoughts. 
+    # currently only updates according to age of each thought and to add new thoughts according to peep's needs
     # In the original code, also updates according to entering or on a ride, conditions of surroundings, leaving the park, cash running out
     def update_thoughts(self):
         for i in range(5):
-            #print(self.thoughts[i])
             self.thoughts[i][1]+=1
             if self.thoughts[i][1]>=6900:
                 self.thoughts.pop(i)
                 self.thoughts.append([PEEP_THOUGHT_TYPE_NONE,0])
 
-        #not adding call to return if peep is at first aid or on a ride.
-        possible_thoughts = []
-
-        if self.energy <= 70 and self.happiness < 128:
-            possible_thoughts.append(PEEP_THOUGHT_TYPE_TIRED)
-        if self.hunger<= 10: #and not self.hasFood
-            possible_thoughts.append(PEEP_THOUGHT_TYPE_HUNGRY)
-        if self.thirst <= 25: #and not self.hasFood
-            possible_thoughts.append(PEEP_THOUGHT_TYPE_THIRSTY)
-        if self.toilet >= 160:
-            possible_thoughts.append(PEEP_THOUGHT_TYPE_TOILET)
-        #original game also has check on money, to insert thought type running out
-
-        if possible_thoughts:
-            choice = random.randint(0, len(possible_thoughts)-1)
-            chosen_thought = possible_thoughts[choice]
-            self.insertNewThought(chosen_thought)
-        
-        #original game also has switch for chosen thought, takes action based on that thought
-        
-        elif self.nausea>=200:
-            self.insertNewThought(PEEP_THOUGHT_TYPE_VERY_SICK)
-        elif self.nausea>=140:
-            self.insertNewThought(PEEP_THOUGHT_TYPE_SICK)
-
         return
 
-    def insertNewThought(self, thoughtType):
-        self.thoughts.insert(0, [thoughtType, 0])
+    def insertNewThought(self, thoughtType, thoughtItem):
+        self.thoughts.insert(0, [thoughtType, thoughtItem, 0])
         self.thoughts.pop(5)
 
 
