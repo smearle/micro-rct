@@ -20,6 +20,7 @@ maxValue = 255
 
 
 class Peep:
+    position = (0, 1)
     def __init__(self, name, path_finder, park):
         self.id = name
         self.park = park
@@ -41,7 +42,7 @@ class Peep:
         self.timeInPark = -1
         self.headingTo = None
         self.hasMap = False
-        self.position = (0, 1)
+       #self.position = (0, 1)
         self.visited = set()
         self.inFirstAid = False
         self.time_sick = 0

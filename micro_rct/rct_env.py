@@ -110,7 +110,7 @@ class RCTEnv():
         This allows for more efficient mutation during evolution, preventing us from
         having to store potentially arbitrarily long build sequences. '''
         for peep in self.park.peepsList:
-            self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = 0
+            self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
         for (x, y) in self.park.path_net:
             self.park.map[Map.PATH, x, y] = Path.PATH
        #for pos, ride in self.park.rides_by_pos.items():

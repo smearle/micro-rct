@@ -96,8 +96,8 @@ class Map():
         self.frame = 0
         
 
-    def render_park(self, frame):
-        if self.frame == 0:
+    def render_park(self):
+        if self.frame == 0 or True:
             for i in range(self.map.shape[1]):
                 for j in range(self.map.shape[2]):
                     i_pix = i*self.tile_width
@@ -136,7 +136,7 @@ class Map():
                     self.screen.blit(self.food_tile, (i_pix, j_pix))
                 elif curr_ride_tile == 't':
                     self.screen.blit(self.toilet_tile, (i_pix, j_pix))
-                elif curr_ride_tile in 'W3c/~T§F¶¥':
+                elif curr_ride_tile in '3c/~T§F¶¥':
                     pass
                 else:
                     if curr_ride_tile not in self.ascii_tiles:

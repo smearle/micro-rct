@@ -13,6 +13,7 @@ from micro_rct import map_utility
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.park import Park
 from micro_rct.path import PathFinder
+from micro_rct.peep import Peep
 from micro_rct.peeps_generator import generate
 from micro_rct.rct_env import RCTEnv
 from micro_rct.rct_test_objects import object_list as ride_list
@@ -118,7 +119,7 @@ class RCT(core.Env):
         pass
 
     def rand_connect(self):
-        waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()]
+        waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()] + [Peep.position]
         try:
             src = waypoints.pop(random.randint(0, len(waypoints)))
             trg = waypoints.pop(random.randint(0, len(waypoints)))
@@ -213,7 +214,7 @@ class RCT(core.Env):
 
     def render(self, mode='human', close=False):
         if self.render_gui:
-            self.rct_env.render_map.render_park(self.n_step)
+            self.rct_env.render_map.render_park()
             self.rct_env.park.printPark()
 
     def simulate(self, n_ticks=-1):

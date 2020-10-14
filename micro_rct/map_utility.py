@@ -15,9 +15,9 @@ from .tilemap import Map
 from .utils.debug_utils import print_msg
 
 def placePath(park, margin, verbose=False):
-    freeSpace = park.freeSpace
-    interactiveSpace = park.interactiveSpace
-    fixedSpace = park.fixedSpace
+   #freeSpace = park.freeSpace
+   #interactiveSpace = park.interactiveSpace
+   #fixedSpace = park.fixedSpace
 
     if margin >= park.size[0] or margin >= park.size[1]:
         return
@@ -25,19 +25,19 @@ def placePath(park, margin, verbose=False):
     for i in range(margin+1):
         for j in range(1,margin+1):
             if i==0 and j==1:
-                fixedSpace.pop((i,j))
-                interactiveSpace[(i,j)] = PARK.pathMark
+#               fixedSpace.pop((i,j))
+#               interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
             elif j == 1 or (i==margin and j!=margin):
-                freeSpace.pop((i,j))
-                interactiveSpace[(i,j)] = PARK.pathMark
+#               freeSpace.pop((i,j))
+#               interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
 
     for i in range(margin, park.size[1] - margin):
         for j in range(margin, park.size[0] - margin):
             if i == margin or i == park.size[1] - margin-1 or j == margin or j == park.size[0] - margin - 1:
-                freeSpace.pop((i,j))
-                interactiveSpace[(i,j)] = PARK.pathMark
+#               freeSpace.pop((i,j))
+#               interactiveSpace[(i,j)] = PARK.pathMark
                 park.map[Map.PATH, i, j] = 1
 
     return
@@ -48,20 +48,20 @@ def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
 #   print_msg('place path tile: {} {} {}'.format(x, y, type_i), priority=4, verbose=verbose)
     pos = (x, y)
 
-    if park.map[Map.RIDE, x, y] != -1 and not park.map[Map.PATH, x, y] != 0:
+    # will overwrite rides, but not their entrances
+    if park.map[Map.RIDE, x, y] != -1 and park.map[Map.PATH, x, y] == -1:
         demolish_tile(park, x, y)
     #   if (x, y) in park.rides_by_pos:
     #       ride = park.rides_by_pos[(x, y)]
     #       for ride_pos in park.pos_by_rides[ride]:
     #           i, j = ride_pos
     #           demolish_tile(park, i, j)
-    else:
-        if pos in park.fixedSpace:
-            park.fixedSpace.pop(pos)
+   #if pos in park.fixedSpace:
+   #    park.fixedSpace.pop(pos)
 
-        if pos in park.freeSpace:
-            park.freeSpace.pop(pos)
-        park.interactiveSpace[(x, y)] = PARK.pathMark
+   #if pos in park.freeSpace:
+   #    park.freeSpace.pop(pos)
+   #park.interactiveSpace[(x, y)] = PARK.pathMark
     update_path_net(park, pos, is_entrance=is_entrance)
 
 def update_path_net(park, pos, is_entrance=False):
@@ -92,19 +92,22 @@ def demolish_tile(park, x, y):
                 adj_path = park.path_net[adj_path]
                 adj_path.get_connecting(park.path_net)
 
-    if pos in park.interactiveSpace:
-        park.interactiveSpace.pop(pos)
+#   if pos in park.interactiveSpace:
+#       park.interactiveSpace.pop(pos)
 
     #FIXME: NO!!
-   #if park.map[Map.RIDE, pos[0], pos[1]] > -1 and not pos in park.rides_by_pos:
-   #    park.map[Map.RIDE, pos[0], pos[1]] = -1
+    if park.map[Map.RIDE, pos[0], pos[1]] > -1 and not pos in park.locs_to_rides:
+        raise Exception('position {}, \n{}\n{}'.format(pos, park.map[Map.RIDE], park.locs_to_rides))
+#       park.map[Map.RIDE, pos[0], pos[1]] = -1
     if pos in park.locs_to_rides:
-        ride = park.rides_by_pos[park.locs_to_rides[pos]]
-        park.rides_by_pos.pop(ride.position)
+        center = park.locs_to_rides[pos]
+        ride = park.rides_by_pos.pop(center)
+        assert center == ride.position
         for ride_pos in ride.locs:
-            park.map[Map.RIDE, ride_pos[0], ride_pos[1]] = -1
             if ride_pos in park.locs_to_rides:
                 park.locs_to_rides.pop(ride_pos)
+            park.map[Map.RIDE, ride_pos[0], ride_pos[1]] = -1
+            demolish_tile(park, ride_pos[0], ride_pos[1])
         
 
     #   for i in range(x, x + ride.size[0]):
@@ -114,7 +117,7 @@ def demolish_tile(park, x, y):
     #           else:
     #               demolish_tile(park, x, y)
 
-    park.freeSpace[pos] = PARK.emptyMark
+#   park.freeSpace[pos] = PARK.emptyMark
     park.map[Map.PATH, x, y] = -1
     park.map[Map.RIDE, x, y] = -1
 
@@ -161,7 +164,7 @@ def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
                 park.map[Map.RIDE, i, j] = ride_i
                 park.locs_to_rides[(i, j)] = (x, y)
                 _ride.locs.append((i, j))
-        park.updateMap((x, y), size, mark, _ride.entrance)
+       #park.updateMap((x, y), size, mark, _ride.entrance)
         update_path_net(park, entrance)
 
     return park
@@ -218,9 +221,6 @@ def checkCanPlaceOrNot(park, ride, startX, startY, width, length):
 
             if park.map[Map.RIDE, i, j] != -1:  # can overwrite rides
                 pass
-               #return False
 
-           #if (i,j) in park.fixedSpace or (i,j) in park.interactiveSpace:
-           #    return False
 
     return True

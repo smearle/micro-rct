@@ -90,20 +90,21 @@ class PathFinder:
                 return pos_to_routes[curr]
             for adj in self.adj:
                 next_pos = (curr[0] + adj[0], curr[1] + adj[1])
+                # next tile cannot be out of bounds, cannot be a ride unless the target entrance
                 if (next_pos not in checking) and (next_pos not in self.checked) and \
                 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2] \
                 and (map_arr[Map.RIDE, next_pos[0], next_pos[1]] == -1 or \
-                        map_arr[Map.PATH, next_pos[0], next_pos[1]] != 0):
+                        map_arr[Map.PATH, next_pos[0], next_pos[1]] != -1 and next_pos == trg):
                     checking.append(next_pos)
                     pos_to_routes[next_pos] = [pos for pos in pos_to_routes[curr]] + [next_pos]
-           #self.checked[curr] = len(pos_to_routes[curr]) + self.heuristic_from_goal(curr)
-            self.checked[curr] = float('inf')
+            self.checked[curr] = len(pos_to_routes[curr]) + self.heuristic_from_goal(curr)
+           #self.checked[curr] = float('inf')
             checking.pop(0)
                         
         best_pos = sorted([(pos, score) for (pos, score) in self.checked.items()], key=lambda pos_score:pos_score[1])[0][0]
         route = pos_to_routes[best_pos]
-        print('settling for heuristic solution {} while attempting to link {} and {}'.format(route, src, trg))
-        print(map_arr[Map.RIDE])
+       #print('settling for heuristic solution {} while attempting to link {} and {}'.format(route, src, trg))
+       #print(map_arr[Map.RIDE])
         return route
 
 
