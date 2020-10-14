@@ -28,11 +28,11 @@ class Park():
         self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int)
+        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int) - 1
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
         self.rides_by_pos = {}
-        self.pos_by_rides = {}
+        self.locs_to_rides = {}
 
         for i in range(self.size[0]):
             for j in range(self.size[1]):
@@ -72,7 +72,6 @@ class Park():
                                      new_park.map[Map.RIDE, x, y],
                                      entrance_pos=ride.entrance_pos)
             new_park.rides_by_pos[(x, y)] = ride
-           #new_park.pos_by_rides[ride].append((x, y))
 
         return new_park
 

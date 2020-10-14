@@ -16,3 +16,10 @@ setuptools.setup(
         python_requires='>=3.6',
         include_package_data=True,
         )
+
+
+
+setuptools.setup(name='gym_micro_rct', 
+        version='0.0.1',
+        install_requires=['gym', 'gym_micro_rct'],
+        )

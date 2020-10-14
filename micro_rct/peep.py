@@ -68,7 +68,7 @@ class Peep:
         target = self.headingTo
         #       ans =  PF.main_path_finding(self,space)
         if not self.curr_route:
-            self.curr_route = self.path_finder.find(self)
+            self.curr_route = self.path_finder.peep_find(self)
         else:
             #           print('REUSING ROUTE')
             pass
@@ -536,7 +536,7 @@ class Peep:
         traversible_tiles = self.park.path_net
         #print('traversible tiles: {}'.format(traversible_tiles))
         if len(traversible_tiles) == 0:
-            self.headingTo = self.position
+            self.headingTo = None
         else:
             goal = random.choice(list(traversible_tiles.keys()))
             # FIXME: do not create new path object every time

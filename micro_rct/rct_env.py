@@ -113,8 +113,8 @@ class RCTEnv():
             self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = 0
         for (x, y) in self.park.path_net:
             self.park.map[Map.PATH, x, y] = Path.PATH
-        for pos, ride in self.park.rides_by_pos.items():
-            self.park.map[Map.RIDE, pos[0], pos[1]] = ride.ride_i
+       #for pos, ride in self.park.rides_by_pos.items():
+       #    self.park.map[Map.RIDE, pos[0], pos[1]] = ride.ride_i
         self.park.vomit_paths = {}
         self.park.populate_path_net()
         self.path_finder = PathFinder(self.park.path_net)
@@ -151,7 +151,7 @@ class RCTEnv():
                 scores.append(self.park.score)
 
             if self.settings['general']['render']:
-                self.render_map.render_park()
+                self.render_map.render_park(frame)
                 self.park.printPark()
             frame += 1
         return scores

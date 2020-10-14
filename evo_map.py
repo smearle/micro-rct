@@ -26,8 +26,11 @@ def evolve(experiment_name, load):
     save_path = os.path.join('experiments', experiment_name)
 
     if load:
-        save_file = open(save_path, 'rb')
-        evolver = pickle.load(save_file)
+        try:
+            save_file = open(save_path, 'rb')
+            evolver = pickle.load(save_file)
+        except Exception:
+            print('no save file to load')
     elif os.path.exists(save_path):
         raise Exception('experiment exists -- not loading or overwriting')
     else:
@@ -47,9 +50,9 @@ def simulate_game(game, n_ticks, conn=None):
 
 class LambdaMuEvolver():
     def __init__(self, save_path):
-        self.lam = 0.2
-        self.mu = 0.2
-        self.population_size = 30
+        self.lam = 1/3
+        self.mu = 1/3
+        self.population_size = 12
         self.n_epochs = 10000
         self.n_sim_ticks = 200
         self.n_init_builds = 30
@@ -90,6 +93,7 @@ class LambdaMuEvolver():
                 population[g_hash] = (game, score, age + 1)
         for g_hash, (p, parent_conn, child_conn) in processes.items():
             score = parent_conn.recv()
+            score = 255 - score
             p.join()
             game, _, age = population[g_hash]
             population[g_hash] = (game, score, age + 1)
@@ -134,7 +138,6 @@ class LambdaMuEvolver():
     def genRandMap(self, game):
         for i in range(self.n_init_builds):
             game.act(game.action_space.sample())
-        game.render()
 
         return game
 
@@ -143,8 +146,11 @@ class LambdaMuEvolver():
 
         child.resetSim()
 
-        for i in range(random.randint(1, self.max_mutate_builds)):
+        n_builds = random.randint(1, self.max_mutate_builds)
+        for i in range(n_builds):
             child.act(child.action_space.sample())
+        for i in range(random.randint(0, 5)):
+            child.rand_connect()
 
         return child
 

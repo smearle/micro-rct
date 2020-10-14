@@ -1,11 +1,13 @@
 from collections import defaultdict
 import numpy as np
 import copy
+from .tilemap import Map
 # For debugging pathfinding only
 #import cv2
 
 
 class PathFinder:
+    adj = [(0,-1), (-1, 0), (1, 0), (0, 1)]
     def __init__(self, path_net):
         self.maxCounter = 100
         #guest path finding line 1172, orignal is 15000 for guest I don't know why 15000
@@ -29,13 +31,20 @@ class PathFinder:
         new_path_finder = PathFinder(new_path_net)
         return new_path_finder
 
-    def find(self, peep):
-        path_net = peep.park.path_net
+    def peep_find(self, peep):
+        park = peep.park
+        trg = peep.headingTo.entrance
+        src = peep.position
+        return self.find_node(park, src, trg)
+
+    def find_node(self, park, src, trg):
+        ''' this uses node objects that are connected to one another, i.e., searching a graph'''
+        self.goal = trg
+        path_net = park.path_net
         self.maxTilesChecked = len(path_net)
         self.counter = self.maxCounter
         self.checked = {}
         self.checking = {}
-        self.goal = peep.headingTo.entrance
 #       print('peep heading to {}'.format(self.goal))
         #FIXME: this is broken below
     #   assert self.goal in path_net
@@ -43,26 +52,106 @@ class PathFinder:
             print('goal not in path net:', self.goal)
             return -1
         # if the peep is off the path...
-        if peep.position not in path_net:
-            return [peep.position]
-        curr_node = path_net[peep.position]
+        if src not in path_net:
+            return [src]
+        curr_node = path_net[src]
         link_scores = []
         self.checking[curr_node.position] = True
         for adj in curr_node.links:
-            if adj:
-                adj_score = self.dfs(adj)
+            if adj in park.path_net:
+                adj = park.path_net[adj]
+                adj_score = self.dfs_node(park, adj)
                 link_scores.append(adj_score)
         adj_paths = sorted(link_scores, key=lambda x:x[1])
         if not adj_paths:
-            return [peep.position]
+            return [src]
         next_path = adj_paths[0][0].position
         self.checked[curr_node] = adj_paths[0][1]
         self.backtrace_hist = {}
-        route = self.backtrace([next_path])
+        route = self.backtrace_node(park, [next_path])
        #print('peep found route: {}'.format(route))
         return route
 
-    def backtrace(self, paths):
+    def find_map(self, park, src, trg):
+        ''' this searches over an array '''
+        self.goal = trg
+        path_net = park.path_net
+        self.maxTilesChecked = len(path_net)
+        self.counter = self.maxCounter
+        self.checked = {}
+        self.checking = {}
+        link_scores = []
+        self.checking[src] = True
+        map_arr = park.map
+        for adj in self.adj:
+            next_pos = (src[0] + adj[0], src[1] + adj[1])
+            if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
+                if (map_arr[Map.RIDE][next_pos[0], next_pos[1]] == -1):
+                    adj_score = self.dfs_map(park.map, next_pos, trg)
+                    link_scores.append(adj_score)
+        adj_paths = sorted(link_scores, key=lambda x:x[1])
+        if not adj_paths:
+            return [src]
+        next_path = adj_paths[0][0]
+        self.checked[src] = adj_paths[0][1]
+        self.backtrace_hist = {}
+        route = self.backtrace_map([next_path])
+        return route
+
+    def dfs_map(self, map_arr, src, trg):
+        if src in self.checked:
+            return src, self.checked[src]
+        if src in self.checking:
+            return src, float('inf')
+        self.checking[src] = True
+        link_scores = []
+        if src == trg:
+            self.checking.pop(src)
+            self.checked[src] = 0
+            return src, 0
+        for adj in self.adj:
+            next_pos = (src[0] + adj[0], src[1] + adj[1])
+            if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
+                if (map_arr[Map.RIDE][next_pos[0], next_pos[1]] == -1):
+                    adj_score = self.dfs_map(map_arr, next_pos, trg)
+                    link_scores.append(adj_score)
+        self.checking.pop(src)
+
+        route = sorted(link_scores, key=lambda x:x[1])
+        non_inf = 0
+        for r in route:
+            if r[1] < float('inf'):
+                non_inf += 1
+        if non_inf == 0:
+            score = float('inf')
+        else:
+            score = route[0][1] + 1
+        self.checked[src] = score
+
+        self.counter -= 1
+        return src, score
+
+    def backtrace_map(self, paths):
+        last_pos = paths[-1]
+        self.backtrace_hist[last_pos] = True
+        if last_pos in self.checked and self.checked[last_pos] == 0:
+            return paths
+        link_scores = []
+        for adj in self.adj:
+            adj_pos = (last_pos[0] + adj[0], last_pos[1] + adj[1])
+            if adj_pos not in self.backtrace_hist and adj_pos in self.checked:
+                score = self.checked[adj_pos]
+                if score == 0:
+                    paths.append(adj_pos)
+                    return paths
+                link_scores.append(adj_pos)
+        if not link_scores:
+            return paths
+        link_scores = sorted(link_scores, key=lambda x:x[1])
+        paths.append(link_scores[0])
+        return self.backtrace_map(paths)
+
+    def backtrace_node(self, park, paths):
        #print('backtrace', paths)
         last_pos = paths[-1]
         self.backtrace_hist[last_pos] = True
@@ -72,9 +161,8 @@ class PathFinder:
             return paths
         last_path = self.path_net[last_pos]
         link_scores = []
-        for adj in last_path.links:
-            if adj and adj.position not in self.backtrace_hist and adj.position in self.checked:
-                adj_pos = adj.position
+        for adj_pos in last_path.links:
+            if adj_pos in park.path_net and adj_pos not in self.backtrace_hist and adj_pos in self.checked:
                 score = self.checked[adj_pos]
                 if score == 0:
                     paths.append(adj_pos)
@@ -84,9 +172,9 @@ class PathFinder:
             return paths
         link_scores = sorted(link_scores, key=lambda x:x[1])
         paths.append(link_scores[0][0])
-        return self.backtrace(paths)
+        return self.backtrace_node(park, paths)
 
-    def dfs(self, node):
+    def dfs_node(self, park, node):
        #print('dfs', node)
        #search_graph = np.ones((50, 50, 3)) * 255
        #rend_arr = np.array(search_graph, dtype=np.uint8)
@@ -123,8 +211,9 @@ class PathFinder:
             return node, 0
 #       print('node', node)
         for adj in node.links:
-            if adj:
-                link_scores.append(self.dfs(adj))
+            if adj in park.path_net:
+                adj = park.path_net[adj]
+                link_scores.append(self.dfs_node(park, adj))
         self.checking.pop(node.position)
 
         route = sorted(link_scores, key=lambda x:x[1])
@@ -196,10 +285,10 @@ class Path:
         if adj_pos in path_net:
             adj_path = path_net[adj_pos]
             if not (adj_path.is_entrance and self.is_entrance):
-                return adj_path
+                return adj_pos
         elif pos_in_map(adj_pos, self.path_map) and self.path_map[adj_pos] >0:
-            return Path(adj_pos, self.path_map, path_net)
-        return None
+            return adj_pos
+        return adj_pos
 
 def pos_in_map(pos, mp):
     return 0 <= pos[0] < mp.shape[0] and 0 <= pos[1] < mp.shape[1]

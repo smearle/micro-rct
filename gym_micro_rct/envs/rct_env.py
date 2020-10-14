@@ -80,7 +80,6 @@ class RCT(core.Env):
         # if render_gui:
         #    self.park_map = self.rct_env.render_map
 
-        self.park = self.rct_env.park
         N_CHAN = len(ride_list) + 3  # path and peeps, lack of ride
         obs_shape = (N_CHAN, self.MAP_WIDTH, self.MAP_HEIGHT)
         low = np.zeros(obs_shape)
@@ -92,12 +91,15 @@ class RCT(core.Env):
         high[0] = self.MAP_WIDTH
         high[1] = self.MAP_HEIGHT
         self.N_ACT_CHAN = len(ride_list) + 2
-        self.action_space = gym.spaces.Discrete(
-            self.MAP_WIDTH * self.MAP_HEIGHT * self.N_ACT_CHAN)
+        self.map_space = gym.spaces.Discrete(
+            self.MAP_WIDTH * self.MAP_HEIGHT)
+        self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.entrance_pos_space = gym.spaces.Discrete(4)
         self.action_space = gym.spaces.Dict({
             'map':
-            self.action_space,
+            self.map_space,
+            'act':
+            self.act_space,
             'entrance_pos':
             self.entrance_pos_space
         })
@@ -114,6 +116,22 @@ class RCT(core.Env):
 
     def place_rand_path_net(self):
         pass
+
+    def rand_connect(self):
+        waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()]
+        try:
+            src = waypoints.pop(random.randint(0, len(waypoints)))
+            trg = waypoints.pop(random.randint(0, len(waypoints)))
+        except IndexError:
+        #   print('not enough potential waypoints to create connecting path')
+            return
+        path_seq = self.connect_with_path(src, trg)
+        for (x, y) in path_seq:
+            self.place_path_tile(x, y)
+
+    def connect_with_path(self, src, trg):
+        path_seq = self.rct_env.path_finder.find_map(self.rct_env.park, src, trg)
+        return path_seq
 
     def place_path_tile(self, x, y, type_i=0):
         if type_i % 2 == 0:
@@ -155,7 +173,8 @@ class RCT(core.Env):
         return obs
 
     def act(self, action):
-        build, x, y = self.ints_to_actions[action['map']]
+        x, y = self.ints_to_actions[action['map']]
+        build = action['act']
         entrance_pos = action['entrance_pos']
         #x = int(action['position'][0])
         #y = int(action['position'][1])
@@ -164,7 +183,7 @@ class RCT(core.Env):
         #       print('build', x, y, build)
 
         if build < len(ride_list):
-            self.park = self.place_ride_tile(x, y, build, entrance_pos)
+            self.place_ride_tile(x, y, build, entrance_pos)
         elif build < len(ride_list) + 1:
             self.place_path_tile(x, y)
         else:
@@ -177,7 +196,6 @@ class RCT(core.Env):
     def step(self, action):
         self.act(action)
         self.step_sim()
-        self.n_step += 1
         obs = self.get_observation()
         reward = self.rct_env.park.score / self.max_step
         done = self.n_step >= self.max_step
@@ -185,6 +203,7 @@ class RCT(core.Env):
 
         if self.render_gui:
             self.render()
+        self.n_step += 1
 
         return obs, reward, done, info
 
@@ -193,11 +212,18 @@ class RCT(core.Env):
 
     def render(self, mode='human', close=False):
         if self.render_gui:
-            self.rct_env.render_map.render_park()
+            self.rct_env.render_map.render_park(self.n_step)
             self.rct_env.park.printPark()
 
     def simulate(self, n_ticks=-1):
-        return self.rct_env.simulate(n_ticks)
+        scores = []
+        for i in range(n_ticks):
+            self.step_sim()
+            self.render()
+            self.n_step += 1
+            scores.append(self.metrics['happiness'])
+
+        return np.mean(scores)
 #       frame = 0
 #       park_map = Map(self.rct_env.park, render=self.render_gui)
 
@@ -213,12 +239,11 @@ class RCT(core.Env):
        #chunk_width = 1
         i = 0
 
-        for z in range(self.N_ACT_CHAN):
-            for x in range(self.MAP_WIDTH):
-                for y in range(self.MAP_HEIGHT):
-                    intsToActions[i] = [z, x, y]
+        for x in range(self.MAP_WIDTH):
+            for y in range(self.MAP_HEIGHT):
+                intsToActions[i] = [x, y]
                     #self.actionsToInts[z, x, y] = i
-                    i += 1
+                i += 1
 #       print('len of intsToActions: {}\n num tools: {}'.format(
 #           len(intsToActcopy.deepcopy(par_game)ions), self.N_ACT_CHAN))
 

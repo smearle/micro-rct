@@ -6,7 +6,7 @@ class Path:
 
 class Attraction:
     def __init__(self, name, thirst, hunger, toilet, excitement, intensity, nausea, time, cost, price, size_x, size_y,
-            mark, position_x=0, position_y=0, ride_i=-1):
+            mark, position_x=0, position_y=0):
         self.name = name
         self.mark = mark
         if thirst!=0 or hunger!=0 or toilet!=0 or name == 'FirstAid' or name =='InformationKiosk' or name=='Shop':
@@ -27,7 +27,7 @@ class Attraction:
         self.entrance = (0,0) #current just place the enterence at the top left
         self.exit = (size_x-1,size_y-1) #current just place the exit at the bottom right
         self.queue = []		#append peep here
-        self.ride_i = ride_i
+        self.locs = []
 
     @classmethod
     def alt_init(cls,arr):
