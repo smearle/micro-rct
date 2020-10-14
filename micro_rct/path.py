@@ -8,7 +8,7 @@ from .tilemap import Map
 
 
 class PathFinder:
-    adj = [(0,-1), (-1, 0), (1, 0), (0, 1)]
+    adj = [(0, 1), (-1, 0), (1, 0), (0, -1)]
     def __init__(self, path_net):
         self.maxCounter = 100
         #guest path finding line 1172, orignal is 15000 for guest I don't know why 15000
@@ -73,87 +73,39 @@ class PathFinder:
        #print('peep found route: {}'.format(route))
         return route
 
-    def find_map(self, park, src, trg):
+    def find_map(self, map_arr, src, trg):
         ''' this searches over an array '''
         self.goal = trg
-        path_net = park.path_net
-        self.maxTilesChecked = len(path_net)
         self.counter = self.maxCounter
         self.checked = {}
-        self.checking = {}
+        checking = []
         link_scores = []
-        self.checking[src] = True
-        map_arr = park.map
-        random.shuffle(self.adj)
-        for adj in self.adj:
-            next_pos = (src[0] + adj[0], src[1] + adj[1])
-            if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
-                if (map_arr[Map.RIDE][next_pos[0], next_pos[1]] == -1):
-                    adj_score = self.dfs_map(park.map, next_pos, trg)
-                    link_scores.append(adj_score)
-        adj_paths = sorted(link_scores, key=lambda x:x[1])
-        if not adj_paths:
-            return [src]
-        next_path = adj_paths[0][0]
-        self.checked[src] = adj_paths[0][1]
-        self.backtrace_hist = {}
-        route = self.backtrace_map([next_path])
+        pos_to_routes = {}
+        checking.append(src)
+        pos_to_routes[src] = []
+        while checking:
+            curr = checking[0]
+            if curr == trg:
+                self.checked[curr] = 0
+                return pos_to_routes[curr]
+            for adj in self.adj:
+                next_pos = (curr[0] + adj[0], curr[1] + adj[1])
+                if (next_pos not in checking) and (next_pos not in self.checked) and \
+                0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2] \
+                and (map_arr[Map.RIDE, next_pos[0], next_pos[1]] == -1 or \
+                        map_arr[Map.PATH, next_pos[0], next_pos[1]] != 0):
+                    checking.append(next_pos)
+                    pos_to_routes[next_pos] = [pos for pos in pos_to_routes[curr]] + [next_pos]
+           #self.checked[curr] = len(pos_to_routes[curr]) + self.heuristic_from_goal(curr)
+            self.checked[curr] = float('inf')
+            checking.pop(0)
+                        
+        best_pos = sorted([(pos, score) for (pos, score) in self.checked.items()], key=lambda pos_score:pos_score[1])[0][0]
+        route = pos_to_routes[best_pos]
+        print('settling for heuristic solution {} while attempting to link {} and {}'.format(route, src, trg))
+        print(map_arr[Map.RIDE])
         return route
 
-    def dfs_map(self, map_arr, src, trg):
-        if src in self.checked:
-            return src, self.checked[src]
-        if src in self.checking:
-            return src, float('inf')
-        self.checking[src] = True
-        link_scores = []
-        if src == trg:
-            self.checking.pop(src)
-            self.checked[src] = 0
-            return src, 0
-        random.shuffle(self.adj)
-        for adj in self.adj:
-            next_pos = (src[0] + adj[0], src[1] + adj[1])
-            if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
-                if (map_arr[Map.RIDE][next_pos[0], next_pos[1]] == -1):
-                    adj_score = self.dfs_map(map_arr, next_pos, trg)
-                    link_scores.append(adj_score)
-        self.checking.pop(src)
-
-        route = sorted(link_scores, key=lambda x:x[1])
-        non_inf = 0
-        for r in route:
-            if r[1] < float('inf'):
-                non_inf += 1
-        if non_inf == 0:
-            score = float('inf')
-        else:
-            score = route[0][1] + 1
-        self.checked[src] = score
-
-        self.counter -= 1
-        return src, score
-
-    def backtrace_map(self, paths):
-        last_pos = paths[-1]
-        self.backtrace_hist[last_pos] = True
-        if last_pos in self.checked and self.checked[last_pos] == 0:
-            return paths
-        link_scores = []
-        random.shuffle(self.adj)
-        for adj in self.adj:
-            adj_pos = (last_pos[0] + adj[0], last_pos[1] + adj[1])
-            if adj_pos not in self.backtrace_hist and adj_pos in self.checked:
-                score = self.checked[adj_pos]
-                if score == 0:
-                    paths.append(adj_pos)
-                    return paths
-                link_scores.append(adj_pos)
-        if not link_scores:
-            return paths
-        link_scores = sorted(link_scores, key=lambda x:x[1])
-        paths.append(link_scores[0])
-        return self.backtrace_map(paths)
 
     def backtrace_node(self, park, paths):
        #print('backtrace', paths)

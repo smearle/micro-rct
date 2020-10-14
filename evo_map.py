@@ -52,7 +52,7 @@ class LambdaMuEvolver():
     def __init__(self, save_path):
         self.lam = 1/3
         self.mu = 1/3
-        self.population_size = 12
+        self.population_size = 3
         self.n_epochs = 10000
         self.n_sim_ticks = 200
         self.n_init_builds = 30
@@ -137,6 +137,8 @@ class LambdaMuEvolver():
     def genRandMap(self, game):
         for i in range(self.n_init_builds):
             game.act(game.action_space.sample())
+        for i in range(3):
+            game.rand_connect()
 
         return game
 
@@ -148,7 +150,7 @@ class LambdaMuEvolver():
         n_builds = random.randint(1, self.max_mutate_builds)
         for i in range(n_builds):
             child.act(child.action_space.sample())
-        for i in range(random.randint(0, 5)):
+        for i in range(random.randint(0, 1)):
             child.rand_connect()
 
         return child

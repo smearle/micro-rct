@@ -48,7 +48,7 @@ def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
 #   print_msg('place path tile: {} {} {}'.format(x, y, type_i), priority=4, verbose=verbose)
     pos = (x, y)
 
-    if park.map[Map.RIDE, x, y] != -1:
+    if park.map[Map.RIDE, x, y] != -1 and not park.map[Map.PATH, x, y] != 0:
         demolish_tile(park, x, y)
     #   if (x, y) in park.rides_by_pos:
     #       ride = park.rides_by_pos[(x, y)]

@@ -128,9 +128,10 @@ class RCT(core.Env):
         path_seq = self.connect_with_path(src, trg)
         for (x, y) in path_seq:
             self.place_path_tile(x, y)
+            self.render()
 
     def connect_with_path(self, src, trg):
-        path_seq = self.rct_env.path_finder.find_map(self.rct_env.park, src, trg)
+        path_seq = self.rct_env.path_finder.find_map(self.rct_env.park.map, src, trg)
         return path_seq
 
     def place_path_tile(self, x, y, type_i=0):
