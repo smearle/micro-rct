@@ -1,5 +1,5 @@
 general:
-    render: False
+    render: True
     verbose: False
 environment:
     n_guests: 100

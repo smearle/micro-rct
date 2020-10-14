@@ -41,7 +41,7 @@ def simulate_game(game, n_ticks, conn=None):
     game.resetSim()
     scores = game.simulate(n_ticks)
     score = np.mean(scores)
-#   score = 255 - score # unhappiness is good
+    score = 255 - score # unhappiness is good
     if conn:
         conn.send(score)
     return score
@@ -93,7 +93,6 @@ class LambdaMuEvolver():
                 population[g_hash] = (game, score, age + 1)
         for g_hash, (p, parent_conn, child_conn) in processes.items():
             score = parent_conn.recv()
-            score = 255 - score
             p.join()
             game, _, age = population[g_hash]
             population[g_hash] = (game, score, age + 1)
