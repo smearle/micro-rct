@@ -1,4 +1,5 @@
 from collections import defaultdict
+import random
 import numpy as np
 import copy
 from .tilemap import Map
@@ -83,6 +84,7 @@ class PathFinder:
         link_scores = []
         self.checking[src] = True
         map_arr = park.map
+        random.shuffle(self.adj)
         for adj in self.adj:
             next_pos = (src[0] + adj[0], src[1] + adj[1])
             if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
@@ -109,6 +111,7 @@ class PathFinder:
             self.checking.pop(src)
             self.checked[src] = 0
             return src, 0
+        random.shuffle(self.adj)
         for adj in self.adj:
             next_pos = (src[0] + adj[0], src[1] + adj[1])
             if 0 <= next_pos[0] < map_arr.shape[1] and 0 <= next_pos[1] < map_arr.shape[2]:
@@ -137,6 +140,7 @@ class PathFinder:
         if last_pos in self.checked and self.checked[last_pos] == 0:
             return paths
         link_scores = []
+        random.shuffle(self.adj)
         for adj in self.adj:
             adj_pos = (last_pos[0] + adj[0], last_pos[1] + adj[1])
             if adj_pos not in self.backtrace_hist and adj_pos in self.checked:

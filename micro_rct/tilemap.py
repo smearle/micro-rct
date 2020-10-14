@@ -85,7 +85,7 @@ class Map():
             self.wooden_tile = self.load_image(os.path.join(self.SPRITE_DIR, "wooden_coaster.png"))
             self.wooden_tile = pygame.transform.scale(self.wooden_tile, (self.tile_width*10, self.tile_height*10))
             self.junior_tile = self.load_image(os.path.join(self.SPRITE_DIR, "junior_coaster.png"))
-            self.junior_tile = pygame.transform.scale(self.wooden_tile, (self.tile_width*10, self.tile_height*10))
+            self.junior_tile = pygame.transform.scale(self.junior_tile, (self.tile_width*10, self.tile_height*10))
         else:
 #           print('not initializing map for rendering')
             pass
@@ -136,8 +136,8 @@ class Map():
                     self.screen.blit(self.food_tile, (i_pix, j_pix))
                 elif curr_ride_tile == 't':
                     self.screen.blit(self.toilet_tile, (i_pix, j_pix))
-               #elif curr_ride_tile in '3c/~T§F¶¥':
-               #    pass
+                elif curr_ride_tile in 'W3c/~T§F¶¥':
+                    pass
                 else:
                     if curr_ride_tile not in self.ascii_tiles:
                         tile = pygame.font.Font(None, self.tile_height).render(curr_ride_tile, False, (255, 255, 255))
