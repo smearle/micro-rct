@@ -28,8 +28,9 @@ def main(settings):
     while True:
         env.reset()
 
-        for i in range(10000):
-            env.step(env.action_space.sample())
+        for i in range(100):
+            env.act(env.action_space.sample())
+            env.delete_islands()
 
             if env.render_gui:
                 env.render()

@@ -45,7 +45,6 @@ class PathFinder:
 
     def find_node(self, park, src, trg):
         ''' this uses node objects that are connected to one another, i.e., searching a graph'''
-        self.goal = trg
         path_net = park.path_net
         self.maxTilesChecked = len(path_net)
         self.counter = self.maxCounter
@@ -54,10 +53,10 @@ class PathFinder:
         pos_to_routes = {}
         checking.append(src)
         pos_to_routes[src] = []
-#       print('peep heading to {}'.format(self.goal))
-    #   assert self.goal in path_net
-        if self.goal not in path_net:
-            print('goal not in path net:', self.goal)
+       #print('peep heading to {}'.format(self.goal))
+       #assert self.goal in path_net
+        if trg not in path_net:
+            print('goal not in path net:', trg)
 
             return -1
         # if the peep is off the path...
@@ -131,101 +130,6 @@ class PathFinder:
         return route
 
 
-    def backtrace_node(self, park, paths):
-       #print('backtrace', paths)
-        last_pos = paths[-1]
-        self.backtrace_hist[last_pos] = True
-
-        if last_pos in self.checked and self.checked[last_pos] == 0:
-            return paths
-
-        if last_pos not in self.path_net:
-            return paths
-        last_path = self.path_net[last_pos]
-        link_scores = []
-
-        for adj_pos in last_path.links:
-            if adj_pos in park.path_net and adj_pos not in self.backtrace_hist and adj_pos in self.checked:
-                score = self.checked[adj_pos]
-
-                if score == 0:
-                    paths.append(adj_pos)
-
-                    return paths
-                link_scores.append((adj_pos, self.checked[adj_pos]))
-
-        if not link_scores:
-            return paths
-        link_scores = sorted(link_scores, key=lambda x:x[1])
-        paths.append(link_scores[0][0])
-
-        return self.backtrace_node(park, paths)
-
-    def dfs_node(self, park, node):
-       #print('dfs', node)
-       #search_graph = np.ones((50, 50, 3)) * 255
-       #rend_arr = np.array(search_graph, dtype=np.uint8)
-       #chkd_arr = np.array(search_graph, dtype=np.uint8)
-       #for pos in self.checking:
-       #    rend_arr[pos[0], pos[1], 0] = 0
-       #cv2.imshow("pathfinder checking", rend_arr)
-       #cv2.waitKey(1)
-       #for pos in self.checked:
-       #    chkd_arr[pos[0], pos[1], 1] = int(max(0, 255 - self.checked[pos] * 10))
-       #cv2.imshow("pathfinder checked", chkd_arr)
-       #cv2.waitKey(1)
-        pos = node.position
-
-        if pos in self.checked:
-           #rend_arr[pos[0], pos[1], 1] = 0
-#           print('FOUND TRACE at {}, distance {}'.format(pos, self.checked[node.position]))
-           #cv2.imshow("pathfinder checking", rend_arr)
-           #cv2.waitKey(1)
-            return node, self.checked[pos]
-
-        if pos in self.checking:
-           #self.checked[node.position] = float('inf')
-            return node, float('inf')
-        self.checking[node.position] = True
-        link_scores = []
-       #print(node.position, self.goal)
-        if node.position == self.goal:
-            self.checking.pop(node.position)
-#           print('FOUND GOAL')
-            pos = node.position
-           #rend_arr[pos[0], pos[1], 2] = 0
-           #cv2.imshow("pathfinder checking", rend_arr)
-           #cv2.waitKey(1)
-            self.checked[node.position] = 0
-
-            return node, 0
-#       print('node', node)
-        for adj in node.links:
-            if adj in park.path_net:
-                adj = park.path_net[adj]
-                link_scores.append(self.dfs_node(park, adj))
-        self.checking.pop(node.position)
-
-        route = sorted(link_scores, key=lambda x:x[1])
-        non_inf = 0
-
-        for r in route:
-            if r[1] < float('inf'):
-                non_inf += 1
-        #FIXME: Make this work!
-       #if self.counter <= 0 or len(self.checked) >= self.maxTilesChecked:
-       #    score = self.heuristic_from_goal(node.position)
-       #   #self.checked[node.position] = score
-        if non_inf == 0:
-#           score = self.heuristic_from_goal(pos)
-            score = float('inf')
-        else:
-            score = route[0][1] + 1
-        self.checked[node.position] = score
-
-        self.counter -= 1
-
-        return node, score
 
     def heuristic_from_goal(self, pos:tuple):
         goal = self.goal

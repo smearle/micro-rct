@@ -60,8 +60,8 @@ class LambdaMuEvolver():
         self.population_size = n_pop
         self.n_epochs = 10000
         self.n_sim_ticks = 200
-        self.n_init_builds = 1
-        self.max_mutate_builds = 3
+        self.n_init_builds = 3
+        self.max_mutate_builds = self.n_init_builds
         self.save_path = save_path
         self.n_epoch = 0
         self.population = {}  # hash: (game, score, age)
