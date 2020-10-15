@@ -129,18 +129,18 @@ def clear_for_placement(park, x, y, dx, dy):
             demolish_tile(park, i, j)
 
 
-def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
+def place_ride_tile(park, x, y, ride_i, rotation=0):
 #   print('placing ride', x, y, ride_i)
     _ride = ride_list[ride_i]()
     mark = str(symbol_list[ride_i])
     size = _ride.size
-    if entrance_pos == 0:
+    if rotation == 0:
         entrance = (x, y)
-    elif entrance_pos == 1:
+    elif rotation == 1:
         entrance = (x + size[0] - 1, y)
-    elif entrance_pos == 2:
+    elif rotation == 2:
         entrance = (x, y + size[1] - 1)
-    elif entrance_pos == 3:
+    elif rotation == 3:
         entrance = (x + size[0] - 1, y + size[1] - 1)
     else:
         raise Exception('invalid entrance position index')
@@ -150,7 +150,7 @@ def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
         place_path_tile(park, *entrance, is_entrance=True)
         _ride.entrance = entrance
         _ride.position = (x, y)
-        _ride.entrance_pos = entrance_pos
+        _ride.rotation = rotation
         park.rides_by_pos[(x, y)] = _ride
         for i in range(x, x + size[0]):
             for j in range(y, y + size[1]):
@@ -167,7 +167,7 @@ def place_ride_tile(park, x, y, ride_i, entrance_pos=0):
        #park.updateMap((x, y), size, mark, _ride.entrance)
         update_path_net(park, entrance)
 
-    return park
+    return _ride
 
 def placeRide(park, ride_i, verbose=False):
     # print('try to place {}'.format(_ride.name))

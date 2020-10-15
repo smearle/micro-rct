@@ -10,7 +10,8 @@ from tqdm import tqdm
 
 from .map_utility import placePath, placeRide
 from .park import Park
-from .path import Path, PathFinder
+from .path import Path
+from .pathfinding import PathFinder
 from .peeps_generator import generate
 from .rct_test_objects import object_list as ride_list
 from .rct_test_objects import symbol_list

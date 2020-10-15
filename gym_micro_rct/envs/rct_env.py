@@ -12,7 +12,7 @@ from gym import core
 from micro_rct import map_utility
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.park import Park
-from micro_rct.path import PathFinder
+from micro_rct.pathfinding import PathFinder
 from micro_rct.peep import Peep
 from micro_rct.peeps_generator import generate
 from micro_rct.rct_env import RCTEnv
@@ -36,6 +36,10 @@ def main(settings):
 
 
 class RCT(core.Env):
+    class BUILDS:
+        RIDE = 0,
+        PATH = len(ride_list)
+        DEMOLISH = PATH + 1
     RENDER_RANK = 0
     def __init__(self, **kwargs):
         settings_path = kwargs.get('settings_path', None)
@@ -43,6 +47,7 @@ class RCT(core.Env):
             settings = yaml.load(file, yaml.FullLoader)
         self.rank = kwargs.get('rank', 1)
         render_gui = settings['general']['render']
+
         if render_gui :#and self.rank == self.RENDER_RANK:
             self.render_gui = render_gui = True
             settings['general']['render'] = True
@@ -95,14 +100,14 @@ class RCT(core.Env):
         self.map_space = gym.spaces.Discrete(
             self.MAP_WIDTH * self.MAP_HEIGHT)
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
-        self.entrance_pos_space = gym.spaces.Discrete(4)
+        self.rotation_space = gym.spaces.Discrete(4)
         self.action_space = gym.spaces.Dict({
             'map':
             self.map_space,
             'act':
             self.act_space,
-            'entrance_pos':
-            self.entrance_pos_space
+            'rotation':
+            self.rotation_space
         })
         # self.action_space = gym.spaces.Dict({
         #    'position': gym.spaces.Box(low, high),
@@ -119,7 +124,7 @@ class RCT(core.Env):
         pass
 
     def rand_connect(self):
-        waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()] + [Peep.position]
+        waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()] + [Peep.ORIGIN]
         try:
             src = waypoints.pop(random.randint(0, len(waypoints)))
             trg = waypoints.pop(random.randint(0, len(waypoints)))
@@ -127,22 +132,64 @@ class RCT(core.Env):
         #   print('not enough potential waypoints to create connecting path')
             return
         path_seq = self.connect_with_path(src, trg)
+
         for (x, y) in path_seq:
             self.place_path_tile(x, y)
             self.render()
 
+    def delete_islands(self):
+        rides_by_pos = self.rct_env.park.rides_by_pos
+        path_net = self.rct_env.park.path_net
+        arr = self.rct_env.park.map
+        src = Peep.ORIGIN
+        checking = [src]
+        checked = []
+
+        while checking:
+            curr = checking.pop(0)
+
+            for delta in [(0,1),(1,0),(-1,0),(0,-1)]:
+                x, y = curr[0] + delta[0], curr[1] + delta[1]
+
+                if (x, y) not in checking and (x, y) not in checked and \
+                    0 <= x < arr.shape[1] and 0 <= y < arr.shape[2] and \
+                    arr[Map.PATH, x, y] != -1:
+
+                    checking.append((x, y))
+                # if this is an entrance, the attached ride is safe from deletion
+#               if curr in rides_by_pos:
+#                   ride = rides_by_pos[curr]
+#                   for pos in ride.locs:
+#                       if pos == curr:
+#                           continue
+#                       print(pos)
+#                       checked.append(pos)
+            checked.append((curr))
+
+
+        for i in range(arr.shape[1]):
+            for j in range(arr.shape[2]):
+                if (i, j) not in checked and (i, j) in path_net:
+                    self.demolish_tile(i, j)
+
+
     def connect_with_path(self, src, trg):
         path_seq = self.rct_env.path_finder.find_map(self.rct_env.park.map, src, trg)
+
         return path_seq
 
     def place_path_tile(self, x, y, type_i=0):
         if type_i % 2 == 0:
             map_utility.place_path_tile(self.rct_env.park, x, y)
 
-    def place_ride_tile(self, x, y, ride_i, entrance_pos):
+    def place_ride_tile(self, x, y, ride_i, rotation):
         #map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i)
-        map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
-                                    entrance_pos)
+        ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
+                                    rotation)
+        path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
+
+        for pos in path_seq:
+            self.place_path_tile(*pos)
 
     def demolish_tile(self, x, y):
         map_utility.demolish_tile(self.rct_env.park, x, y)
@@ -177,7 +224,7 @@ class RCT(core.Env):
     def act(self, action):
         x, y = self.ints_to_actions[action['map']]
         build = action['act']
-        entrance_pos = action['entrance_pos']
+        rotation = action['rotation']
         #x = int(action['position'][0])
         #y = int(action['position'][1])
         #print('x y build', x, y, build)
@@ -185,7 +232,7 @@ class RCT(core.Env):
         #       print('build', x, y, build)
 
         if build < len(ride_list):
-            self.place_ride_tile(x, y, build, entrance_pos)
+            self.place_ride_tile(x, y, build, rotation)
         elif build < len(ride_list) + 1:
             self.place_path_tile(x, y)
         else:
@@ -219,6 +266,7 @@ class RCT(core.Env):
 
     def simulate(self, n_ticks=-1):
         scores = []
+
         for i in range(n_ticks):
             self.step_sim()
             self.render()

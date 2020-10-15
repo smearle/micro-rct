@@ -71,11 +71,12 @@ class Park():
                              x,
                              y,
                              ride_i,
-                             entrance_pos=ride.entrance_pos)
+                             rotation=ride.rotation)
            #for loc in ride.locs:
            #    new_park.locs_to_rides[loc] = pos
            #new_park.rides_by_pos[(x, y)] = ride
-        new_park.map = self.map.copy()
+        for pos in self.path_net:
+            place_path_tile(new_park, pos[0], pos[1])
 
 
         return new_park

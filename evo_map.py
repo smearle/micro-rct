@@ -22,7 +22,7 @@ def main():
         game.resetSim()
 
 
-def evolve(experiment_name, load):
+def evolve(experiment_name, load, args):
     save_path = os.path.join('experiments', experiment_name)
 
     if load:
@@ -34,14 +34,14 @@ def evolve(experiment_name, load):
     elif os.path.exists(save_path):
         raise Exception('experiment exists -- not loading or overwriting')
     else:
-        evolver = LambdaMuEvolver(save_path)
+        evolver = LambdaMuEvolver(save_path, n_pop=args.n_pop, lam=args.lam, mu=args.mu)
     evolver.main()
 
 def simulate_game(game, n_ticks, conn=None):
     game.resetSim()
     scores = game.simulate(n_ticks)
     score = np.mean(scores)
-    score = 255 - score # unhappiness is good
+    255 - score # unhappiness is good
     if conn:
         conn.send(score)
     return score
@@ -49,14 +49,19 @@ def simulate_game(game, n_ticks, conn=None):
 
 
 class LambdaMuEvolver():
-    def __init__(self, save_path):
-        self.lam = 1/3
-        self.mu = 1/3
-        self.population_size = 12
+    def __init__(self, 
+            save_path, 
+            n_pop = 12, 
+            lam = 1/3, 
+            mu = 1/3,
+            ):
+        self.lam = lam
+        self.mu = mu
+        self.population_size = n_pop
         self.n_epochs = 10000
         self.n_sim_ticks = 200
-        self.n_init_builds = 30
-        self.max_mutate_builds = 30
+        self.n_init_builds = 1
+        self.max_mutate_builds = 3
         self.save_path = save_path
         self.n_epoch = 0
         self.population = {}  # hash: (game, score, age)
@@ -153,9 +158,13 @@ class LambdaMuEvolver():
 
         n_builds = random.randint(1, self.max_mutate_builds)
         for i in range(n_builds):
+            action = child.action_space.sample()
+            if action['act'] == RCT.BUILDS.PATH:
+                action['act'] = RCT.BUILDS.DEMOLISH
             child.act(child.action_space.sample())
-        for i in range(random.randint(0, 1)):
-            child.rand_connect()
+       #for i in range(random.randint(0, 1)):
+       #    child.rand_connect()
+        child.delete_islands()
 
         return child
 
@@ -174,8 +183,20 @@ if __name__ == '__main__':
     parser.add_argument('--load',
                         default=False,
                         help='whether or not to load a previous experiment')
+    parser.add_argument('--n-pop',
+                        type=int,
+                        default=12,
+                        help='population size')
+    parser.add_argument('--lam',
+                        type=float,
+                        default=1/3,
+                        help='number of reproducers each epoch')
+    parser.add_argument('--mu',
+                        type=float,
+                        default=1/3,
+                        help='number of individuals to cull and replace each epoch')
     args = parser.parse_args()
     experiment_name = args.experiment_name
     load = args.load
     # main()
-    evolve(experiment_name, load)
+    evolve(experiment_name, load, args)

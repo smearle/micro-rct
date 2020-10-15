@@ -2,7 +2,8 @@ import random
 #from collections import *
 
 #from peeps_path_finding import PathFinder
-from .path import Path, PathFinder
+from .path import Path
+from .pathfinding import PathFinder
 
 #PF = PathFinder()
 
@@ -20,10 +21,11 @@ maxValue = 255
 
 
 class Peep:
-    position = (0, 1)
+    ORIGIN = (0, 1)
     def __init__(self, name, path_finder, park):
         self.id = name
         self.park = park
+        self.position = self.ORIGIN
         self.intensity = [random.randint(8, 15), random.randrange(0, 7)]
         self.happiness = 128
         self.happinessTarget = 128
