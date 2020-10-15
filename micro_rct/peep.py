@@ -4,6 +4,7 @@ import random
 #from peeps_path_finding import PathFinder
 from .path import Path
 from .pathfinding import PathFinder
+from .utils.debug_utils import print_msg
 
 from .thoughts_enums import *
 
@@ -170,7 +171,7 @@ class Peep:
             self.insertNewThought(PEEP_THOUGHT_TYPE_VERY_SICK, PEEP_THOUGHT_ITEM_NONE)
         elif self.nausea>=140:
             self.insertNewThought(PEEP_THOUGHT_TYPE_SICK, PEEP_THOUGHT_ITEM_NONE)
-        
+    
         return
 
     #adding simplified (very simplified) version of function from original code
@@ -298,19 +299,26 @@ class Peep:
                 self.toilet = min(self.toilet + 2, 255)
 
             if self.timeToConsume == 0:
+                msg = ""
                 #in the original, items are stored in an array of bits/flags so this is implemented a little bit differently
                 if self.hasFood and self.hasDrink:
                     #original does not compare hunger and thirst, just consumes the first item from that array
-                    if self.hunger >= self.thirst:
+                    if self.hunger <= self.thirst:
                         self.hasFood = False
+                        msg = "Peep {} is eating".format(self.id)
                     else:
                         self.hasDrink = False
+                        msg = "Peep {} is drinking".format(self.id)
                 else:
-                    self.hasFood = False
-                    self.hasDrink = False
+                    if self.hasFood:
+                        msg = "Peep {} is eating".format(self.id)
+                        self.hasFood = False
+                    else:
+                        msg = "Peep {} is drinking".format(self.id)
+                        self.hasDrink = False
 
-        
-        
+                if msg:
+                    print_msg(msg, priority=0, verbose=self.park.settings['general']['verbose'])
 
 
     def update_toilet(self):
@@ -368,6 +376,9 @@ class Peep:
     def insertNewThought(self, thoughtType, thoughtItem):
         self.thoughts.insert(0, [thoughtType, thoughtItem, 0])
         self.thoughts.pop(5)
+
+        msg = "Peep {} is thinking {}".format(self.id, str(thoughtType))
+        print_msg(msg, priority=0, verbose=self.park.settings['general']['verbose'])
 
 
     #currently only update hapiness and Nausea Target
