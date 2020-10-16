@@ -61,8 +61,8 @@ class LambdaMuEvolver():
         self.lam = lam
         self.mu = mu
         self.population_size = n_pop
-        self.n_epochs = 11000
-        self.n_sim_ticks = 1000
+        self.n_epochs = 10000
+        self.n_sim_ticks = 100
         self.n_init_builds = 3
         self.max_mutate_builds = self.n_init_builds
         self.save_path = save_path

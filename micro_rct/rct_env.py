@@ -152,7 +152,7 @@ class RCTEnv():
                 scores.append(self.park.score)
 
             if self.settings['general']['render']:
-                self.render_map.render_park(frame)
+                self.render_map.render_park()
                 self.park.printPark()
             frame += 1
         return scores
