@@ -35,7 +35,10 @@ def evolve(experiment_name, load, args):
         raise Exception('experiment exists -- not loading or overwriting')
     else:
         evolver = LambdaMuEvolver(save_path, n_pop=args.n_pop, lam=args.lam, mu=args.mu)
-    evolver.main()
+    if args.inference:
+        evolver.infer(200)
+    else:
+        evolver.main()
 
 def simulate_game(game, n_ticks, conn=None):
     game.resetSim()
@@ -58,8 +61,8 @@ class LambdaMuEvolver():
         self.lam = lam
         self.mu = mu
         self.population_size = n_pop
-        self.n_epochs = 10000
-        self.n_sim_ticks = 200
+        self.n_epochs = 11000
+        self.n_sim_ticks = 1000
         self.n_init_builds = 3
         self.max_mutate_builds = self.n_init_builds
         self.save_path = save_path
@@ -77,6 +80,14 @@ class LambdaMuEvolver():
 
         while self.n_epoch < self.n_epochs:
             self.evolve_generation(self.n_epoch)
+
+    def infer(self, n_ticks):
+        while True:
+            for g_hash in self.population:
+                game = self.population[g_hash][0]
+                game.resetSim()
+                score = simulate_game(game, n_ticks)
+                print('game {} score: {}'.format(g_hash, score))
 
 
     def evolve_generation(self, i):
@@ -182,6 +193,7 @@ if __name__ == '__main__':
                         help='name of the experiment')
     parser.add_argument('--load',
                         default=False,
+                        action='store_true',
                         help='whether or not to load a previous experiment')
     parser.add_argument('--n-pop',
                         type=int,
@@ -195,6 +207,10 @@ if __name__ == '__main__':
                         type=float,
                         default=1/3,
                         help='number of individuals to cull and replace each epoch')
+    parser.add_argument('--inference',
+                        default=False,
+                        action='store_true',
+                        help='watch simulations on evolved maps')
     args = parser.parse_args()
     experiment_name = args.experiment_name
     load = args.load
