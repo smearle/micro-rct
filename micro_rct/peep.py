@@ -11,6 +11,7 @@ class Peep:
     def __init__(self,name, path_finder, park):
         self.id = name
         self.park = park
+        self.type = 0 # type 0 = normal, type 1 = coward, type 2 = brave
         self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
         self.happiness = 128
         self.happinessTarget = 128

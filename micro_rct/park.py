@@ -18,6 +18,8 @@ np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
 class Park():
     humanMark = 'Ü'
+    humanMark2 = '2'
+    humanMark3 = '3'
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
@@ -36,7 +38,7 @@ class Park():
         self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int)
+        self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int)
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
 
@@ -183,17 +185,27 @@ class Park():
 
     def updateHuman(self, peep:Peep):
         res = []
-
+        if peep.type == 0:
+            _mark = Park.humanMark
+            channel = 2
+        elif peep.type == 1:
+            _mark = Park.humanMark2
+            channel = 3
+        else:
+            _mark = Park.humanMark3
+            channel = 4
+            
         if peep not in self.peepsList:
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
             self.updateMap(peep.position, (1,1), Park.pathMark)
-            self.map[2, peep.position[0], peep.position[1]] = 0
+            self.map[channel, peep.position[0], peep.position[1]] = 0
             res += peep.updatePosition(self.interactiveSpace, self.listOfRides, self.vomit_paths)
             res += peep.updateStatus(self.listOfRides)
-        self.updateMap(peep.position, (1,1), Park.humanMark)
-        self.map[2, peep.position[0], peep.position[1]] = 1
+        
+        self.updateMap(peep.position, (1,1), _mark)
+        self.map[channel, peep.position[0], peep.position[1]] = 1
 
         return res
 
