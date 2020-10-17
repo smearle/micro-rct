@@ -384,9 +384,9 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-        traversible_tiles = [tile for tile in self.park.path_net.items() if tile[1].junction]            
-    #   print('traversible tiles: {}'.format(traversible_tiles))
-        goal = random.choice(list(traversible_tiles))
+        current_tile = self.park.path_net[self.position]
+        traversible_tiles = current_tile.get_junctions()
+        goal = random.choice(traversible_tiles)
         #FIXME: do not create new path object every time
-        self.headingTo = self.park.path_net[goal[0]]
+        self.headingTo = self.park.path_net[goal.position]
 
