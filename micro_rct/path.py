@@ -158,8 +158,24 @@ class Path:
                 connections += 1
         if connections > 2:
             self.junction = True
+        # elif connections == 1:
+        #     if (self.links[0] and self.links[1]) or (self.links[1] and self.links[2]) or (self.links[2] and self.links[3]) or (self.links[3] and self.links[1]):
+        #         self.junction = True
         else:
             self.junction = False
+    
+    def get_junctions(self):
+        junctions = []
+        for i, link in enumerate(self.links):
+            if link and not link.junction:
+                # go off in this direction until there is another junction
+                next_link = link.links[i]
+                while next_link and next_link.links[i] and not next_link.junction:
+                    next_link = next_link.links[i]
+                link = next_link
+            if link:
+                junctions.append(link)
+        return junctions
 
     def get_adjacent(self, direction):
         adj_pos = (self.position[0] + direction[0],
