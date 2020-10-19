@@ -12,8 +12,8 @@ def main(settings):
 
     env = RCT(settings_path=settings, rank=1)
 
+    env.reset()
     while True:
-        env.reset()
         for j in range(10):
             env.act(env.action_space.sample())
             env.render()
@@ -21,7 +21,7 @@ def main(settings):
             env.render()
 
         env.resetSim()
-        env.simulate(500)
+    #   env.simulate(500)
         env.render()
 
 if __name__ == "__main__":
