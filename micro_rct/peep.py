@@ -46,8 +46,10 @@ class Peep:
             return res
 
         if not self.headingTo:
-            res += self.findNextRide(lst)
-
+            if self.hasMap:
+                res += self.findNextRide(lst)
+            else:
+                self.wander()
             return res
         target = self.headingTo
 #       ans =  PF.main_path_finding(self,space)
@@ -67,6 +69,10 @@ class Peep:
             str1 = 'Peep {} arrived at {}\n'.format(self.id,target.name)
             res.append(str1)
             if not isinstance(target, Path):
+
+                # when peep get to kiosk we assume it will get the map for now
+                if target.name == 'InformationKiosk':
+                    self.hasMap = True
 
                 if target.name == 'FirstAid':
                     self.inFirstAid = True
