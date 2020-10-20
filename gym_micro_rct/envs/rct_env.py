@@ -100,18 +100,20 @@ class RCT(core.Env):
         self.N_ACT_CHAN = len(ride_list) + 2
        #self.map_space = gym.spaces.Discrete(
        #    self.MAP_WIDTH * self.MAP_HEIGHT)
-        low = np.zeros((2))
-        high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
-        self.map_space = gym.spaces.Box(low, high)
+        self.x_space = gym.spaces.Discrete(self.MAP_WIDTH)
+        self.y_space = gym.spaces.Discrete(self.MAP_HEIGHT)
+       #low = np.zeros((2))
+       #high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
+       #self.map_space = gym.spaces.Box(low, high)
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.rotation_space = gym.spaces.Discrete(4)
         self.action_space = gym.spaces.Dict({
-            'map':
-            self.map_space,
-            'act':
-            self.act_space,
-            'rotation':
-            self.rotation_space
+           #'map':
+           #self.map_space,
+            'x': self.x_space,
+            'y': self.y_space,
+            'act': self.act_space,
+            'rotation': self.rotation_space
         })
         # self.action_space = gym.spaces.Dict({
         #    'position': gym.spaces.Box(low, high),
@@ -226,12 +228,14 @@ class RCT(core.Env):
         return obs
 
     def act(self, action):
-        x, y = action['map']
-        x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
-        y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
-        x = x % self.MAP_WIDTH
-        y = y % self.MAP_HEIGHT
-        x, y = int(x), int(y)
+       #x, y = action['map']
+        x = action['x']
+        y = action['y']
+#       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
+#       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
+#       x = x % self.MAP_WIDTH
+#       y = y % self.MAP_HEIGHT
+#       x, y = int(x), int(y)
         build = action['act']
         rotation = action['rotation']
         #x = int(action['position'][0])
