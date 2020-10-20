@@ -9,7 +9,12 @@ def generate(total, park, cowardRatio=0.3, braveRatio=0.3, path_finder=None):
     for i in range(total):
         if i < cap1:
             peeps[i].intensity = [8,0]
+            peeps[i].type = 1
         elif i < cap2:
             peeps[i].intensity = [15,7]
+            peeps[i].type = 2
+        else:
+            break
+            
 
     return peeps

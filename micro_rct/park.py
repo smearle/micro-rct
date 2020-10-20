@@ -19,6 +19,18 @@ from .rct_test_objects import symbol_dict
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
 class Park():
+    humanMark = 'Ü'
+    humanMark2 = '2'
+    humanMark3 = '3'
+    emptyMark = ' '
+    pathMark = '░'
+    wallMark = '▓'
+    MARKS_TO_RIDES = {
+            emptyMark: 'empty',
+            wallMark: 'wall',
+            }
+    VOMIT_LIFESPAN = 40
+    PATH = 0,
 
     def __init__(self, settings):
         self.startTime = 0
@@ -28,22 +40,22 @@ class Park():
         self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int) - 1
+        self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int) - 1
 #       self.freeSpace = defaultdict(str)
 #       self.fixedSpace = defaultdict(str)
+#       self.interactiveSpace = defaultdict(str)
         self.rides_by_pos = {}
         self.locs_to_rides = {}
 
 #       for i in range(self.size[0]):
 #           for j in range(self.size[1]):
 #               if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
-#                   self.fixedSpace[(i,j)] = PARK.wallMark
+#                   self.fixedSpace[(i,j)] = Park.wallMark
 #                   self.map[[0,1], i, j] = -1
 #               else:
-#                   self.freeSpace[(i,j)] = PARK.emptyMark
+#                   self.freeSpace[(i,j)] = Park.emptyMark
 #                   self.map[0, i, j] = -1
 
-#       self.interactiveSpace = defaultdict(str)
         self.peepsList = set()
 #       self.listOfRides = []
         self.score = 0
@@ -227,17 +239,35 @@ class Park():
 
     def updateHuman(self, peep:Peep):
         res = []
-
+        if peep.type == 0:
+            _mark = Park.humanMark
+       #    channel = 2
+        elif peep.type == 1:
+            _mark = Park.humanMark2
+       #    channel = 3
+        else:
+            _mark = Park.humanMark3
+       #    channel = 4
+            
         if peep not in self.peepsList:
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
-#           self.updateMap(peep.position, (1,1), PARK.pathMark)
+#<<<<<<< HEAD
+##           self.updateMap(peep.position, (1,1), PARK.pathMark)
+#            self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
+#            res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
+#            res += peep.updateStatus(self.rides_by_pos)
+##       self.updateMap(peep.position, (1,1), PARK.humanMark)
+#        self.map[Map.PEEP, peep.position[0], peep.position[1]] = 1
+#=======
+           #self.updateMap(peep.position, (1,1), Park.pathMark)
             self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
             res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
             res += peep.updateStatus(self.rides_by_pos)
-#       self.updateMap(peep.position, (1,1), PARK.humanMark)
-        self.map[Map.PEEP, peep.position[0], peep.position[1]] = 1
+        
+       #self.updateMap(peep.position, (1,1), _mark
+        self.map[Map.PEEP, peep.position[0], peep.position[1]] = peep.type
 
         return res
 

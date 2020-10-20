@@ -14,14 +14,15 @@ def main(settings):
 
     env.reset()
     while True:
-        for j in range(10):
+        env.resetSim()
+        for j in range(50):
             env.act(env.action_space.sample())
             env.render()
             env.delete_islands()
             env.render()
-
         env.resetSim()
-    #   env.simulate(500)
+
+        env.simulate(500)
         env.render()
 
 if __name__ == "__main__":

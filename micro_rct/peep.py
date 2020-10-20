@@ -18,7 +18,8 @@ class Peep:
         self.id = name
         self.park = park
         self.position = self.ORIGIN
-        self.intensity = [random.randint(8, 15), random.randrange(0, 7)]
+        self.type = 0 # type 0 = normal, type 1 = coward, type 2 = brave
+        self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
         self.happiness = 128
         self.happinessTarget = 128
         self.nausea = 0
@@ -57,13 +58,15 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
-        if not self.headingTo: 
-            res += self.findNextRide(lst)
-
+        if not self.headingTo:
+            if True or self.hasMap:
+                res += self.findNextRide(lst)
+            else:
+                self.wander()
             return res
         target = self.headingTo
         #       ans =  PF.main_path_finding(self,space)
-        if not self.curr_route:
+        if not self.curr_route: # and self.hasMap:
             self.curr_route = self.path_finder.peep_find(self)
         else:
             #           print('REUSING ROUTE')
@@ -96,6 +99,10 @@ class Peep:
             res.append(str1)
 
             if not isinstance(target, Path):
+
+                # when peep get to kiosk we assume it will get the map for now
+                if target.name == 'InformationKiosk':
+                    self.hasMap = True
 
                 if target.name == 'FirstAid':
                     self.inFirstAid = True
@@ -617,11 +624,8 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-        traversible_tiles = self.park.path_net
-        #print('traversible tiles: {}'.format(traversible_tiles))
-        if len(traversible_tiles) == 0:
-            self.headingTo = None
-        else:
-            goal = random.choice(list(traversible_tiles.keys()))
-            # FIXME: do not create new path object every time
-            self.headingTo = self.park.path_net[goal]
+        current_tile = self.park.path_net[self.position]
+        traversible_tiles = current_tile.get_junctions(self.park.path_net)
+        goal = random.choice(traversible_tiles)
+        #FIXME: do not create new path object every time
+        self.headingTo = self.park.path_net[goal.position]

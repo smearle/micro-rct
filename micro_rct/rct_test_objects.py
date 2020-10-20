@@ -35,3 +35,11 @@ with open(obj_list_path, 'r') as fp:
     print(symbol_dict)
     print(symbol_list)
     fp.close()
+
+def rideNameToID(nameList):
+    rtn = []
+    for name in nameList:
+        for i,ride in symbol_dict.values():
+            if name == ride:
+                rtn.append(i)
+    return rtn
