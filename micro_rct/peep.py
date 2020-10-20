@@ -1,12 +1,14 @@
 import random
-#from collections import *
 
 #from peeps_path_finding import PathFinder
 from .path import Path
 from .pathfinding import PathFinder
+from .thoughts_enums import *
 from .utils.debug_utils import print_msg
 
-from .thoughts_enums import *
+#from collections import *
+
+
 
 #PF = PathFinder()
 
@@ -58,16 +60,17 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
-        if not self.headingTo:
+        if not self.curr_route or not self.headingTo:
             if True or self.hasMap:
                 res += self.findNextRide(lst)
+                if self.headingTo:
+                    self.curr_route = self.path_finder.peep_find(self, self.park)
+                else:
+                    self.curr_route = []
             else:
                 self.wander()
-            return res
+           #return res
         target = self.headingTo
-        #       ans =  PF.main_path_finding(self,space)
-        if not self.curr_route: # and self.hasMap:
-            self.curr_route = self.path_finder.peep_find(self, self.park)
 
         if not self.curr_route:
             self.wander()
@@ -76,17 +79,19 @@ class Peep:
 
         #  when the target is not in the path_net dict,
         # could be because of deletion
-        if self.curr_route == -1:
-            print(self.park.map)
-            print(self.park.path_net)
-            raise Exception(
-                'invalid route {} to goal {} corresponding to ride at position {} with \
-                    entrance at {}'.format(self.curr_route, self.headingTo,
-                                           self.headingTo.position,
-                                           self.headingTo.entrance))
+
+#       if self.curr_route == -1:
+#           print(self.park.map)
+#           print(self.park.path_net)
+#           raise Exception(
+#               'invalid route {} to goal {} corresponding to ride at position {} with \
+#                   entrance at {}'.format(self.curr_route, self.headingTo,
+#                                          self.headingTo.position,
+#                                          self.headingTo.entrance))
            #self.curr_route = [self.position]
            #self.headingTo = None
         self.passingBy(vomitPath)
+
         if self.curr_route:
             ans = self.curr_route.pop(0)
 
@@ -99,6 +104,7 @@ class Peep:
 
         if target is None:
             return res
+
         if self.position == target.position or self.position == target.entrance:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
@@ -106,6 +112,7 @@ class Peep:
             if not isinstance(target, Path):
 
                 # when peep get to kiosk we assume it will get the map for now
+
                 if target.name == 'InformationKiosk':
                     self.hasMap = True
 
@@ -139,26 +146,31 @@ class Peep:
 
         return res
 
-        
+
     def update_thoughts_Tick128(self, lst):
 
         #to implement later: peep_assess_surroundings
-        #peep assesses surroundings, gets a thought according to trash, vandalism, tidiness, or nice scenery. 
+        #peep assesses surroundings, gets a thought according to trash, vandalism, tidiness, or nice scenery.
 
         possible_thoughts = []
         num_thoughts = 0
+
         if self.energy <= 70 and self.happiness < 128:
             possible_thoughts.append(PEEP_THOUGHT_TYPE_TIRED)
             num_thoughts+=1
+
         if self.hunger<= 10 and not self.hasFood:
             possible_thoughts.append(PEEP_THOUGHT_TYPE_HUNGRY)
             num_thoughts+=1
+
         if self.thirst <= 25 and not self.hasFood:
             possible_thoughts.append(PEEP_THOUGHT_TYPE_THIRSTY)
             num_thoughts+=1
+
         if self.toilet >= 160:
             possible_thoughts.append(PEEP_THOUGHT_TYPE_TOILET)
             num_thoughts+=1
+
         if self.cash <= 9 and self.happiness >= 105 and self.energy >= 70:
             possible_thoughts.append(PEEP_THOUGHT_TYPE_RUNNING_OUT)
             num_thoughts+=1
@@ -178,12 +190,12 @@ class Peep:
                 pass
                 #placeholder - ATMs are not implemented yet
                 #original code: peep_head_for_nearest_ride_type(this, RIDE_TYPE_CASH_MACHINE);
-        
+
         elif self.nausea>=200:
             self.insertNewThought(PEEP_THOUGHT_TYPE_VERY_SICK, PEEP_THOUGHT_ITEM_NONE)
         elif self.nausea>=140:
             self.insertNewThought(PEEP_THOUGHT_TYPE_SICK, PEEP_THOUGHT_ITEM_NONE)
-    
+
         return
 
     #adding simplified (very simplified) version of function from original code
@@ -192,8 +204,10 @@ class Peep:
             return
         rides = [
             ride for _,ride in lst.items()
+
             if ride.name == rideType
         ]
+
         if not rides:
             return
         self.findNextRide(rides, True)
@@ -256,6 +270,7 @@ class Peep:
                         self.id))
                     firstAids = [
                         ride for _, ride in lst.items()
+
                         if ride.name == 'FirstAid'
                     ]
                     res += self.findNextRide(firstAids, True)
@@ -278,28 +293,34 @@ class Peep:
     #adding thirst updates to hunger updates to avoid duplicate 'if' conditions
     def update_hunger(self):
         #in tick128update
+
         if self.hunger >= 15:
             self.hunger -= 15
+
         if self.thirst >= 5:
             self.thirst -=4
             self.toilet = min(self.toilet + 3, 255)
 
         #in peep_update_hunger, called in tick128update
+
         if self.hunger >=3:
             self.hunger -= 2
             self.EnergyTarget = min(self.energyTarget + 2, 255)
             self.toilet = min(self.toilet+1, 255)
 
         #in loc_68F9F3, called in tick128update
+
         if self.hunger < 10:
             self.hunger = max(self.hunger-2, 0)
+
         if self.thirst < 10:
             self.thirst = max(self.thirst-1, 0)
 
         #in loc_68FA89, called in tick128update
+
         if self.timeToConsume == 0 and self.hasFood:
             self.timeToConsume += 3
-        
+
         if self.timeToConsume != 0:
             self.timeToConsume = max(self.timeToConsume-3, 0)
 
@@ -313,8 +334,10 @@ class Peep:
             if self.timeToConsume == 0:
                 msg = ""
                 #in the original, items are stored in an array of bits/flags so this is implemented a little bit differently
+
                 if self.hasFood and self.hasDrink:
                     #original does not compare hunger and thirst, just consumes the first item from that array
+
                     if self.hunger <= self.thirst:
                         self.hasFood = False
                         msg = "Peep {} is eating".format(self.id)
@@ -380,9 +403,11 @@ class Peep:
     def update_thoughts(self):
         for i in range(5):
             self.thoughts[i][1]+=1
+
             if self.thoughts[i][1]>=6900:
                 self.thoughts.pop(i)
                 self.thoughts.append([PEEP_THOUGHT_TYPE_NONE,0])
+
         return
 
     def insertNewThought(self, thoughtType, thoughtItem):
@@ -420,16 +445,18 @@ class Peep:
 
         if ride.name == 'FoodStall':
             #           print('peep {} has acquired food'.format(self.id))
+
             if self.hunger > 75:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_HUNGRY, PEEP_THOUGHT_ITEM_NONE)
             else:
                 self.hasFood = True
             # removing the below, adding timeToConsume update to update_hunger
             # in OpenRCT2 this is added when timeToConsume==0 and peep.hasFood
-            # self.timeToConsume += 3 
-        
+            # self.timeToConsume += 3
+
         if ride.name == 'DrinkStall':
             #           print('peep {} has acquired food'.format(self.id))
+
             if self.thirst > 75:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_THIRSTY, PEEP_THOUGHT_ITEM_NONE)
             else:
@@ -594,6 +621,7 @@ class Peep:
         #               so we didn't consider visiting same ride at this moment
         distance = [
             abs(i.entrance[0] - pos[0]) + abs(i.entrance[1] - pos[1])
+
             if not i.name in self.visited else float('inf') for i in lst
         ]
 
@@ -629,8 +657,16 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
+        if self.position not in self.park.path_net:
+            return
         current_tile = self.park.path_net[self.position]
         traversible_tiles = current_tile.get_junctions(self.park.path_net)
-        goal = random.choice(traversible_tiles)
-        #FIXME: do not create new path object every time
-        self.headingTo = self.park.path_net[goal.position]
+
+        if len(traversible_tiles) == 0:
+            self.headingTo = None
+        else:
+            goal = random.choice(traversible_tiles)
+            # FIXME: do not create new path object every time
+            self.headingTo = goal
+
+            self.curr_route = self.path_finder.peep_find(self, self.park)

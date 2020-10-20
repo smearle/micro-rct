@@ -55,9 +55,15 @@ class PathFinder:
        #print('peep heading to {}'.format(self.goal))
        #assert self.goal in path_net
         if trg not in path_net:
+            return []
             print('goal not in path net:', trg)
-            raise Exception
-            return -1
+            print(park.map)
+            print(park.path_net)
+            raise Exception(
+                'invalid route {} to goal {} corresponding to ride at position {} with \
+                    entrance at {}'.format(self.curr_route, self.headingTo,
+                                           self.headingTo.position,
+                                           self.headingTo.entrance))
         # if the peep is off the path...
 
         if src not in path_net:
