@@ -36,8 +36,7 @@ class PathFinder:
 
         return new_path_finder
 
-    def peep_find(self, peep):
-        park = peep.park
+    def peep_find(self, peep, park):
         trg = peep.headingTo.entrance
         src = peep.position
 
@@ -57,7 +56,7 @@ class PathFinder:
        #assert self.goal in path_net
         if trg not in path_net:
             print('goal not in path net:', trg)
-
+            raise Exception
             return -1
         # if the peep is off the path...
 

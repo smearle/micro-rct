@@ -72,7 +72,7 @@ class RCT(core.Env):
 
         self.n_step = 0
         self.metric_trgs = {
-            'happiness': 255,
+            'happiness': 0,
         }
         self.param_bounds = {
             'happiness': (0, 255),
@@ -98,8 +98,11 @@ class RCT(core.Env):
         high[0] = self.MAP_WIDTH
         high[1] = self.MAP_HEIGHT
         self.N_ACT_CHAN = len(ride_list) + 2
-        self.map_space = gym.spaces.Discrete(
-            self.MAP_WIDTH * self.MAP_HEIGHT)
+       #self.map_space = gym.spaces.Discrete(
+       #    self.MAP_WIDTH * self.MAP_HEIGHT)
+        low = np.zeros((2))
+        high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
+        self.map_space = gym.spaces.Box(low, high)
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.rotation_space = gym.spaces.Discrete(4)
         self.action_space = gym.spaces.Dict({
@@ -223,7 +226,12 @@ class RCT(core.Env):
         return obs
 
     def act(self, action):
-        x, y = self.ints_to_actions[action['map']]
+        x, y = action['map']
+        x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
+        y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
+        x = x % self.MAP_WIDTH
+        y = y % self.MAP_HEIGHT
+        x, y = int(x), int(y)
         build = action['act']
         rotation = action['rotation']
         #x = int(action['position'][0])
@@ -247,7 +255,8 @@ class RCT(core.Env):
         self.act(action)
         self.step_sim()
         obs = self.get_observation()
-        reward = self.rct_env.park.score / self.max_step
+        reward = 255 - self.rct_env.park.score
+        reward = reward / self.max_step
         done = self.n_step >= self.max_step
         info = {}
 

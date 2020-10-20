@@ -50,6 +50,7 @@ def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
 
     # will overwrite rides, but not their entrances
     if park.map[Map.RIDE, x, y] != -1 and park.map[Map.PATH, x, y] == -1:
+
         demolish_tile(park, x, y)
     #   if (x, y) in park.rides_by_pos:
     #       ride = park.rides_by_pos[(x, y)]
@@ -123,7 +124,7 @@ def demolish_tile(park, x, y):
 
 
 def clear_for_placement(park, x, y, dx, dy):
-    ''' delete everything in a patch'''
+    ''' delete everything in a patch. We must already know that this is a valid thing to do.'''
     for i in range(x, x + dx):
         for j in range(y, y + dy):
             demolish_tile(park, i, j)
