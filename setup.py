@@ -1,5 +1,11 @@
 import setuptools
 
+
+setuptools.setup(name='gym_micro_rct', 
+        version='0.0.1',
+        install_requires=['gym'],
+        )
+
 setuptools.setup(
         name="micro-rct",
         version="0.0.1",
@@ -19,7 +25,3 @@ setuptools.setup(
 
 
 
-setuptools.setup(name='gym_micro_rct', 
-        version='0.0.1',
-        install_requires=['gym', 'gym_micro_rct'],
-        )

@@ -57,26 +57,24 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
-        if not self.headingTo: 
+        if not self.curr_route or not self.headingTo: 
             res += self.findNextRide(lst)
 
-            return res
-        target = self.headingTo
+           #return res
         #       ans =  PF.main_path_finding(self,space)
-        if not self.curr_route:
-            self.curr_route = self.path_finder.peep_find(self)
-        else:
-            #           print('REUSING ROUTE')
-            pass
+            self.curr_route = self.path_finder.peep_find(self, self.park)
+
+        target = self.headingTo
 
         if not self.curr_route:
-            self.curr_route = [self.position]
-            self.headingTo = None
+            self.wander()
+           #self.curr_route = [self.position]
+           #self.headingTo = None
 
         #  when the target is not in the path_net dict,
         # could be because of deletion
         if self.curr_route == -1:
-            print(self.park.printPark())
+            print(self.park.map)
             print(self.park.path_net)
             raise Exception(
                 'invalid route {} to goal {} corresponding to ride at position {} with \
@@ -85,12 +83,19 @@ class Peep:
                                            self.headingTo.entrance))
            #self.curr_route = [self.position]
            #self.headingTo = None
-        ans = self.curr_route.pop(0)
-
         self.passingBy(vomitPath)
+        if self.curr_route:
+            ans = self.curr_route.pop(0)
 
-        self.position = ans
+            if ans not in self.park.path_net:
+                self.wander()
+               #self.curr_route = []
+               #self.headingTo = None
+            else:
+                self.position = ans
 
+        if target is None:
+            return res
         if self.position == target.position or self.position == target.entrance:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
@@ -625,3 +630,5 @@ class Peep:
             goal = random.choice(list(traversible_tiles.keys()))
             # FIXME: do not create new path object every time
             self.headingTo = self.park.path_net[goal]
+
+            self.curr_route = self.path_finder.peep_find(self, self.park)
