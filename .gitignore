@@ -12,3 +12,4 @@ testPeep.txt
 # Vim swap files
 *.swp
 *.swo
+*.psd

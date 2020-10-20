@@ -1,5 +1,6 @@
 from collections import defaultdict
 import numpy as np
+# For debugging pathfinding only
 #import cv2
 
 
@@ -16,8 +17,8 @@ class PathFinder:
         self.goal = (0,0)
         self.start = (0,0)
         self.path_net = path_net
-     #  cv2.namedWindow("pathfinder checking", cv2.WINDOW_NORMAL)
-     #  cv2.namedWindow("pathfinder checked", cv2.WINDOW_NORMAL)
+       #cv2.namedWindow("pathfinder checking", cv2.WINDOW_NORMAL)
+       #cv2.namedWindow("pathfinder checked", cv2.WINDOW_NORMAL)
 
 
     def find(self, peep):
@@ -38,17 +39,21 @@ class PathFinder:
         adj_paths = sorted(link_scores, key=lambda x:x[1])
         next_path = adj_paths[0][0].position
         self.checked[curr_node] = adj_paths[0][1]
+        self.backtrace_hist = {}
         route = self.backtrace([next_path])
+       #print('peep found route: {}'.format(route))
         return route
 
     def backtrace(self, paths):
+       #print('backtrace', paths)
         last_pos = paths[-1]
+        self.backtrace_hist[last_pos] = True
         if last_pos in self.checked and self.checked[last_pos] == 0:
             return paths
         last_path = self.path_net[last_pos]
         link_scores = []
         for adj in last_path.links:
-            if adj and adj.position in self.checked:
+            if adj and adj.position not in self.backtrace_hist and adj.position in self.checked:
                 adj_pos = adj.position
                 score = self.checked[adj_pos]
                 if score == 0:
@@ -62,6 +67,7 @@ class PathFinder:
         return self.backtrace(paths)
 
     def dfs(self, node):
+       #print('dfs', node)
        #search_graph = np.ones((50, 50, 3)) * 255
        #rend_arr = np.array(search_graph, dtype=np.uint8)
        #chkd_arr = np.array(search_graph, dtype=np.uint8)
@@ -75,10 +81,10 @@ class PathFinder:
        #cv2.waitKey(1)
         pos = node.position
         if pos in self.checked:
-      #     rend_arr[pos[0], pos[1], 1] = 0
+           #rend_arr[pos[0], pos[1], 1] = 0
 #           print('FOUND TRACE at {}, distance {}'.format(pos, self.checked[node.position]))
-      #     cv2.imshow("pathfinder checking", rend_arr)
-      #     cv2.waitKey(1)
+           #cv2.imshow("pathfinder checking", rend_arr)
+           #cv2.waitKey(1)
             return node, self.checked[pos]
         if pos in self.checking:
            #self.checked[node.position] = float('inf')
@@ -90,11 +96,12 @@ class PathFinder:
             self.checking.pop(node.position)
 #           print('FOUND GOAL')
             pos = node.position
-      #     rend_arr[pos[0], pos[1], 2] = 0
-      #     cv2.imshow("pathfinder checking", rend_arr)
-      #     cv2.waitKey(1)
+           #rend_arr[pos[0], pos[1], 2] = 0
+           #cv2.imshow("pathfinder checking", rend_arr)
+           #cv2.waitKey(1)
             self.checked[node.position] = 0
             return node, 0
+#       print('node', node)
         for adj in node.links:
             if adj:
                 link_scores.append(self.dfs(adj))
@@ -110,10 +117,11 @@ class PathFinder:
        #    score = self.heuristic_from_goal(node.position)
        #   #self.checked[node.position] = score
         if non_inf == 0:
-            score = float('inf')
+            score = self.heuristic_from_goal(pos)
+#           score = float('inf')
         else:
             score = route[0][1] + 1
-            self.checked[node.position] = score
+        self.checked[node.position] = score
 
         self.counter -= 1
         return node, score
@@ -136,6 +144,7 @@ class Path:
         self.position = position
         self.enter = position
         self.path_map = path_map
+        assert pos_in_map(position, path_map)
 
     def get_connecting(self):
         self.west = self.get_adjacent((-1, 0))
@@ -149,15 +158,36 @@ class Path:
                 connections += 1
         if connections > 2:
             self.junction = True
+        # elif connections == 1:
+        #     if (self.links[0] and self.links[1]) or (self.links[1] and self.links[2]) or (self.links[2] and self.links[3]) or (self.links[3] and self.links[1]):
+        #         self.junction = True
         else:
             self.junction = False
+    
+    def get_junctions(self):
+        junctions = []
+        for i, link in enumerate(self.links):
+            if link and not link.junction:
+                # go off in this direction until there is another junction
+                next_link = link.links[i]
+                while next_link and next_link.links[i] and not next_link.junction:
+                    next_link = next_link.links[i]
+                link = next_link
+            if link:
+                junctions.append(link)
+        return junctions
 
     def get_adjacent(self, direction):
         adj_pos = (self.position[0] + direction[0],
                    self.position[1] + direction[1],
                    )
+        # FIXME store dict of whether paths have been connected
         if adj_pos in self.path_net:
-            return self.path_net[adj_pos]
-        elif self.path_map[adj_pos] >0:
+            adj_path = self.path_net[adj_pos]
+            return adj_path
+        elif pos_in_map(adj_pos, self.path_map) and self.path_map[adj_pos] >0:
             return Path(adj_pos, self.path_map, self.path_net)
         return None
+
+def pos_in_map(pos, mp):
+    return 0 <= pos[0] < mp.shape[0] and 0 <= pos[1] < mp.shape[1]

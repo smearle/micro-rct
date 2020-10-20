@@ -12,11 +12,14 @@ from .map_utility import *
 from .path import Path
 #from .map import Map
 from .tilemap import Map
+from utils.debug_utils import print_msg
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
 class Park():
     humanMark = 'Ü'
+    humanMark2 = '2'
+    humanMark3 = '3'
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
@@ -25,19 +28,22 @@ class Park():
             wallMark: 'wall',
             }
     VOMIT_LIFESPAN = 40
-    def __init__(self, width, height):
+    PATH = 0,
+
+    def __init__(self, settings):
         self.startTime = 0
         self.printCount = 1
         self.parkSize = (0,0)
-        self.size = (width,height)
+        self.size = (settings['environment']['map_width'],settings['environment']['map_height'])
+        self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, width, height), dtype=int)
+        self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int)
         self.freeSpace = defaultdict(str)
         self.fixedSpace = defaultdict(str)
 
-        for i in range(width):
-            for j in range(height):
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
                 if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
                     self.fixedSpace[(i,j)] = Park.wallMark
                     self.map[[0,1], i, j] = -1
@@ -79,6 +85,7 @@ class Park():
 
         for path in self.path_net.values():
             path.get_connecting()
+       #print('path map: \n{}.format(self.map[Map.PATH]))
 
 
     def freeSpaceNextToInteractiveSpace(self):
@@ -146,7 +153,7 @@ class Park():
             self.printPark(frame)
 
             for line in res:
-                print(line)
+                print_msg(line, priority=3, verbose=self.settings['general']['verbose'])
 
         
         dead_vomit = []
@@ -178,17 +185,27 @@ class Park():
 
     def updateHuman(self, peep:Peep):
         res = []
-
+        if peep.type == 0:
+            _mark = Park.humanMark
+            channel = 2
+        elif peep.type == 1:
+            _mark = Park.humanMark2
+            channel = 3
+        else:
+            _mark = Park.humanMark3
+            channel = 4
+            
         if peep not in self.peepsList:
             self.peepsList.add(peep)
-            print(vars(peep))
+            print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
             self.updateMap(peep.position, (1,1), Park.pathMark)
-            self.map[2, peep.position[0], peep.position[1]] = 0
+            self.map[channel, peep.position[0], peep.position[1]] = 0
             res += peep.updatePosition(self.interactiveSpace, self.listOfRides, self.vomit_paths)
             res += peep.updateStatus(self.listOfRides)
-        self.updateMap(peep.position, (1,1), Park.humanMark)
-        self.map[2, peep.position[0], peep.position[1]] = 1
+        
+        self.updateMap(peep.position, (1,1), _mark)
+        self.map[channel, peep.position[0], peep.position[1]] = 1
 
         return res
 
@@ -220,5 +237,5 @@ class Park():
         res += 'human: '+Park.humanMark+"\n"
         res += 'enter: '+Park.pathMark+'\n'
         res += '\npark score: {}\n'.format(self.score)
-        print(res)
+        print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1

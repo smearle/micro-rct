@@ -23,6 +23,8 @@ class Map():
     RIDE = 0
     PATH = 1
     PEEP = 2
+    PEEP_COWARD = 3
+    PEEP_BRAVE = 4
     curr_dir = os.path.dirname(os.path.abspath(__file__))
     SPRITE_DIR = os.path.join(curr_dir, "tilemap/img")
     def __init__(self, park=None, render=False, screen=None):
@@ -48,6 +50,10 @@ class Map():
             self.grass_tile = pygame.transform.scale(self.grass_tile, (self.tile_width, self.tile_height))
             self.guest_tile = self.load_image(os.path.join(self.SPRITE_DIR, "guest.png"))
             self.guest_tile = pygame.transform.scale(self.guest_tile, (self.tile_width, self.tile_height))
+            self.guest_tile_2 = self.load_image(os.path.join(self.SPRITE_DIR, "guest_2.png"))
+            self.guest_tile_2 = pygame.transform.scale(self.guest_tile_2, (self.tile_width, self.tile_height))
+            self.guest_tile_3 = self.load_image(os.path.join(self.SPRITE_DIR, "guest_3.png"))
+            self.guest_tile_3 = pygame.transform.scale(self.guest_tile_3, (self.tile_width, self.tile_height))
             self.shop_tile = self.load_shop(os.path.join(self.SPRITE_DIR, "balloon.png"))
             self.shop_tile = pygame.transform.scale(self.shop_tile, (self.tile_width, self.tile_height))
             self.firstaid_tile = self.load_firstaid(os.path.join(self.SPRITE_DIR, "first aid.png"))
@@ -99,6 +105,8 @@ class Map():
                     curr_ride_tile = symbol_list[curr_ride_tile]
                 curr_path_tile = self.map[self.PATH, i, j]
                 curr_peep_tile = self.map[self.PEEP, i, j]
+                curr_peep_tile_C = self.map[self.PEEP_COWARD, i, j]
+                curr_peep_tile_B = self.map[self.PEEP_BRAVE, i, j]
                 i_pix = i*self.tile_width
                 j_pix = j*self.tile_height
                 self.screen.blit(self.grass_tile, (i_pix, j_pix))
@@ -132,6 +140,12 @@ class Map():
 
                 if curr_peep_tile == 1:
                     self.screen.blit(self.guest_tile, (i_pix, j_pix))
+                
+                if curr_peep_tile_C == 1:
+                    self.screen.blit(self.guest_tile_2, (i_pix, j_pix))
+
+                if curr_peep_tile_B == 1:
+                    self.screen.blit(self.guest_tile_3, (i_pix, j_pix))
 
                 j += 1
             i += 1
