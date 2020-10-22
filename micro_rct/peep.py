@@ -48,8 +48,8 @@ class Peep:
         self.path_finder = path_finder
         self.hasFood = False
         self.hasDrink = False
-        #not implementing thoughts as a class yet, just a list of thought types, items, and their age
-        self.thoughts = [[PEEP_THOUGHT_TYPE_NONE, PEEP_THOUGHT_ITEM_NONE, 0]]*5
+        self.n_ticks = 0
+        self.thoughts = [Thought()]*5
 
 
     def updatePosition(self, space, rides_by_pos, vomitPath):
@@ -139,18 +139,16 @@ class Peep:
         self.update_hunger()
         self.update_toilet()
 
-        #in original code, some updates to thoughts are inside tick128UpdateGuest and some are in a separate update_thoughts function.
         self.update_thoughts()
         self.update_thoughts_Tick128(lst)
-
+        self.n_ticks += 1
 
         return res
 
 
     def update_thoughts_Tick128(self, lst):
-
-        #to implement later: peep_assess_surroundings
-        #peep assesses surroundings, gets a thought according to trash, vandalism, tidiness, or nice scenery.
+        if self.n_ticks % 8 != 0:
+            return
 
         possible_thoughts = []
         num_thoughts = 0
@@ -293,23 +291,21 @@ class Peep:
     #adding thirst updates to hunger updates to avoid duplicate 'if' conditions
     def update_hunger(self):
         #in tick128update
+        if self.n_ticks % 4 == 0:
+            if self.hunger >= 15:
+                self.hunger -= 15
 
-        if self.hunger >= 15:
-            self.hunger -= 15
+            if self.thirst >= 5:
+                self.thirst -=4
+                self.toilet = min(self.toilet + 3, 255)
 
-        if self.thirst >= 5:
-            self.thirst -=4
-            self.toilet = min(self.toilet + 3, 255)
-
-        #in peep_update_hunger, called in tick128update
-
-        if self.hunger >=3:
-            self.hunger -= 2
-            self.EnergyTarget = min(self.energyTarget + 2, 255)
-            self.toilet = min(self.toilet+1, 255)
+            #in peep_update_hunger, called in tick128update
+            if self.hunger >=3:
+                self.hunger -= 2
+                self.EnergyTarget = min(self.energyTarget + 2, 255)
+                self.toilet = min(self.toilet+1, 255)
 
         #in loc_68F9F3, called in tick128update
-
         if self.hunger < 10:
             self.hunger = max(self.hunger-2, 0)
 
@@ -317,7 +313,6 @@ class Peep:
             self.thirst = max(self.thirst-1, 0)
 
         #in loc_68FA89, called in tick128update
-
         if self.timeToConsume == 0 and self.hasFood:
             self.timeToConsume += 3
 
@@ -325,7 +320,7 @@ class Peep:
             self.timeToConsume = max(self.timeToConsume-3, 0)
 
             if self.hasDrink:
-                self.thirst = min(self.thirst+7, 255)
+                self.thirst = min(self.thirst + 7, 255)
             else:
                 self.hunger = min(self.hunger + 7, 255)
                 self.thirst = max(self.thirst - 3, 0)
@@ -401,18 +396,58 @@ class Peep:
     # currently only updates according to age of each thought and to add new thoughts according to peep's needs
     # In the original code, also updates according to entering or on a ride, conditions of surroundings, leaving the park, cash running out
     def update_thoughts(self):
-        for i in range(5):
-            self.thoughts[i][1]+=1
+        add_fresh = 1
+        fresh_thought = -1
+        for i, thought in enumerate(self.thoughts):
+            if thought.type == PEEP_THOUGHT_TYPE_NONE: 
+                break
+            if thought.freshness == 1:
+                add_fresh = 0
+                thought.fresh_timeout += 1
+                if thought.fresh_timeout >=220:
+                    thought.fresh_timeout = 0
+                    thought.freshness += 1
+                    add_fresh = 1
+            elif thought.freshness > 1:
+                thought.fresh_timeout+=1
+                if thought.fresh_timeout == 0:
+                    thought.freshness+=1
+                    if thought.freshness >= 28:
+                        for j in range(i+1, 5):
+                            self.thoughts[j-1].type = self.thoughts[j].type
+                            self.thoughts[j-1].item = self.thoughts[j].item
+                            self.thoughts[j-1].freshness = self.thoughts[j].freshness
+                            self.thoughts[j-1].fresh_timeout = self.thoughts[j].fresh_timeout
+                        self.thoughts[-1].type = PEEP_THOUGHT_TYPE_NONE
+                        self.thoughts[-1].item = PEEP_THOUGHT_ITEM_NONE
+                        self.thoughts[-1].freshness = 0
+                        self.thoguhts[-1].fresh_timeout = 0
+            else:
+                fresh_thought = i
+            if add_fresh and fresh_thought != -1:
+                self.thoughts[fresh_thought].freshness = 1
 
-            if self.thoughts[i][1]>=6900:
-                self.thoughts.pop(i)
-                self.thoughts.append([PEEP_THOUGHT_TYPE_NONE,0])
 
         return
 
     def insertNewThought(self, thoughtType, thoughtItem):
-        self.thoughts.insert(0, [thoughtType, thoughtItem, 0])
-        self.thoughts.pop(5)
+        if thoughtType == PEEP_THOUGHT_TYPE_NONE:
+            return
+        for i, thought in enumerate(self.thoughts):
+            if i == 0: 
+                continue
+            if thought.type == PEEP_THOUGHT_TYPE_NONE:
+                break
+            if thought.type == thoughtType:
+                thought.type = self.thoughts[i-1].type
+                thought.item = self.thoughts[i-1].item
+                break
+            thought.type = self.thoughts[i-1].type
+            thought.item = self.thoughts[i-1].item
+        self.thoughts[0].type = thoughtType
+        self.thoughts[0].item = thoughtItem
+        self.thoughts[0].freshness = 0
+        self.thoughts[0].fresh_timeout = 0
 
         msg = "Peep {} is thinking {}".format(self.id, str(thoughtType))
         print_msg(msg, priority=0, verbose=self.park.settings['general']['verbose'])
@@ -442,6 +477,7 @@ class Peep:
                 self.nausea -= 1
                 # res.append('Peep {} nausea: {}\n'.format(self.id,self.nausea))
                 self.nauseaTarget = self.nausea
+
 
         if ride.name == 'FoodStall':
             #           print('peep {} has acquired food'.format(self.id))
