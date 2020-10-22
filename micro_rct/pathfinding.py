@@ -78,9 +78,11 @@ class PathFinder:
                 return pos_to_routes[curr]
             assert curr in path_net
             path = path_net[curr]
-            for next_pos in path.links:
+            for next_path in path.links:
                 # get children
-                if next_pos in path_net and next_pos not in checking and not next_pos in checked:
+                if next_path:
+                    next_pos = next_path.position
+                if next_path and next_pos not in checking and not next_pos in checked:
                    #print(path_net)
                     checking.append(next_pos)
                     pos_to_routes[next_pos] = [pos for pos in pos_to_routes[curr]] + [next_pos]
