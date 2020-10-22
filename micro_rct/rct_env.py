@@ -106,6 +106,7 @@ class RCTEnv():
            #print('in rct env, not initializing render map')
             self.render_map.reset(self.park)
 
+
     def resetSim(self):
         ''' This resets the park but leaves the map (path and ride placement) intact.
         This allows for more efficient mutation during evolution, preventing us from

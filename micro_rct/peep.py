@@ -60,7 +60,7 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
-        if not self.curr_route or not self.headingTo:
+        if not self.headingTo:
             if True or self.hasMap:
                 res += self.findNextRide(lst)
                 if self.headingTo:

@@ -208,6 +208,8 @@ class RCT(core.Env):
     def reset(self):
         self.rct_env.reset()
         self.n_step = 0
+       #for i in range(random.randint(0, 10)):
+       #    self.act(self.action_space.sample())
         obs = self.get_observation()
 
         return obs
@@ -220,7 +222,6 @@ class RCT(core.Env):
         ride_obs_onehot = torch.zeros(
             len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT)
         # print(ride_obs.shape)
-        # print(ride_obs)
         # print(ride_obs_onehot.shape)
         ride_obs_onehot.scatter(0, ride_obs, 1)
         obs[2:, :, :] = ride_obs_onehot
@@ -260,6 +261,7 @@ class RCT(core.Env):
         self.step_sim()
         obs = self.get_observation()
         reward = 255 - self.rct_env.park.score
+       #reward = len(self.rct_env.park.rides_by_pos)
         reward = reward / self.max_step
         done = self.n_step >= self.max_step
         info = {}
