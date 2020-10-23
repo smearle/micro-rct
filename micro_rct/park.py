@@ -182,7 +182,7 @@ class Park():
                 curPeep = ride.queue.pop(0)
                 res += curPeep.interactWithRide(ride)
 
-        return  res
+        return res
 
 
     def updateHuman(self, peep:Peep):

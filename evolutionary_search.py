@@ -58,18 +58,50 @@ class RCTEvolution:
         delete_prob = 0.1
         move_prob = 0.4
 
+        newRideList = []
+
+        # replace_prob = 0.2
+
         # iterate through list of rides and mutate by either deleting or moving the ride
         # TODO: Deleting and Moving rides
+
+        for ride in self.park.listOfRides:
+            mutate_prob = random.uniform(0, 1)
+            # print(ride)
+            if delete_prob < mutate_prob <= move_prob:
+                # move ride
+                print("moving ride", ride)
+
+                # delete the ride first by identifying index and not including in new list
+                # print(type(ride))
+                # ride_i = ride_list.index(ride[1])
+
+                # place the same ride again
+                # placeRide(self.park, ride_i, verbose=True)
+                # newRideList.append(ride)
+                newRideList.append(ride)
+
+            elif mutate_prob > move_prob:
+                # do not mutate the ride
+                print("no mutation occurs")
+                newRideList.append(ride)
+
+            else:
+                # the else condition essentially deletes ride since it doesn't add it to the ride list
+                print("deleting ride")
 
         # after (potentially) mutating every object, separately check mutation probability to add
         if random.uniform(0, 1) <= add_prob:
             print("mutating - adding ride")
             ride_i = random.randint(0, self.N_RIDES - 1)
             placeRide(self.park, ride_i, verbose=True)
+            newRideList.append(ride)
+
+        return newRideList
 
     def evolutionary_search(self, n_ticks=100):
         # initialize number of generations, mutation probabilities
-        generations = 5
+        generations = 10000
 
         # initialize peeps
         print("resetting peeps")
@@ -81,12 +113,13 @@ class RCTEvolution:
 
         for _ in range(generations):
             print("current best fitness: ", bestFitness)
+            # print("Best Park: ", bestPark.printPark())
 
             # create child node of existing park
             childPark = copy.deepcopy(self)
 
             # mutate the child parks
-            childPark.mutate_rides()
+            childPark.listOfRides = childPark.mutate_rides()
 
             # reset peeps each generation to reset needs
             childPark.reset()
@@ -105,19 +138,19 @@ class RCTEvolution:
 
     def run_experiment(self, n_ticks, settings, n_trials=20):
         start_time = time.time()
-        # self.evolutionary_search(n_ticks)
+        self.evolutionary_search(n_ticks)
 
-        for i in tqdm(range(n_trials)):
-            log_name = 'output_logs/evolutionary_search_{}_ticks_{}_trial_{}'.format(
-                settings['environment']['n_guests'], n_ticks, i)
-            orig_stdout = sys.stdout
-            f = open(log_name, 'w')
-            sys.stdout = f
-            self.evolutionary_search(n_ticks)
-            sys.stdout = orig_stdout
-            f.close()
+        # for i in tqdm(range(n_trials)):
+        #     log_name = 'output_logs/evolutionary_search_{}_ticks_{}_trial_{}'.format(
+        #         settings['environment']['n_guests'], n_ticks, i)
+        #     orig_stdout = sys.stdout
+        #     f = open(log_name, 'w')
+        #     sys.stdout = f
+        #     self.evolutionary_search(n_ticks)
+        #     sys.stdout = orig_stdout
+        #     f.close()
 
-        print('Experiment log filename: {}\n Time elapsed: {}'.format(log_name, time.time() - start_time))
+        # print('Experiment log filename: {}\n Time elapsed: {}'.format(log_name, time.time() - start_time))
 
 
 def main(settings_path):
@@ -126,11 +159,11 @@ def main(settings_path):
 
     env = RCTEvolution(settings, population_size=50)
 
-    for n_ticks in settings['experiments']['ticks']:
-        print("n_ticks = ", n_ticks)
-        env.run_experiment(n_ticks, settings)
+    # for n_ticks in settings['experiments']['ticks']:
+    #     print("n_ticks = ", n_ticks)
+    #     env.run_experiment(n_ticks, settings)
 
-    # env.run_experiment(n_ticks=500, settings=settings)
+    env.run_experiment(n_ticks=500, settings=settings)
 
 
 if __name__ == "__main__":
