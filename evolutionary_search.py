@@ -9,12 +9,12 @@ from tqdm import tqdm
 
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.park import Park
-from micro_rct.path import PathFinder
+from micro_rct.pathfinding import PathFinder
 from micro_rct.peeps_generator import generate
 from micro_rct.rct_test_objects import object_list as ride_list
 from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
-from utils.debug_utils import print_msg
+from micro_rct.utils.debug_utils import print_msg
 
 
 class RCTEvolution:
