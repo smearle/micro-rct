@@ -108,6 +108,10 @@ class Park():
             score += peep.happiness
         self.score = score / len(self.peepsList)
 
+    def returnScore(self):
+        self.updateScore()
+        return self.score
+
 
     def updateMap(self, start, size, mark:str, entrance=None):
         for i in range(start[0], start[0] + size[1]):

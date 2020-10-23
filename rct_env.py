@@ -19,6 +19,7 @@ from utils.debug_utils import print_msg
 def main(settings_path):
     with open(settings_path) as file:
         settings = yaml.load(file, yaml.FullLoader)
+
     env = RCTEnv(settings)
 
     for n_ticks in settings['experiments']['ticks']:
@@ -62,6 +63,7 @@ class RCTEnv():
         for _ in range(self.settings['environment']['n_actions']):
             ride_i = random.randint(0, self.N_RIDES-1)
             placeRide(self.park, ride_i, verbose=self.settings['general']['verbose'])
+
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
         peeps = generate(
