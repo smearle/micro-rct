@@ -156,6 +156,10 @@ class Park():
             score += peep.happiness
         self.score = score / len(self.peepsList)
 
+    def returnScore(self):
+        self.updateScore()
+        return self.score
+
 
     # TODO: I think this function is mostly redundanat at this point?
 #   def updateMap(self, start, size, mark:str, entrance=None):
@@ -253,15 +257,6 @@ class Park():
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
-#<<<<<<< HEAD
-##           self.updateMap(peep.position, (1,1), PARK.pathMark)
-#            self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
-#            res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
-#            res += peep.updateStatus(self.rides_by_pos)
-##       self.updateMap(peep.position, (1,1), PARK.humanMark)
-#        self.map[Map.PEEP, peep.position[0], peep.position[1]] = 1
-#=======
-           #self.updateMap(peep.position, (1,1), Park.pathMark)
             self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
             res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
             res += peep.updateStatus(self.rides_by_pos)
@@ -312,4 +307,3 @@ class Park():
         res += '\npark score: {}\n'.format(self.score)
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
-        print(res)
