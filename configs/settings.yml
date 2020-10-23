@@ -1,6 +1,6 @@
 general:
     render: True
-    verbose: True
+    verbose: False
 environment:
     n_guests: 100
     map_width: 50

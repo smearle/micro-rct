@@ -357,11 +357,11 @@ class Peep:
 
     def update_happiness(self):
         ''' Update happiness, which tends toward its target.'''
-
-        if self.happiness >= self.happinessTarget:
-            self.happiness = max(0, self.happiness - 1)
-        else:
-            self.happiness = min(255, self.happiness + 1)
+        self.happiness = self.happinessTarget
+       #if self.happiness >= self.happinessTarget:
+       #    self.happiness = max(0, self.happiness - 1)
+       #else:
+       #    self.happiness = min(255, self.happiness + 1)
 
         return
 

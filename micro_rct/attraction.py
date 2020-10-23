@@ -13,6 +13,7 @@ class Attraction:
                 self.isShop = True
         else:
                 self.isShop = False
+        self.symbol = mark
         self.size = (size_x,size_y)
         self.consume_time = time*size_y*size_x
         self.building_cost = cost*size_y*size_x

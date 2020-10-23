@@ -14,7 +14,7 @@ from .path import Path
 #from .map import Map
 from .tilemap import Map
 from .utils.debug_utils import print_msg
-from .rct_test_objects import symbol_dict
+from .rct_test_objects import symbol_dict, symbol_list
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
@@ -273,5 +273,43 @@ class Park():
 
     # TODO: implement this using numpy game map!
     def printPark(self, frame=0):
-        pass
+        rides_by_pos = self.rides_by_pos
+        res = 'print count: {} at {} frame\n'.format(self.printCount, frame)
 
+        res += ''.join([Park.wallMark for _ in range(self.size[0] + 2)]) + '\n'
+        for j in range(self.size[1]):
+            line = ''
+            line += Park.wallMark
+            for i in range(self.size[0]):
+                repped = False
+                if self.map[Map.PEEP, i, j] != -1:
+                    line += Park.humanMark
+                    repped = True
+                ride_i = self.map[Map.RIDE, i, j]
+                if not repped and ride_i != -1:
+                    line += symbol_list[ride_i]
+                    repped = True
+                # TODO: represent vomit as ascii character
+                if not repped and self.map[Map.PATH, i, j] != -1:
+                    line += Park.pathMark
+                    repped = True
+                if not repped:
+                    line += Park.emptyMark
+            line += Park.wallMark
+            line += '\n'
+            res += line
+        res += ''.join([Park.wallMark for _ in range(self.size[0] + 2)]) + '\n'
+        res += '\n'
+
+        legend = []
+        for ride in rides_by_pos.values():
+            mark = ride.symbol
+            if mark not in legend:
+                res += ride.name + ': {}\n'.format(ride.symbol)
+                legend.append(mark)
+        res += 'human: {}\n'.format(Park.humanMark)
+        res += 'enter: {}\n'.format(Park.pathMark)
+        res += '\npark score: {}\n'.format(self.score)
+        print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
+        self.printCount += 1
+        print(res)
