@@ -2,7 +2,7 @@ general:
     render: True
     verbose: True
 environment:
-    n_guests: 1
+    n_guests: 100
     map_width: 50
     map_height: 50
     n_actions: 10
