@@ -33,6 +33,16 @@ class Path:
         self.east = self.get_adjacent((1, 0), path_net)
         self.south = self.get_adjacent((0, -1), path_net)
         self.links = [self.west, self.north, self.east, self.south]
+        if self.is_entrance:
+            connected = False
+            i = 0
+            for l in self.links:
+                if l:
+                    if connected:
+                        self.links[i] = None
+                    connected = True
+                i += 1
+
         connections = 0
         for l in self.links:
             if l:

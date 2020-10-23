@@ -79,6 +79,7 @@ class PathFinder:
             assert curr in path_net
             path = path_net[curr]
             for next_pos in path.links:
+                print(next_pos)
                 # get children
                 if next_pos in path_net and next_pos not in checking and not next_pos in checked:
                    #print(path_net)
