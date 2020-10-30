@@ -19,6 +19,7 @@ def main(settings):
 
     while True:
         env.resetSim()
+        env.place_ride_tile(4, 1, -3, 0)
 
         # basic impassible-shop test
        #env.place_ride_tile(3, 5, -2, 0)
