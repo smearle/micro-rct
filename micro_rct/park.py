@@ -9,15 +9,19 @@ import numpy as np
 
 from .peep import Peep
 from .map_utility import *
+from .park_enums import PARK
 from .path import Path
 #from .map import Map
 from .tilemap import Map
-from utils.debug_utils import print_msg
+from .utils.debug_utils import print_msg
+from .rct_test_objects import symbol_dict, symbol_list
 
 np.set_printoptions(linewidth=200, threshold=sys.maxsize)
 
 class Park():
     humanMark = 'Ü'
+    humanMark2 = '2'
+    humanMark3 = '3'
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
@@ -36,31 +40,68 @@ class Park():
         self.settings=settings
         self.startTime = time.time()
         # channels for rides, paths, peeps
-        self.map = np.zeros((3, self.size[0], self.size[1]), dtype=int)
-        self.freeSpace = defaultdict(str)
-        self.fixedSpace = defaultdict(str)
+        self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int) - 1
+#       self.freeSpace = defaultdict(str)
+#       self.fixedSpace = defaultdict(str)
+#       self.interactiveSpace = defaultdict(str)
+        self.rides_by_pos = {}
+        self.locs_to_rides = {}
 
-        for i in range(self.size[0]):
-            for j in range(self.size[1]):
-                if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
-                    self.fixedSpace[(i,j)] = Park.wallMark
-                    self.map[[0,1], i, j] = -1
-                else:
-                    self.freeSpace[(i,j)] = Park.emptyMark
-                    self.map[0, i, j] = -1
+#       for i in range(self.size[0]):
+#           for j in range(self.size[1]):
+#               if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
+#                   self.fixedSpace[(i,j)] = Park.wallMark
+#                   self.map[[0,1], i, j] = -1
+#               else:
+#                   self.freeSpace[(i,j)] = Park.emptyMark
+#                   self.map[0, i, j] = -1
 
-        self.interactiveSpace = defaultdict(str)
         self.peepsList = set()
-        self.listOfRides = []
+#       self.listOfRides = []
         self.score = 0
         self.path_net = {}
         self.vomit_paths = {}
 
+    def clone(self, settings):
+        new_park = Park(settings)
+       #new_park.rides_by_pos = copy.deepcopy(self.rides_by_pos)
+        new_park.rides_by_pos = {}
+        new_park.locs_to_rides = {}
+
+        for peep in self.peepsList:
+            new_park.map[Map.PEEP, peep.position[0],
+                    peep.position[1]] = -1
+
+        for pos, ride in self.rides_by_pos.items():
+#           print('replicating ride', ride)
+            x = ride.position[0]
+            y = ride.position[1]
+            assert (x, y) == pos
+            ride_i = self.map[Map.RIDE, x, y]
+#           new_ride = ride_list[ride_i]()
+            place_ride_tile(new_park,
+                             x,
+                             y,
+                             ride_i,
+                             rotation=ride.rotation)
+           #for loc in ride.locs:
+           #    new_park.locs_to_rides[loc] = pos
+           #new_park.rides_by_pos[(x, y)] = ride
+        for pos in self.path_net:
+            place_path_tile(new_park, pos[0], pos[1])
+
+
+        return new_park
+
     def add_vomit(self, pos):
         x, y = pos
         self.map[Map.PATH, x, y] = Path.VOMIT
+        # non-path immediately absorbs vomit for now
+
+        if (x, y) not in self.path_net:
+            return
         path_tile = self.path_net[x, y]
-        path_tile.vom_time = self.VOMIT_LIFESPAN
+        path_tile.vom_time = PARK.VOMIT_LIFESPAN
         self.vomit_paths[x, y] = path_tile
 
     def populate_path_net(self):
@@ -82,7 +123,7 @@ class Park():
                 self.path_net[position] = Path(position, self.map[Map.PATH], self.path_net)
 
         for path in self.path_net.values():
-            path.get_connecting()
+            path.get_connecting(self.path_net)
        #print('path map: \n{}.format(self.map[Map.PATH]))
 
 
@@ -90,7 +131,10 @@ class Park():
         ans = defaultdict(str)
         neighbors = [(1,0), (0,1), (-1,0), (0,-1)]
 
-        for x,y in self.interactiveSpace:
+        for x,y in self.path_net:
+            path = self.path_net[(x, y)]
+            if path.is_entrance:
+                return
             for _x,_y in neighbors:
                 neighbor = (_x+x,_y+y)
 
@@ -102,41 +146,53 @@ class Park():
 
     def updateScore(self):
         ''' Calculates the score of the park as the average guest happiness. '''
+       #print('debug ride dict')
+       #for k in self.rides_by_pos:
+       #    print(self.rides_by_pos[k])
+       #    print(self.path_net[k])
         score = 0
 
         for peep in self.peepsList:
             score += peep.happiness
         self.score = score / len(self.peepsList)
 
+    def returnScore(self):
+        self.updateScore()
+        return self.score
 
-    def updateMap(self, start, size, mark:str, entrance=None):
-        for i in range(start[0], start[0] + size[1]):
-            for j in range(start[1], start[1] + size[0]):
-                if (i, j) in self.freeSpace:
-                    self.freeSpace.pop((i, j))
 
-                    if mark == Park.pathMark:
-                        self.interactiveSpace[(i, j)] = mark
-                        self.map[1, i, j] = 1
-                    else:
-                        if (entrance and i == entrance[0] and j == entrance[1]) or (not entrance and i==start[0] and j==start[1]): #ride entrance
-                            if size != (1, 1):
-                                self.interactiveSpace[(i, j)] = Park.pathMark
-                            else:
-                                self.interactiveSpace[(i,j)] = mark
-                            self.map[1, i, j] = 1
-                        else:
-                            self.fixedSpace[(i,j)] = mark
+    # TODO: I think this function is mostly redundanat at this point?
+#   def updateMap(self, start, size, mark:str, entrance=None):
+#       for i in range(start[0], start[0] + size[0]):
+#           for j in range(start[1], start[1] + size[1]):
+#               if (i, j) in self.freeSpace:
+#                   self.freeSpace.pop((i, j))
 
-                        if mark != Park.wallMark:
-                            assert isinstance(symbol_dict[mark][0], int)
-                            self.map[0, i, j] = symbol_dict[mark][0]
-                elif (i, j) in self.interactiveSpace:
-                    self.interactiveSpace[(i,j)] = mark
+#                   if mark == PARK.pathMark:
+#                       self.#nteractiveSpace[(i, j)] = mark
+#                       self.map[1, i, j] = 1
+#                   else:
+#                       if (entrance and i == entrance[0] and j == entrance[1]) or (not entrance and i==start[0] and j==start[1]): #ride entrance
+#                           if size != (1, 1):
+#                               self.interactiveSpace[(i, j)] = PARK.pathMark
+#                           else:
+#                               self.interactiveSpace[(i,j)] = mark
+#                           self.map[1, i, j] = 1
+#                       else:
+#                           self.fixedSpace[(i,j)] = mark
+
+#                       if mark != PARK.wallMark:
+#                           if mark == PARK.humanMark:
+#                               self.map[Map.PEEP, i, j] = 1
+#                           assert(isinstance(symbol_dict[mark][0], int), 'symbol dict is fucked up {}'.format(symbol_dict))
+#                           else:
+#                               self.map[0, i, j] = symbol_dict[mark][0]
+#               elif (i, j) in self.interactiveSpace:
+#                   self.interactiveSpace[(i,j)] = mark
 
                 #elf.map[0, i, j] = symbol_dict[mark][0]
 
-        return
+#       return
 
 
     def update(self, frame):
@@ -148,13 +204,15 @@ class Park():
         self.updateScore()
 
         if res != []:
-            self.printPark(frame)
+           #self.printPark(frame)
+            pass
 
             for line in res:
                 print_msg(line, priority=3, verbose=self.settings['general']['verbose'])
 
-        
+
         dead_vomit = []
+
         for pos, path_tile in self.vomit_paths.items():
             path_tile.vom_time -= 1
 
@@ -162,15 +220,17 @@ class Park():
                 dead_vomit.append(pos)
                 x, y = pos
                 self.map[Map.PATH, x, y] = Path.PATH
+
         for pos in dead_vomit:
             self.vomit_paths.pop(pos)
 
 
     def updateRides(self):
-        listOfRides = self.listOfRides
+#       listOfRides = self.listOfRides
         res = []
 
-        for _,ride in listOfRides:
+        for ride in self.rides_by_pos.values():
+
             if ride.name == 'FirstAid': #peep will remove themselves when the criterial meets
                 for curPeep in ride.queue:
                     res += curPeep.interactWithRide(ride)
@@ -183,47 +243,67 @@ class Park():
 
     def updateHuman(self, peep:Peep):
         res = []
-
+        if peep.type == 0:
+            _mark = Park.humanMark
+       #    channel = 2
+        elif peep.type == 1:
+            _mark = Park.humanMark2
+       #    channel = 3
+        else:
+            _mark = Park.humanMark3
+       #    channel = 4
+            
         if peep not in self.peepsList:
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
-            self.updateMap(peep.position, (1,1), Park.pathMark)
-            self.map[2, peep.position[0], peep.position[1]] = 0
-            res += peep.updatePosition(self.interactiveSpace, self.listOfRides, self.vomit_paths)
-            res += peep.updateStatus(self.listOfRides)
-        self.updateMap(peep.position, (1,1), Park.humanMark)
-        self.map[2, peep.position[0], peep.position[1]] = 1
+            self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
+            res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
+            res += peep.updateStatus(self.rides_by_pos)
+        
+       #self.updateMap(peep.position, (1,1), _mark
+        self.map[Map.PEEP, peep.position[0], peep.position[1]] = peep.type
 
         return res
 
+    # TODO: implement this using numpy game map!
     def printPark(self, frame=0):
-        startTime = self.startTime
-        interactiveSpace = self.interactiveSpace
-        freeSpace = self.freeSpace
-        fixedSpace = self.fixedSpace
-        listOfRides = self.listOfRides
-
+        rides_by_pos = self.rides_by_pos
         res = 'print count: {} at {} frame\n'.format(self.printCount, frame)
 
-        for i in range(self.size[1]):
+        res += ''.join([Park.wallMark for _ in range(self.size[0] + 2)]) + '\n'
+        for j in range(self.size[1]):
             line = ''
-
-            for j in range(self.size[0]):
-                if (i,j) in interactiveSpace:
-                    line += interactiveSpace[(i,j)]
-                elif (i,j) in freeSpace:
-                    line += freeSpace[(i,j)]
-                else:
-                    line += fixedSpace[(i,j)]
+            line += Park.wallMark
+            for i in range(self.size[0]):
+                repped = False
+                if self.map[Map.PEEP, i, j] != -1:
+                    line += Park.humanMark
+                    repped = True
+                ride_i = self.map[Map.RIDE, i, j]
+                if not repped and ride_i != -1:
+                    line += symbol_list[ride_i]
+                    repped = True
+                # TODO: represent vomit as ascii character
+                if not repped and self.map[Map.PATH, i, j] != -1:
+                    line += Park.pathMark
+                    repped = True
+                if not repped:
+                    line += Park.emptyMark
+            line += Park.wallMark
             line += '\n'
             res += line
-        res+='\n'
+        res += ''.join([Park.wallMark for _ in range(self.size[0] + 2)]) + '\n'
+        res += '\n'
 
-        for mark,ride in listOfRides:
-            res += ride.name +': '+mark+'\n'
-        res += 'human: '+Park.humanMark+"\n"
-        res += 'enter: '+Park.pathMark+'\n'
+        legend = []
+        for ride in rides_by_pos.values():
+            mark = ride.symbol
+            if mark not in legend:
+                res += ride.name + ': {}\n'.format(ride.symbol)
+                legend.append(mark)
+        res += 'human: {}\n'.format(Park.humanMark)
+        res += 'enter: {}\n'.format(Park.pathMark)
         res += '\npark score: {}\n'.format(self.score)
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
