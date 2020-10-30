@@ -505,7 +505,6 @@ class Peep:
                 self.hasDrink = True
 
         self.park.money += ride.price
-        print(self.park.money)
 
         return res if len(res) > 0 else []
 

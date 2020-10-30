@@ -260,7 +260,8 @@ class RCT(core.Env):
         self.act(action)
         self.step_sim()
         obs = self.get_observation()
-        reward = 255 - self.rct_env.park.score
+        reward = self.rct_env.park.money
+       #reward = 255 - self.rct_env.park.score
        #reward = len(self.rct_env.park.rides_by_pos)
         reward = reward / self.max_step
         done = self.n_step >= self.max_step

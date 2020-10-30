@@ -85,7 +85,13 @@ class PathFinder:
                 # return first route to goal
 
                 return pos_to_routes[curr]
-            assert curr in path_net
+           #print(park.printPark())
+           #print(curr)
+           #print(path_net)
+           #assert curr in path_net
+            #FIXME: why is this happening?
+            if curr not in path_net:
+                continue
             path = path_net[curr]
 
             for next_path in path.links:
