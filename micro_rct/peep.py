@@ -22,7 +22,7 @@ class Peep:
         self.position = self.ORIGIN
         self.type = 0 # type 0 = normal, type 1 = coward, type 2 = brave
         self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
-        self.happiness = 128
+        self.happiness = 128 - random.randint(-15,16)
         self.happinessTarget = 128
         self.nausea = 0
         self.nauseaTarget = 0
@@ -473,9 +473,10 @@ class Peep:
                 format(self.nauseaTarget, self.happinessTarget))
 
         if ride.name == 'FirstAid':
-            if self.nausea <= 35:  # leave first aid when nausea below 35
-                res.append('Peep {} is recovered from nausea\n'.format(
-                    self.id))
+            if self.nausea <= 35:   #leave first aid when nausea below 35
+                res.append('Peep {} is recovered from nausea\n'.format(self.id))
+                self.happinessTarget = max(maxValue,self.happinessTarget+30)
+                self.happiness = self.happinessTarget
                 self.inFirstAid = False
                 ride.queue.remove(self)
             else:
