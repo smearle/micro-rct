@@ -2,7 +2,7 @@
 import yaml
 import argparse
 
-from rct_env import RCTEnv
+from micro_rct.rct_env import RCTEnv
 
 
 def main(settings_path):
