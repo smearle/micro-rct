@@ -136,6 +136,7 @@ class RCTEnv():
                               render=self.settings['general']['render'],
                               screen=self.screen)
        #self.render_map.reset(self.park)
+        self.park.money = Park.INIT_MONEY
 
     def simulate(self, n_ticks=-1):
         if n_ticks != -1:

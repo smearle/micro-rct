@@ -127,6 +127,7 @@ class Peep:
             self.headingTo = None
 
         if self.position in rides_by_pos and rides_by_pos[self.position].name == 'InformationKiosk':
+            #FIXME: this should cost money
             self.hasMap = True
 
         return res
@@ -459,7 +460,7 @@ class Peep:
 
 
     #currently only update hapiness and Nausea Target
-    def interactWithRide(self,ride):
+    def interactWithRide(self, ride):
         res = ['Peep {} is on {}\n'.format(self.id,ride.name)]
 
         if not ride.isShop and ride.name != 'FirstAid':  # peep on the ride
@@ -502,6 +503,9 @@ class Peep:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_THIRSTY, PEEP_THOUGHT_ITEM_NONE)
             else:
                 self.hasDrink = True
+
+        self.park.money += ride.price
+        print(self.park.money)
 
         return res if len(res) > 0 else []
 

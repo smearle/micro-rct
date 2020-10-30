@@ -25,6 +25,7 @@ class Park():
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
+    INIT_MONEY = 0
     MARKS_TO_RIDES = {
             emptyMark: 'empty',
             wallMark: 'wall',
@@ -61,6 +62,7 @@ class Park():
         self.score = 0
         self.path_net = {}
         self.vomit_paths = {}
+        self.money = Park.INIT_MONEY
 
     def clone(self, settings):
         new_park = Park(settings)
