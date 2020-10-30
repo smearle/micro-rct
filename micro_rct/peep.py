@@ -61,7 +61,7 @@ class Peep:
             return res
 
         if not self.headingTo:
-            if True or self.hasMap:
+            if self.hasMap:
                 res += self.findNextRide(lst)
                 if self.headingTo:
                     self.curr_route = self.path_finder.peep_find(self, self.park)
@@ -116,6 +116,8 @@ class Peep:
                 if target.name == 'InformationKiosk':
                     self.hasMap = True
 
+
+
                 if target.name == 'FirstAid':
                     self.inFirstAid = True
                 target.queue.append(self)
@@ -123,6 +125,9 @@ class Peep:
                 if not target.isShop:
                     self.visited.add(target.name)
             self.headingTo = None
+
+        if self.position in rides_by_pos and rides_by_pos[self.position].name == 'InformationKiosk':
+            self.hasMap = True
 
         return res
 

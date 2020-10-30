@@ -50,7 +50,7 @@ class Path:
         for l in self.links:
             if l:
                 connections += 1
-        if connections > 2:
+        if self.is_entrance or connections > 2:
             self.junction = True
         # are dead ends junctions? No, right?
        #if connections == 1:
