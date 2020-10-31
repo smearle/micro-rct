@@ -20,27 +20,23 @@ def main(settings):
     env.reset()
 
     while True:
-        env.resetSim()
-        env.place_ride_tile(4, 1, -3, 0)
-        env.simulate(100)
-        env.demolish_tile(3, 2)
-        env.render()
-        env.simulate(100)
+#       env.resetSim()
+#       env.place_ride_tile(4, 1, -3, 0)
+#       env.demolish_tile(3, 2)
+#       env.render()
 
         # basic impassible-shop test
        #env.place_ride_tile(3, 5, -2, 0)
        #env.place_ride_tile(5, 3, -2, 0)
 
-        for j in range(100):
+        for j in range(20):
             env.act(env.action_space.sample())
-            env.get_observation()
-            env.simulate(10)
             env.render()
             env.delete_islands()
             env.render()
         env.resetSim()
 
-        env.simulate(500)
+        env.simulate(200)
         env.render()
 
 
