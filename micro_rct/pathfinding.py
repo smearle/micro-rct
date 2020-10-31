@@ -55,6 +55,8 @@ class PathFinder:
         checked = {}
         checking = []
         pos_to_routes = {}
+        if src not in path_net:
+            raise Exception
         checking.append(src)
         pos_to_routes[src] = []
         #print('peep heading to {}'.format(self.goal))
@@ -85,13 +87,12 @@ class PathFinder:
                 # return first route to goal
 
                 return pos_to_routes[curr]
-           #print(park.printPark())
-           #print(curr)
-           #print(path_net)
-           #assert curr in path_net
-            #FIXME: why is this happening?
             if curr not in path_net:
-                continue
+                print(park.printPark())
+                print(curr)
+                print(path_net)
+            #FIXME: why is this happening?
+            assert curr in path_net
             path = path_net[curr]
 
             for next_path in path.links:
@@ -99,6 +100,12 @@ class PathFinder:
 
                 if next_path:
                     next_pos = next_path.position
+                    if next_pos not in path_net:
+                        print(park.printPark())
+                        print(curr)
+                        print(next_pos)
+                        print(path_net.keys())
+                    assert next_pos in path_net
 
                 if next_path and next_pos not in checking and next_pos not in checked \
                         and not (next_path.is_entrance and path.position != next_path.entrance_connected):

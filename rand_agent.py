@@ -1,4 +1,6 @@
 import argparse
+import numpy as np
+np.random.seed(0)
 
 from gym_micro_rct.envs.rct_env import RCT
 
@@ -20,6 +22,13 @@ def main(settings):
     while True:
         env.resetSim()
         env.place_ride_tile(4, 1, -3, 0)
+        env.simulate(100)
+        env.demolish_tile(3, 2)
+        print(env.rct_env.park.path_net[(3,3)].links)
+        env.render()
+        env.simulate(100)
+        print('sdf')
+        raise Exception
 
         # basic impassible-shop test
        #env.place_ride_tile(3, 5, -2, 0)
@@ -27,6 +36,8 @@ def main(settings):
 
         for j in range(100):
             env.act(env.action_space.sample())
+            env.get_observation()
+            env.simulate(10)
             env.render()
             env.delete_islands()
             env.render()

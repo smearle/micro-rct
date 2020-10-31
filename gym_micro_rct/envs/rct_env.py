@@ -6,7 +6,7 @@ import time
 
 import gym
 import numpy as np
-import torch
+#import torch
 import yaml
 from gym import core
 from micro_rct import map_utility
@@ -42,6 +42,7 @@ class RCT(core.Env):
         PATH = len(ride_list)
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
+    ACTION_SPACE = 1
     def __init__(self, **kwargs):
         settings_path = kwargs.get('settings_path', None)
         with open(settings_path) as file:
@@ -105,8 +106,12 @@ class RCT(core.Env):
        #low = np.zeros((2))
        #high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
        #self.map_space = gym.spaces.Box(low, high)
+       #if False:
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.rotation_space = gym.spaces.Discrete(4)
+        if RCT.ACTION_SPACE == 0:
+            self.action_space = gym.spaces.Discrete((
+                self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
         self.action_space = gym.spaces.Dict({
            #'map':
            #self.map_space,
@@ -216,34 +221,39 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:2, :, :] = torch.Tensor(self.rct_env.park.map[:2, :, :])
-        ride_obs = torch.LongTensor(self.rct_env.park.map[Map.RIDE] + 1)
+        obs[:2, :, :] = self.rct_env.park.map[:2, :, :]
+        ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
-        ride_obs_onehot = torch.zeros(
-            len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT)
+        ride_obs_onehot = np.zeros(
+            (len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT))
         # print(ride_obs.shape)
         # print(ride_obs_onehot.shape)
-        ride_obs_onehot.scatter(0, ride_obs, 1)
+       #ride_obs_onehot.scatter(0, ride_obs, 1)
+        xs, ys = np.indices(ride_obs.shape[1:])
+        ride_obs_onehot[ride_obs, xs, ys] = 1
         obs[2:, :, :] = ride_obs_onehot
 
         return obs
 
     def act(self, action):
+        if RCT.ACTION_SPACE == 0:
+            x, y, build, rotation = self.ravel_action(action)
        #x, y = action['map']
-        x = action['x']
-        y = action['y']
-#       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
-#       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
-#       x = x % self.MAP_WIDTH
-#       y = y % self.MAP_HEIGHT
-#       x, y = int(x), int(y)
-        build = action['act']
-        rotation = action['rotation']
-        #x = int(action['position'][0])
-        #y = int(action['position'][1])
-        #print('x y build', x, y, build)
-        #build = action['build']
-        #       print('build', x, y, build)
+        elif RCT.ACTION_SPACE == 1:
+            x = action['x']
+            y = action['y']
+    #       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
+    #       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
+    #       x = x % self.MAP_WIDTH
+    #       y = y % self.MAP_HEIGHT
+    #       x, y = int(x), int(y)
+            build = action['act']
+            rotation = action['rotation']
+            #x = int(action['position'][0])
+            #y = int(action['position'][1])
+            #print('x y build', x, y, build)
+            #build = action['build']
+            #       print('build', x, y, build)
 
         if build < len(ride_list):
             self.place_ride_tile(x, y, build, rotation)
@@ -258,13 +268,15 @@ class RCT(core.Env):
 
     def step(self, action):
         self.act(action)
-        self.step_sim()
-        obs = self.get_observation()
-        reward = self.rct_env.park.money
        #reward = 255 - self.rct_env.park.score
        #reward = len(self.rct_env.park.rides_by_pos)
-        reward = reward / self.max_step
         done = self.n_step >= self.max_step
+        if done:
+            for _ in range(self.max_step):
+                self.step_sim()
+        obs = self.get_observation()
+        reward = self.rct_env.park.money
+        reward = reward / self.max_step
         info = {}
 
         if self.render_gui:
