@@ -1,4 +1,5 @@
 import argparse
+freom .peep import Peep
 import copy
 import os
 import random
@@ -85,7 +86,8 @@ class RCTEnv():
                   priority=2,
                   verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
-        placePath(self.park, margin=3)
+    #   placePath(self.park, margin=3)
+        place_path_tile(Peep.ORIGIN)
 
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)

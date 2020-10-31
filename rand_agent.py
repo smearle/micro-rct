@@ -24,11 +24,8 @@ def main(settings):
         env.place_ride_tile(4, 1, -3, 0)
         env.simulate(100)
         env.demolish_tile(3, 2)
-        print(env.rct_env.park.path_net[(3,3)].links)
         env.render()
         env.simulate(100)
-        print('sdf')
-        raise Exception
 
         # basic impassible-shop test
        #env.place_ride_tile(3, 5, -2, 0)

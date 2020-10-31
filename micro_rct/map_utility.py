@@ -27,18 +27,21 @@ def placePath(park, margin, verbose=False):
             if i==0 and j==1:
 #               fixedSpace.pop((i,j))
 #               interactiveSpace[(i,j)] = PARK.pathMark
-                park.map[Map.PATH, i, j] = 1
+#               park.map[Map.PATH, i, j] = 1
+                place_path_tile(park, i, j)
             elif j == 1 or (i==margin and j!=margin):
 #               freeSpace.pop((i,j))
 #               interactiveSpace[(i,j)] = PARK.pathMark
-                park.map[Map.PATH, i, j] = 1
+#               park.map[Map.PATH, i, j] = 1
+                place_path_tile(park, i, j)
 
     for i in range(margin, park.size[1] - margin):
         for j in range(margin, park.size[0] - margin):
             if i == margin or i == park.size[1] - margin-1 or j == margin or j == park.size[0] - margin - 1:
 #               freeSpace.pop((i,j))
 #               interactiveSpace[(i,j)] = PARK.pathMark
-                park.map[Map.PATH, i, j] = 1
+#               park.map[Map.PATH, i, j] = 1
+                place_path_tile(park, i, j)
 
     return
 
@@ -87,7 +90,7 @@ def demolish_tile(park, x, y):
 
     if pos in park.path_net:
         path = park.path_net.pop(pos)
-
+        path.get_connecting(park.path_net)
         for adj_path in path.links:
             if adj_path in park.path_net:
                 adj_path = park.path_net[adj_path]
