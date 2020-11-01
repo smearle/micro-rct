@@ -42,8 +42,9 @@ class Path:
                 if l:
                     if connected:
                         self.links[i] = None
-                    connected = True
-                    self.entrance_connected = l.position
+                    else:
+                        connected = True
+                        self.entrance_connected = l.position
                 i += 1
 
         connections = 0
@@ -70,7 +71,8 @@ class Path:
                 next_link = link.links[i]
                 while next_link and next_link.links[i] and not next_link.junction:
                     next_link = next_link.links[i]
-                link = next_link
+                if next_link:
+                    link = next_link
             if link:
                 junctions.append(link)
         return junctions
@@ -83,7 +85,7 @@ class Path:
         if adj_pos in path_net:
             adj_path = path_net[adj_pos]
             if not (adj_path.is_entrance and self.is_entrance) and \
-                    not (adj_path.is_entrance and self not in adj_path.links):
+                    not (adj_path.is_entrance and self.position != adj_path.entrance_connected):
                 return adj_path
         return None
        #elif pos_in_map(adj_pos, self.path_map) and self.path_map[adj_pos] >0:

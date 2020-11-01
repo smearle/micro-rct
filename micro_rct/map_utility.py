@@ -77,8 +77,7 @@ def update_path_net(park, pos, is_entrance=False):
         path.get_connecting(park.path_net)
 
         for adj_path in path.links:
-            if adj_path in park.path_net:
-                adj_path = park.path_net[adj_path]
+            if adj_path:
                 adj_path.get_connecting(park.path_net)
 #   print('path placed')
 
@@ -92,8 +91,7 @@ def demolish_tile(park, x, y):
         path = park.path_net.pop(pos)
         path.get_connecting(park.path_net)
         for adj_path in path.links:
-            if adj_path in park.path_net:
-                adj_path = park.path_net[adj_path]
+            if adj_path:
                 adj_path.get_connecting(park.path_net)
 
 #   if pos in park.interactiveSpace:
@@ -171,9 +169,11 @@ def place_ride_tile(park, x, y, ride_i, rotation=0):
                 park.locs_to_rides[(i, j)] = (x, y)
                 _ride.locs.append((i, j))
        #park.updateMap((x, y), size, mark, _ride.entrance)
-        update_path_net(park, entrance)
+        assert _ride.entrance in park.path_net
 
-    return _ride
+        return _ride
+    else:
+        return None
 
 def placeRide(park, ride_i, verbose=False):
     # print('try to place {}'.format(_ride.name))
@@ -207,7 +207,7 @@ def placeRide(park, ride_i, verbose=False):
 
         if placed:
             _ride.entrance = entrance
-            update_path_net(park, entrance)
+            place_path_tile(park, entrance, is_entrance=True)
             print_msg('ride {} is placed at {}'.format(_ride.name,_ride.position), priority=3, verbose=verbose)
 
 def checkCanPlaceOrNot(park, ride, startX, startY, width, length):

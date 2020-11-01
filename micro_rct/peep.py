@@ -708,12 +708,12 @@ class Peep:
         '''Pick a random destination.'''
        #print('wandering')
         if self.position not in self.park.path_net:
-            self.park.populate_path_net()
+#           self.park.populate_path_net()
             assert self.position in self.park.pathnet
 #           raise Exception("peep's current tile not in path net")
             return
         current_tile = self.park.path_net[self.position]
-        current_tile.get_connecting(self.park.path_net)
+#       current_tile.get_connecting(self.park.path_net)
         traversible_tiles = current_tile.get_junctions(self.park.path_net)
 
         if len(traversible_tiles) == 0:

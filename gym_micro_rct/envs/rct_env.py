@@ -218,10 +218,13 @@ class RCT(core.Env):
         #map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i)
         ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
                                     rotation)
+        if not ride:
+            return
         path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
 
         for pos in path_seq:
             self.place_path_tile(*pos)
+        self.rct_env.park.populate_path_net()
 
     def demolish_tile(self, x, y):
         map_utility.demolish_tile(self.rct_env.park, x, y)

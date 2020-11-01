@@ -95,7 +95,7 @@ class PathFinder:
             #FIXME: why is this happening?
             assert curr in path_net
             path = path_net[curr]
-            path.get_connecting(path_net)
+#           path.get_connecting(path_net)
             for next_path in path.links:
                 # get children
                 if not next_path:
