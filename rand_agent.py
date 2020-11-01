@@ -21,8 +21,16 @@ def main(settings):
 
     while True:
 #       env.resetSim()
+        env.reset()
 #       env.place_ride_tile(4, 1, -3, 0)
+#       for i in range(100):
+#           env.step_sim()
+#           env.render()
 #       env.demolish_tile(3, 2)
+#       env.demolish_tile(4, 1)
+#       env.demolish_tile(3, 1)
+#       env.demolish_tile(2, 1)
+#       env.demolish_tile(0, 1)
 #       env.render()
 
         # basic impassible-shop test
