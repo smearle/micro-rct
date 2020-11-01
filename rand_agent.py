@@ -7,7 +7,7 @@ from gym_micro_rct.envs.rct_env import RCT
 parser = argparse.ArgumentParser()
 parser.add_argument('--settings-path',
                     '-sp',
-                    default='configs/settings.yml',
+                    default='./configs/settings.yml',
                     help='path to read the settings yaml file')
 args = parser.parse_args()
 settings_path = args.settings_path
@@ -34,6 +34,9 @@ def main(settings):
             env.render()
             env.delete_islands()
             env.render()
+            for i in range(20):
+                env.step_sim()
+                env.render()
         env.resetSim()
 
         env.simulate(200)

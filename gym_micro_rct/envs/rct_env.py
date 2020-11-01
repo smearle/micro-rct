@@ -45,14 +45,16 @@ class RCT(core.Env):
     ACTION_SPACE = 1
     N_SIM_STEP = 20
     def __init__(self, **kwargs):
+        self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         self.rank = kwargs.get('rank', 1)
-        render_gui = kwargs.get('render_gui', False)
+        render_gui = kwargs.get('render_gui', True)
         try:
             with open(settings_path) as file:
                 settings = yaml.load(file, yaml.FullLoader)
             render_gui = settings['general']['render']
-        except Exception:
+        except Exception as e:
+            print(e)
             settings = {
                     'general': {
                         'render': render_gui and self.rank == RCT.RENDER_RANK,
@@ -125,17 +127,20 @@ class RCT(core.Env):
        #if False:
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.rotation_space = gym.spaces.Discrete(4)
-        if RCT.ACTION_SPACE == 0:
-            self.action_space = gym.spaces.Discrete((
-                self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
-        self.action_space = gym.spaces.Dict({
-           #'map':
-           #self.map_space,
-            'x': self.x_space,
-            'y': self.y_space,
-            'act': self.act_space,
-            'rotation': self.rotation_space
-        })
+       #if RCT.ACTION_SPACE == 0:
+       #    self.action_space = gym.spaces.Discrete((
+       #        self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
+        self.action_space = gym.spaces.MultiDiscrete(
+                (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
+                )
+#       self.action_space = gym.spaces.Dict({
+#          #'map':
+#          #self.map_space,
+#           'x': self.x_space,
+#           'y': self.y_space,
+#           'act': self.act_space,
+#           'rotation': self.rotation_space
+#       })
         # self.action_space = gym.spaces.Dict({
         #    'position': gym.spaces.Box(low, high),
         #    # path
@@ -168,8 +173,8 @@ class RCT(core.Env):
         rides_by_pos = self.rct_env.park.rides_by_pos
         path_net = self.rct_env.park.path_net
         arr = self.rct_env.park.map
-        src = Peep.ORIGIN
-        checking = [src]
+        xs, ys = np.where(self.rct_env.park.map[Map.PEEP] > -1)
+        checking = list(zip(xs, ys))
         checked = []
 
         while checking:
@@ -228,6 +233,7 @@ class RCT(core.Env):
 
     def reset(self):
         self.rct_env.reset()
+        self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
@@ -237,7 +243,7 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:2, :, :] = self.rct_env.park.map[:2, :, :]
+        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
         ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(
@@ -260,16 +266,20 @@ class RCT(core.Env):
             x, y, build, rotation = self.ravel_action(action)
        #x, y = action['map']
         elif RCT.ACTION_SPACE == 1:
-            x = action['x']
-            y = action['y']
+           #x = action['x']
+            x = action[0]
+           #y = action['y']
+            y = action[1]
+           #build = action['act']
+            build = action[2]
+           #rotation = action['rotation']
+            rotation = action[3]
+            #x = int(action['position'][0])
     #       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
     #       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
     #       x = x % self.MAP_WIDTH
     #       y = y % self.MAP_HEIGHT
     #       x, y = int(x), int(y)
-            build = action['act']
-            rotation = action['rotation']
-            #x = int(action['position'][0])
             #y = int(action['position'][1])
             #print('x y build', x, y, build)
             #build = action['build']
@@ -281,6 +291,7 @@ class RCT(core.Env):
             self.place_path_tile(x, y)
         else:
             self.demolish_tile(x, y)
+        self.delete_islands()
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)

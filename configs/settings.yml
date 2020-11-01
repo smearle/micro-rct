@@ -3,8 +3,8 @@ general:
     verbose: False
 environment:
     n_guests: 100
-    map_width: 16
-    map_height: 16
+    map_width: 32
+    map_height: 32
     n_actions: 10
 experiments:
     ticks: [500, 1000]
