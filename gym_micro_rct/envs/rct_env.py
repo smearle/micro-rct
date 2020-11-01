@@ -43,12 +43,28 @@ class RCT(core.Env):
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
     ACTION_SPACE = 1
+    N_SIM_STEP = 20
     def __init__(self, **kwargs):
         settings_path = kwargs.get('settings_path', None)
-        with open(settings_path) as file:
-            settings = yaml.load(file, yaml.FullLoader)
         self.rank = kwargs.get('rank', 1)
-        render_gui = settings['general']['render']
+        render_gui = kwargs.get('render_gui', False)
+        try:
+            with open(settings_path) as file:
+                settings = yaml.load(file, yaml.FullLoader)
+            render_gui = settings['general']['render']
+        except Exception:
+            settings = {
+                    'general': {
+                        'render': render_gui and self.rank == RCT.RENDER_RANK,
+                        'verbose': False,
+                        },
+                    'environment': {
+                        'n_guests': 10,
+                        'map_width': kwargs.get('map_width', 16),
+                        'map_height': kwargs.get('map_width', 16),
+                        },
+                    'experiments': {}
+                    }
 
         if render_gui :#and self.rank == self.RENDER_RANK:
             self.render_gui = render_gui = True
@@ -236,6 +252,10 @@ class RCT(core.Env):
         return obs
 
     def act(self, action):
+        # FIXME: hack to support gym-city implementation
+        if len(action.shape) > 1:
+            assert action.shape[1] == 1
+            action = action[:, 0]
         if RCT.ACTION_SPACE == 0:
             x, y, build, rotation = self.ravel_action(action)
        #x, y = action['map']
@@ -271,12 +291,13 @@ class RCT(core.Env):
        #reward = 255 - self.rct_env.park.score
        #reward = len(self.rct_env.park.rides_by_pos)
         done = self.n_step >= self.max_step
-        if done:
-            for _ in range(self.max_step):
-                self.step_sim()
+        self.rct_env.park.populate_path_net()
+        for _ in range(RCT.N_SIM_STEP):
+            self.step_sim()
+            self.render()
         obs = self.get_observation()
         reward = self.rct_env.park.money
-        reward = reward / self.max_step
+        reward = reward / (self.max_step * RCT.N_SIM_STEP)
         info = {}
 
         if self.render_gui:

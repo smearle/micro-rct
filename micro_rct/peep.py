@@ -60,6 +60,11 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
+
+        if self.position not in self.park.path_net:
+            return res
+#           raise Exception('peep\'s current tile is not in path net')
+
         if not self.headingTo:
             if self.hasMap:
                 res += self.findNextRide(lst)
