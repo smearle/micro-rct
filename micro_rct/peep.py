@@ -60,6 +60,9 @@ class Peep:
         if self.inFirstAid:  # don't update position when peep interact with first aid
             return res
 
+        if self.position not in self.park.path_net:
+            raise Exception('peep\'s current tile is not in path net')
+
         if not self.headingTo:
             if self.hasMap:
                 res += self.findNextRide(lst)
@@ -129,6 +132,7 @@ class Peep:
         if self.position in rides_by_pos and rides_by_pos[self.position].name == 'InformationKiosk':
             #FIXME: this should cost money
             self.hasMap = True
+
 
         return res
 
@@ -701,12 +705,16 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
+       #print('wandering')
         if self.position not in self.park.path_net:
+            raise Exception("peep's current tile not in path net")
             return
         current_tile = self.park.path_net[self.position]
+        current_tile.get_connecting(self.park.path_net)
         traversible_tiles = current_tile.get_junctions(self.park.path_net)
 
         if len(traversible_tiles) == 0:
+       #    print('no traversible tiles')
             self.headingTo = None
         else:
             goal = random.choice(traversible_tiles)

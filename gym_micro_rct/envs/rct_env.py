@@ -44,10 +44,25 @@ class RCT(core.Env):
     RENDER_RANK = 0
     ACTION_SPACE = 1
     def __init__(self, **kwargs):
+        self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
-        with open(settings_path) as file:
-            settings = yaml.load(file, yaml.FullLoader)
-        self.rank = kwargs.get('rank', 1)
+        render_gui = kwargs.get('render_gui', False)
+        if settings_path is None:
+            settings = {
+                    'general': {
+                        'render': render_gui and self.rank == RCT.RENDER_RANK,
+                        'verbose': False,
+                        },
+                    'environment': {
+                        'n_guests': 10,
+                        'map_width': 36,
+                        'map_height': 36,
+                        },
+                    'experiments': {}
+                    }
+        else:
+            with open(settings_path) as file:
+                settings = yaml.load(file, yaml.FullLoader)
         render_gui = settings['general']['render']
 
         if render_gui :#and self.rank == self.RENDER_RANK:
@@ -112,14 +127,17 @@ class RCT(core.Env):
         if RCT.ACTION_SPACE == 0:
             self.action_space = gym.spaces.Discrete((
                 self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
-        self.action_space = gym.spaces.Dict({
-           #'map':
-           #self.map_space,
-            'x': self.x_space,
-            'y': self.y_space,
-            'act': self.act_space,
-            'rotation': self.rotation_space
-        })
+        self.action_space = gym.spaces.MultiDiscrete(
+                (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
+                )
+#       self.action_space = gym.spaces.Dict({
+#          #'map':
+#          #self.map_space,
+#           'x': self.x_space,
+#           'y': self.y_space,
+#           'act': self.act_space,
+#           'rotation': self.rotation_space
+#       })
         # self.action_space = gym.spaces.Dict({
         #    'position': gym.spaces.Box(low, high),
         #    # path
@@ -212,6 +230,7 @@ class RCT(core.Env):
 
     def reset(self):
         self.rct_env.reset()
+        self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
@@ -221,7 +240,7 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:2, :, :] = self.rct_env.park.map[:2, :, :]
+        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
         ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(
@@ -240,16 +259,20 @@ class RCT(core.Env):
             x, y, build, rotation = self.ravel_action(action)
        #x, y = action['map']
         elif RCT.ACTION_SPACE == 1:
-            x = action['x']
-            y = action['y']
+           #x = action['x']
+            x = action[0]
+           #y = action['y']
+            y = action[1]
+           #build = action['act']
+            build = action[2]
+           #rotation = action['rotation']
+            rotation = action[3]
+            #x = int(action['position'][0])
     #       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
     #       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
     #       x = x % self.MAP_WIDTH
     #       y = y % self.MAP_HEIGHT
     #       x, y = int(x), int(y)
-            build = action['act']
-            rotation = action['rotation']
-            #x = int(action['position'][0])
             #y = int(action['position'][1])
             #print('x y build', x, y, build)
             #build = action['build']
@@ -261,6 +284,7 @@ class RCT(core.Env):
             self.place_path_tile(x, y)
         else:
             self.demolish_tile(x, y)
+        self.delete_islands()
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)
@@ -272,8 +296,10 @@ class RCT(core.Env):
        #reward = len(self.rct_env.park.rides_by_pos)
         done = self.n_step >= self.max_step
         if done:
-            for _ in range(self.max_step):
+            self.rct_env.park.populate_path_net()
+            for _ in range(200):
                 self.step_sim()
+                self.render()
         obs = self.get_observation()
         reward = self.rct_env.park.money
         reward = reward / self.max_step
