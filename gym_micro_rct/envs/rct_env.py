@@ -43,7 +43,7 @@ class RCT(core.Env):
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
     ACTION_SPACE = 1
-    N_SIM_STEP = 20
+    N_SIM_STEP = 4
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
@@ -231,12 +231,12 @@ class RCT(core.Env):
 
     def update_metrics(self):
         self.metrics = {
-            'happiness': self.rct_env.park.score,
+            'happiness': self.rct_env.park.avg_peep_happiness,
         }
 
     def reset(self):
         self.rct_env.reset()
-        self.rct_env.resetSim()
+       #self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
@@ -302,16 +302,17 @@ class RCT(core.Env):
 
     def step(self, action):
         self.act(action)
-       #reward = 255 - self.rct_env.park.score
+       #reward = 255 - self.rct_env.park.avg_peep_happiness
        #reward = len(self.rct_env.park.rides_by_pos)
         done = self.n_step >= self.max_step
         self.rct_env.park.populate_path_net()
+        reward = 0
         for _ in range(RCT.N_SIM_STEP):
             self.step_sim()
+            reward += self.rct_env.park.income
             self.render()
         obs = self.get_observation()
-        reward = self.rct_env.park.money
-        reward = reward / (self.max_step * RCT.N_SIM_STEP)
+        reward = reward / (RCT.N_SIM_STEP)
         info = {}
 
         if self.render_gui:
