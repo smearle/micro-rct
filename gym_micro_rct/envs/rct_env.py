@@ -234,8 +234,13 @@ class RCT(core.Env):
             'happiness': self.rct_env.park.avg_peep_happiness,
         }
 
+    def rand_act(self):
+        return self.act(self.action_space.sample())
+
     def reset(self):
         self.rct_env.reset()
+        for i in range(self.map_width):
+            self.rand_act()
        #self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
@@ -294,7 +299,7 @@ class RCT(core.Env):
             self.place_path_tile(x, y)
         else:
             self.demolish_tile(x, y)
-        self.delete_islands()
+       #self.delete_islands()
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)
