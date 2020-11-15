@@ -32,8 +32,8 @@ with open(obj_list_path, 'r') as fp:
     for symb in symbol_list:
         symbol_dict[symb[0]] = (i, object_list[i]().name)
         i += 1
-    print(symbol_dict)
-    print(symbol_list)
+   #print(symbol_dict)
+   #print(symbol_list)
     fp.close()
 
 def rideNameToID(nameList):
