@@ -25,6 +25,7 @@ class Park():
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
+    INIT_MONEY = 0
     MARKS_TO_RIDES = {
             emptyMark: 'empty',
             wallMark: 'wall',
@@ -58,9 +59,12 @@ class Park():
 
         self.peepsList = set()
 #       self.listOfRides = []
-        self.score = 0
+        self.avg_peep_happiness = 0
         self.path_net = {}
         self.vomit_paths = {}
+        self.money = Park.INIT_MONEY
+        self.last_money = self.money
+        self.income = 0
 
     def clone(self, settings):
         new_park = Park(settings)
@@ -154,11 +158,11 @@ class Park():
 
         for peep in self.peepsList:
             score += peep.happiness
-        self.score = score / len(self.peepsList)
+        self.avg_peep_happiness = score / len(self.peepsList)
 
     def returnScore(self):
         self.updateScore()
-        return self.score
+        return self.avg_peep_happiness
 
 
     # TODO: I think this function is mostly redundanat at this point?
@@ -223,6 +227,9 @@ class Park():
 
         for pos in dead_vomit:
             self.vomit_paths.pop(pos)
+
+        self.income = self.money - self.last_money
+        self.last_money = self.money
 
 
     def updateRides(self):
@@ -304,6 +311,7 @@ class Park():
                 legend.append(mark)
         res += 'human: {}\n'.format(Park.humanMark)
         res += 'enter: {}\n'.format(Park.pathMark)
-        res += '\npark score: {}\n'.format(self.score)
+        res += '\npark score: {}\n'.format(self.avg_peep_happiness)
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
+        return res
