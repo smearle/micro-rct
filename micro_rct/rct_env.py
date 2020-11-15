@@ -49,7 +49,7 @@ def run_experiment(env, n_ticks, settings, n_trials=20):
 class RCTEnv():
     N_RIDES = len(ride_list)
 
-    def __init__(self, settings, **kwargs):
+    def __init__(self, settings, park=None, **kwargs):
         if settings is None:
             settings_path = os.path.dirname(
                 os.path.dirname(os.path.realpath(__file__)))
@@ -78,7 +78,11 @@ class RCTEnv():
             self.screen = None
         self.settings = settings
         self.render_map = None
-        self.park = Park(self.settings)
+        if park == None:
+            self.park = Park(self.settings)
+        else:
+            self.park = park
+            self.resetSim()
 
     def reset(self):
         print_msg('resetting park',

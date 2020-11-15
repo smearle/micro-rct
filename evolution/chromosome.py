@@ -1,12 +1,58 @@
-
+import random
+from ..micro_rct.rct_env import RCTEnv
 class Chromosome:
-    def __init__(self, rct_env):
-        self.env = rct_env
+    def __init__(self, settings, dimension_keys, fitness_type=0, env=None):
+        self.settings = settings
+        
+        self.fitness_type = fitness_type
         self.fitness = 0
+        self.dimensions = {}
+        for key in dimension_keys:
+            self.dimensions[key] = 0
+        
+        if env == None:
+            self.env = RCTEnv(self.settings)
+            self.initialize()
+        else:
+            self.env = env
+        self.calculate_dimensions()
 
+    def initialize(self):
+        self.env.reset()
+        
     def mutate(self):
         print('** mutating')
+        self.calculate_dimensions()
 
     def simulate(self):
         self.env.simulate()
-        print('** running map')
+        self.calculate_fitness()
+
+    def reset_sim(self):
+        self.env.resetSim()
+
+    def clone(self, dimension_keys):
+        clone_park = self.env.park.clone()
+        new_env = RCTEnv(settings, clone_park)
+        return Chromosome(self.settings, dimension_keys, fitness_type=self.fitness_type, env=new_env)
+
+
+    ######## CALCULATION FUNCTIONS
+    def calculate_fitness(self):
+        if self.fitness_type == 0:
+            print('** random fitness')
+            self.fitness = random.randrange(0, 1)
+
+    def calculate_dimensions(self):
+        # ride total
+        if 'ride count' in self.dimensions.keys():
+            self.dimensions['ride_count'] = len(self.env.park.rides_by_pos.keys)
+        if 'happiness' in self.dimensions.keys():
+            avg_happiness = 0
+            for peep in self.env.park.peepsList:
+                avg_happiness += peep.happiness
+            self.dimensions['happiness'] = avg_happiness / len(self.peepsList)
+             
+    
+    ####### UTILITY FUNCTIONS
+
