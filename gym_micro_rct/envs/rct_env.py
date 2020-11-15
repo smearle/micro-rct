@@ -239,7 +239,7 @@ class RCT(core.Env):
 
     def reset(self):
         self.rct_env.reset()
-        for i in range(self.map_width):
+        for i in range(np.random.randint(0, self.map_width + 1)):
             self.rand_act()
        #self.rct_env.resetSim()
         self.n_step = 0
