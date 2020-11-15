@@ -6,7 +6,7 @@ import time
 
 import gym
 import numpy as np
-import torch
+#import torch
 import yaml
 from gym import core
 from micro_rct import map_utility
@@ -42,7 +42,10 @@ class RCT(core.Env):
         PATH = len(ride_list)
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
+    ACTION_SPACE = 1
+    N_SIM_STEP = 4
     def __init__(self, **kwargs):
+        self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
         if settings_path != None:
@@ -50,7 +53,25 @@ class RCT(core.Env):
                 settings = yaml.load(file, yaml.FullLoader) 
                 kwargs['settings'] = settings
         self.rank = kwargs.get('rank', 1)
-        render_gui = settings['general']['render']
+        render_gui = kwargs.get('render_gui', True)
+        try:
+            with open(settings_path) as file:
+                settings = yaml.load(file, yaml.FullLoader)
+            render_gui = settings['general']['render']
+        except Exception as e:
+            print(e)
+            settings = {
+                    'general': {
+                        'render': render_gui and self.rank == RCT.RENDER_RANK,
+                        'verbose': False,
+                        },
+                    'environment': {
+                        'n_guests': 10,
+                        'map_width': kwargs.get('map_width', 16),
+                        'map_height': kwargs.get('map_width', 16),
+                        },
+                    'experiments': {}
+                    }
 
         if render_gui :#and self.rank == self.RENDER_RANK:
             self.render_gui = render_gui = True
@@ -108,16 +129,23 @@ class RCT(core.Env):
        #low = np.zeros((2))
        #high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
        #self.map_space = gym.spaces.Box(low, high)
+       #if False:
         self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
         self.rotation_space = gym.spaces.Discrete(4)
-        self.action_space = gym.spaces.Dict({
-           #'map':
-           #self.map_space,
-            'x': self.x_space,
-            'y': self.y_space,
-            'act': self.act_space,
-            'rotation': self.rotation_space
-        })
+       #if RCT.ACTION_SPACE == 0:
+       #    self.action_space = gym.spaces.Discrete((
+       #        self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
+        self.action_space = gym.spaces.MultiDiscrete(
+                (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
+                )
+#       self.action_space = gym.spaces.Dict({
+#          #'map':
+#          #self.map_space,
+#           'x': self.x_space,
+#           'y': self.y_space,
+#           'act': self.act_space,
+#           'rotation': self.rotation_space
+#       })
         # self.action_space = gym.spaces.Dict({
         #    'position': gym.spaces.Box(low, high),
         #    # path
@@ -150,8 +178,8 @@ class RCT(core.Env):
         rides_by_pos = self.rct_env.park.rides_by_pos
         path_net = self.rct_env.park.path_net
         arr = self.rct_env.park.map
-        src = Peep.ORIGIN
-        checking = [src]
+        xs, ys = np.where(self.rct_env.park.map[Map.PEEP] > -1)
+        checking = list(zip(xs, ys))
         checked = []
 
         while checking:
@@ -195,21 +223,30 @@ class RCT(core.Env):
         #map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i)
         ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
                                     rotation)
+        if not ride:
+            return
         path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
 
         for pos in path_seq:
             self.place_path_tile(*pos)
+        self.rct_env.park.populate_path_net()
 
     def demolish_tile(self, x, y):
         map_utility.demolish_tile(self.rct_env.park, x, y)
 
     def update_metrics(self):
         self.metrics = {
-            'happiness': self.rct_env.park.score,
+            'happiness': self.rct_env.park.avg_peep_happiness,
         }
+
+    def rand_act(self):
+        return self.act(self.action_space.sample())
 
     def reset(self):
         self.rct_env.reset()
+        for i in range(np.random.randint(0, self.map_width + 1)):
+            self.rand_act()
+       #self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
@@ -219,34 +256,47 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:2, :, :] = torch.Tensor(self.rct_env.park.map[:2, :, :])
-        ride_obs = torch.LongTensor(self.rct_env.park.map[Map.RIDE] + 1)
+        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
+        ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
-        ride_obs_onehot = torch.zeros(
-            len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT)
+        ride_obs_onehot = np.zeros(
+            (len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT))
         # print(ride_obs.shape)
         # print(ride_obs_onehot.shape)
-        ride_obs_onehot.scatter(0, ride_obs, 1)
+       #ride_obs_onehot.scatter(0, ride_obs, 1)
+        xs, ys = np.indices(ride_obs.shape[1:])
+        ride_obs_onehot[ride_obs, xs, ys] = 1
         obs[2:, :, :] = ride_obs_onehot
 
         return obs
 
     def act(self, action):
+        # FIXME: hack to support gym-city implementation
+        if len(action.shape) > 1:
+            assert action.shape[1] == 1
+            action = action[:, 0]
+        if RCT.ACTION_SPACE == 0:
+            x, y, build, rotation = self.ravel_action(action)
        #x, y = action['map']
-        x = action['x']
-        y = action['y']
-#       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
-#       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
-#       x = x % self.MAP_WIDTH
-#       y = y % self.MAP_HEIGHT
-#       x, y = int(x), int(y)
-        build = action['act']
-        rotation = action['rotation']
-        #x = int(action['position'][0])
-        #y = int(action['position'][1])
-        #print('x y build', x, y, build)
-        #build = action['build']
-        #       print('build', x, y, build)
+        elif RCT.ACTION_SPACE == 1:
+           #x = action['x']
+            x = action[0]
+           #y = action['y']
+            y = action[1]
+           #build = action['act']
+            build = action[2]
+           #rotation = action['rotation']
+            rotation = action[3]
+            #x = int(action['position'][0])
+    #       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
+    #       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
+    #       x = x % self.MAP_WIDTH
+    #       y = y % self.MAP_HEIGHT
+    #       x, y = int(x), int(y)
+            #y = int(action['position'][1])
+            #print('x y build', x, y, build)
+            #build = action['build']
+            #       print('build', x, y, build)
 
         if build < len(ride_list):
             self.place_ride_tile(x, y, build, rotation)
@@ -254,6 +304,7 @@ class RCT(core.Env):
             self.place_path_tile(x, y)
         else:
             self.demolish_tile(x, y)
+       #self.delete_islands()
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)
@@ -261,12 +312,17 @@ class RCT(core.Env):
 
     def step(self, action):
         self.act(action)
-        self.step_sim()
-        obs = self.get_observation()
-        reward = 255 - self.rct_env.park.score
+       #reward = 255 - self.rct_env.park.avg_peep_happiness
        #reward = len(self.rct_env.park.rides_by_pos)
-        reward = reward / self.max_step
         done = self.n_step >= self.max_step
+        self.rct_env.park.populate_path_net()
+        reward = 0
+        for _ in range(RCT.N_SIM_STEP):
+            self.step_sim()
+            reward += self.rct_env.park.income
+            self.render()
+        obs = self.get_observation()
+        reward = reward / (RCT.N_SIM_STEP)
         info = {}
 
         if self.render_gui:

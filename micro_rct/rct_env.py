@@ -1,4 +1,5 @@
 import argparse
+from .peep import Peep
 import copy
 import os
 import random
@@ -8,7 +9,7 @@ import time
 import yaml
 from tqdm import tqdm
 
-from .map_utility import placePath, placeRide
+from .map_utility import placePath, placeRide, place_path_tile
 from .park import Park
 from .path import Path
 from .pathfinding import PathFinder
@@ -91,7 +92,8 @@ class RCTEnv():
                   priority=2,
                   verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
-        placePath(self.park, margin=3)
+    #   placePath(self.park, margin=3)
+        place_path_tile(self.park, Peep.ORIGIN[0], Peep.ORIGIN[1])
 
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
@@ -144,6 +146,7 @@ class RCTEnv():
                               render=self.settings['general']['render'],
                               screen=self.screen)
        #self.render_map.reset(self.park)
+        self.park.money = Park.INIT_MONEY
 
     def simulate(self, n_ticks=-1):
         if n_ticks != -1:
