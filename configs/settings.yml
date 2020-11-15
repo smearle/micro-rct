@@ -11,4 +11,9 @@ experiments:
 
 evolution:
     population_size: 100
-    prob_mutate: 0.10
+    mutation:
+        add_prob: 0.3
+        delete_prob: 0.1
+        move_prob: 0.4
+    dimension_keys: [ride_count]
+    fitness_type: 1
