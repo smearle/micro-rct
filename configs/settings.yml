@@ -7,4 +7,8 @@ environment:
     map_height: 50
     n_actions: 10
 experiments:
-    ticks: [500, 1000]
+    ticks: [500]
+
+evolution:
+    population_size: 100
+    prob_mutate: 0.10
