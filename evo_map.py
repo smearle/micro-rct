@@ -234,6 +234,8 @@ class LambdaMuEvolver():
         for game, _, _ in self.population.values():
             game.rct_env.screen = None
             game.rct_env.render_map = None
+        from os import environ
+        environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
         import pygame
         pygame.quit()
         copyfile(self.save_path, self.save_path + '.bkp')

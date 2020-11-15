@@ -1,7 +1,13 @@
+from micro_rct.rct_env import RCTEnv
+from gym_micro_rct.envs.rct_env import RCT
+
+from micro_rct.map_utility import placePath, placeRide
+from micro_rct.rct_test_objects import object_list as ride_list
+
 import sys
 sys.path.append("..")
 import random
-from micro_rct.rct_env import RCTEnv
+
 class Chromosome:
     def __init__(self, settings, env=None):
         self.settings = settings
@@ -13,31 +19,55 @@ class Chromosome:
             self.dimensions[key] = 0
         
         if env == None:
-            self.env = RCTEnv(self.settings)
+            self.rct = RCT(settings=self.settings)
             self.initialize()
         else:
-            self.env = env
+            self.rct = env
         self.calculate_dimensions()
 
     def initialize(self):
-        self.env.reset()
-        
-    def mutate(self):
-        # TODO
-        print('** mutating')
-        self.calculate_dimensions()
+        self.rct.reset()
+        rides_count = random.randint(self.settings.get('evolution', {}).get('ride_range')[
+            0], self.settings.get('evolution', {}).get('ride_range')[1])
+        for i in range(0, rides_count):
+                # for i in range(1000):
+            self.rct.act(self.rct.action_space.sample())
 
-    def simulate(self):
-        self.env.simulate()
-        self.calculate_fitness()
+        for i in range(random.randint(0, 3)):
+            self.rct.rand_connect()
+
+    def mutate(self):
+        print('** mutating')
+        child = self.clone(self.dimensions.keys())
+
+        child.reset_sim()
+
+        n_builds = random.randint(1, self.settings.get('evolution', {}).get('max_mutate_builds'))
+        for i in range(n_builds):
+            action = child.rct.action_space.sample()
+
+            if action['act'] == RCT.BUILDS.PATH:
+                action['act'] = RCT.BUILDS.DEMOLISH
+            child.rct.act(child.rct.action_space.sample())
+
+        child.rct.delete_islands()
+        child.calculate_dimensions()
+        return child
+
+
+    def simulate(self, ticks=100):
+        try:
+            self.rct.simulate(ticks)
+            self.calculate_fitness()
+        except Exception as e:
+            self.fitness = 0
 
     def reset_sim(self):
-        self.env.resetSim()
+        self.rct.resetSim()
 
     def clone(self, dimension_keys):
-        clone_park = self.env.park.clone()
-        new_env = RCTEnv(settings, clone_park)
-        return Chromosome(self.settings, dimension_keys, fitness_type=self.fitness_type, env=new_env)
+        new_env = self.rct.clone(rank=1, settings=self.settings)
+        return Chromosome(self.settings, env=new_env)
 
 
     ######## CALCULATION FUNCTIONS
@@ -48,17 +78,17 @@ class Chromosome:
         elif self.fitness_type == 1:
             # happiness fitness
             avg_happiness = 0
-            for peep in self.env.park.peepsList:
+            for peep in self.rct.rct_env.park.peepsList:
                 avg_happiness += peep.happiness
-            self.fitness = avg_happiness / len(self.peepsList)
+            self.fitness = avg_happiness / len(self.rct.rct_env.park.peepsList)
 
     def calculate_dimensions(self):
         # ride total
         if 'ride_count' in self.dimensions.keys():
-            self.dimensions['ride_count'] = len(self.env.park.rides_by_pos.keys())
+            self.dimensions['ride_count'] = len(self.rct.rct_env.park.rides_by_pos.keys())
         if 'happiness' in self.dimensions.keys():
             avg_happiness = 0
-            for peep in self.env.park.peepsList:
+            for peep in self.rct.rct_env.park.peepsList:
                 avg_happiness += peep.happiness
             self.dimensions['happiness'] = avg_happiness / len(self.peepsList)
              

@@ -109,8 +109,6 @@ def demolish_tile(park, x, y):
                 park.locs_to_rides.pop(ride_pos)
             park.map[Map.RIDE, ride_pos[0], ride_pos[1]] = -1
             demolish_tile(park, ride_pos[0], ride_pos[1])
-        
-
     #   for i in range(x, x + ride.size[0]):
     #       for j in range(y, y + ride.size[1]):
     #           if not (0 <= i < park.map.shape[0] and 0 <= j < park.map.shape[1]):
@@ -122,13 +120,11 @@ def demolish_tile(park, x, y):
     park.map[Map.PATH, x, y] = -1
     park.map[Map.RIDE, x, y] = -1
 
-
 def clear_for_placement(park, x, y, dx, dy):
     ''' delete everything in a patch. We must already know that this is a valid thing to do.'''
     for i in range(x, x + dx):
         for j in range(y, y + dy):
             demolish_tile(park, i, j)
-
 
 def place_ride_tile(park, x, y, ride_i, rotation=0):
 #   print('placing ride', x, y, ride_i)

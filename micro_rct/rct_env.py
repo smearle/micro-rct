@@ -67,10 +67,12 @@ class RCTEnv():
 
         if settings['general']['render']:
             # if kwargs.get('render_gui', False):
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
-            screen_width = 1000
-            screen_height = 1000
+            screen_width = settings.get('general', {}).get('render_screen_width')
+            screen_height = settings.get('general', {}).get('render_screen_height')
             self.screen = pygame.display.set_mode(
                 (screen_width, screen_height))
             self.screen_width, self.screen_height = screen_width, screen_height
@@ -132,6 +134,8 @@ class RCTEnv():
             self.park.updateHuman(p)
 
         if not self.screen and self.settings['general']['render']:
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
             self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
