@@ -48,37 +48,38 @@ class RCT(core.Env):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
-        if settings_path != None:
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader) 
-                kwargs['settings'] = settings
         self.rank = kwargs.get('rank', 1)
-        render_gui = kwargs.get('render_gui', True)
-        try:
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
-            render_gui = settings['general']['render']
-        except Exception as e:
-            print(e)
-            settings = {
-                    'general': {
-                        'render': render_gui and self.rank == RCT.RENDER_RANK,
-                        'verbose': False,
-                        },
-                    'environment': {
-                        'n_guests': 10,
-                        'map_width': kwargs.get('map_width', 16),
-                        'map_height': kwargs.get('map_width', 16),
-                        },
-                    'experiments': {}
-                    }
+        self.render_gui = kwargs.get('render_gui', False)
+        kwargs['settings'] = settings
+        if not settings:
+            if settings_path != None:
+                with open(settings_path) as file:
+                    settings = yaml.load(file, yaml.FullLoader) 
+                    kwargs['settings'] = settings
+            try:
+                with open(settings_path) as file:
+                    settings = yaml.load(file, yaml.FullLoader)
+                render_gui = settings['general']['render']
+            except Exception as e:
+                print(e)
+                settings = {
+                        'general': {
+                            'render': render_gui and self.rank == RCT.RENDER_RANK,
+                            'verbose': False,
+                            },
+                        'environment': {
+                            'n_guests': 10,
+                            'map_width': kwargs.get('map_width', 16),
+                            'map_height': kwargs.get('map_width', 16),
+                            },
+                        'experiments': {}
+                        }
 
-        if render_gui :#and self.rank == self.RENDER_RANK:
-            self.render_gui = render_gui = True
-            settings['general']['render'] = True
-        else:
-            self.render_gui = render_gui = False
-            settings['general']['render'] = False
+            if self.render_gui :#and self.rank == self.RENDER_RANK:
+                settings['general']['render'] = True
+            else:
+                self.render_gui = render_gui = False
+                settings['general']['render'] = False
         self.rct_env = RCTEnv(**kwargs)
         core.Env.__init__(self)
         settings = self.rct_env.settings
@@ -88,7 +89,7 @@ class RCT(core.Env):
         self.MAP_WIDTH = settings['environment']['map_width']
         self.MAP_HEIGHT = settings['environment']['map_height']
 
-        if render_gui:
+        if self.render_gui:
 #           print('render rank', render_gui, rank)
             pass
 
