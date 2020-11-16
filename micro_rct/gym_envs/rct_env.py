@@ -48,22 +48,23 @@ class RCT(core.Env):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
-        self.render_gui = kwargs.get('render_gui', False)
         kwargs['settings'] = settings
-        if not settings:
-            if settings_path != None:
+        if settings:
+            self.render_gui = settings['general']['render']
+        else:
+            self.render_gui = kwargs.get('render_gui', False) and self.rank == RCT.RENDER_RANK
+            try:
+                # Supposing no settings, try finding local config file
                 with open(settings_path) as file:
                     settings = yaml.load(file, yaml.FullLoader) 
                     kwargs['settings'] = settings
-            try:
-                with open(settings_path) as file:
-                    settings = yaml.load(file, yaml.FullLoader)
-                render_gui = settings['general']['render']
+                    self.render_gui = settings['general']['render']
             except Exception as e:
+                # Otherwise, use some default values 
                 print(e)
                 settings = {
                         'general': {
-                            'render': render_gui and self.rank == RCT.RENDER_RANK,
+                            'render': self.render_gui,
                             'verbose': False,
                             },
                         'environment': {
@@ -77,7 +78,7 @@ class RCT(core.Env):
             if self.render_gui :#and self.rank == self.RENDER_RANK:
                 settings['general']['render'] = True
             else:
-                self.render_gui = render_gui = False
+                self.render_gui = self.render_gui = False
                 settings['general']['render'] = False
         self.rct_env = RCTEnv(**kwargs)
         core.Env.__init__(self)
