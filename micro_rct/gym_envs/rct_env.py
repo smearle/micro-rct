@@ -48,7 +48,6 @@ class RCT(core.Env):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
-        self.rank = kwargs.get('rank', 1)
         self.render_gui = kwargs.get('render_gui', False)
         kwargs['settings'] = settings
         if not settings:
