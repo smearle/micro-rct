@@ -1,5 +1,5 @@
 from micro_rct.rct_env import RCTEnv
-from gym_micro_rct.envs.rct_env import RCT
+from micro_rct.gym_envs.rct_env import RCT
 
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.rct_test_objects import object_list as ride_list
@@ -15,6 +15,7 @@ class Chromosome:
         self.fitness_type = settings.get('evolution', {}).get('fitness_type')
         self.fitness = 0
         self.dimensions = {}
+        self.age = 0
         for key in settings.get('evolution', {}).get('dimension_keys'):
             self.dimensions[key] = 0
         
@@ -46,8 +47,8 @@ class Chromosome:
         for i in range(n_builds):
             action = child.rct.action_space.sample()
 
-            if action['act'] == RCT.BUILDS.PATH:
-                action['act'] = RCT.BUILDS.DEMOLISH
+            # if action['act'] == RCT.BUILDS.PATH:
+            #     action['act'] = RCT.BUILDS.DEMOLISH
             child.rct.act(child.rct.action_space.sample())
 
         child.rct.delete_islands()
@@ -60,7 +61,7 @@ class Chromosome:
             self.rct.simulate(ticks)
             self.calculate_fitness()
         except Exception as e:
-            self.fitness = 0
+            self.fitness = -1
 
     def reset_sim(self):
         self.rct.resetSim()
@@ -69,7 +70,6 @@ class Chromosome:
         new_env = self.rct.clone(rank=1, settings=self.settings)
         return Chromosome(self.settings, env=new_env)
 
-
     ######## CALCULATION FUNCTIONS
     def calculate_fitness(self):
         if self.fitness_type == 0:
@@ -77,10 +77,9 @@ class Chromosome:
             self.fitness = random.randrange(0, 1)
         elif self.fitness_type == 1:
             # happiness fitness
-            avg_happiness = 0
-            for peep in self.rct.rct_env.park.peepsList:
-                avg_happiness += peep.happiness
-            self.fitness = avg_happiness / len(self.rct.rct_env.park.peepsList)
+            self.fitness = self.rct.rct_env.park.avg_peep_happiness
+        elif self.fitness_type == 2:
+            self.fitness = self.rct.rct_env.park.money
 
     def calculate_dimensions(self):
         # ride total

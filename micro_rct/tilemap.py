@@ -105,7 +105,7 @@ class Map():
         
 
     def render_park(self):
-        if self.frame == 0 or True:
+        if self.frame == 0:
             for i in range(self.map.shape[1]):
                 for j in range(self.map.shape[2]):
                     i_pix = i*self.tile_width

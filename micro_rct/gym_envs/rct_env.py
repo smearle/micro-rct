@@ -78,7 +78,7 @@ class RCT(core.Env):
             if self.render_gui :#and self.rank == self.RENDER_RANK:
                 settings['general']['render'] = True
             else:
-                self.render_gui = self.render_gui = False
+                self.render_gui = False
                 settings['general']['render'] = False
         self.rct_env = RCTEnv(**kwargs)
         core.Env.__init__(self)
@@ -381,11 +381,8 @@ class RCT(core.Env):
         self.rct_env.resetSim()
         self.render()
 
-    def clone(self, rank, settings_path=None, settings=None):
-        if settings_path != None:
-            new_env = RCT(settings_path=settings_path, rank=rank)
-        elif settings != None:
-            new_env = RCT(settings=settings, rank=rank)
+    def clone(self, rank=0, settings=None, settings_path=None):
+        new_env = RCT(rank=rank, settings_path=settings_path, settings=settings)
         new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
        #new_env.path_finder = PathFinder(new_env.park.path_net)
        #new_env.rct_env.path_finder = self.rct_env.path_finder.clone()
