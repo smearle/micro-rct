@@ -178,7 +178,6 @@ def clear_for_placement(park, x, y, dx, dy):
 
     return result
 
-
 def place_ride_tile(park, x, y, ride_i, rotation=0):
 #   print('placing ride', x, y, ride_i)
     _ride = ride_list[ride_i]()

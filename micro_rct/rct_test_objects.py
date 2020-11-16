@@ -23,17 +23,12 @@ with open(obj_list_path, 'r') as fp:
                 symbol = arr[-1]
                 arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr)-1)]+arr[-1:] + [i]
                 #newObj = RS.alt_init(arr)
-                # print(newObj)
                 object_list.append(create_attraction(arr))
                 symbol_list.append(symbol)
-        # for i,obj in enumerate(object_list):
-            # print(i,obj)
     i = 0
     for symb in symbol_list:
         symbol_dict[symb[0]] = (i, object_list[i]().name)
         i += 1
-   #print(symbol_dict)
-   #print(symbol_list)
     fp.close()
 
 def rideNameToID(nameList):

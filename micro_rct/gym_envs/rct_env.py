@@ -47,35 +47,40 @@ class RCT(core.Env):
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
+        settings = kwargs.get('settings', None)
         self.rank = kwargs.get('rank', 1)
-        render_gui = kwargs.get('render_gui', True)
-        try:
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
-            render_gui = settings['general']['render']
-        except Exception as e:
-            print('No configs/settings.yaml file in current directory, using kwargs instead')
-            print(e)
-            settings = {
-                    'general': {
-                        'render': render_gui and self.rank == RCT.RENDER_RANK,
-                        'verbose': False,
-                        },
-                    'environment': {
-                        'n_guests': 10,
-                        'map_width': kwargs.get('map_width', 16),
-                        'map_height': kwargs.get('map_width', 16),
-                        },
-                    'experiments': {}
-                    }
+        self.render_gui = kwargs.get('render_gui', False)
+        kwargs['settings'] = settings
+        if not settings:
+            if settings_path != None:
+                with open(settings_path) as file:
+                    settings = yaml.load(file, yaml.FullLoader) 
+                    kwargs['settings'] = settings
+            try:
+                with open(settings_path) as file:
+                    settings = yaml.load(file, yaml.FullLoader)
+                render_gui = settings['general']['render']
+            except Exception as e:
+                print(e)
+                settings = {
+                        'general': {
+                            'render': render_gui and self.rank == RCT.RENDER_RANK,
+                            'verbose': False,
+                            },
+                        'environment': {
+                            'n_guests': 10,
+                            'map_width': kwargs.get('map_width', 16),
+                            'map_height': kwargs.get('map_width', 16),
+                            },
+                        'experiments': {}
+                        }
 
-        if render_gui :#and self.rank == self.RENDER_RANK:
-            self.render_gui = render_gui = True
-            settings['general']['render'] = True
-        else:
-            self.render_gui = render_gui = False
-            settings['general']['render'] = False
-        self.rct_env = RCTEnv(settings, **kwargs)
+            if self.render_gui :#and self.rank == self.RENDER_RANK:
+                settings['general']['render'] = True
+            else:
+                self.render_gui = render_gui = False
+                settings['general']['render'] = False
+        self.rct_env = RCTEnv(**kwargs)
         core.Env.__init__(self)
         settings = self.rct_env.settings
 
@@ -84,7 +89,7 @@ class RCT(core.Env):
         self.MAP_WIDTH = settings['environment']['map_width']
         self.MAP_HEIGHT = settings['environment']['map_height']
 
-        if render_gui:
+        if self.render_gui:
 #           print('render rank', render_gui, rank)
             pass
 
@@ -376,8 +381,11 @@ class RCT(core.Env):
         self.rct_env.resetSim()
         self.render()
 
-    def clone(self, settings_path, rank):
-        new_env = RCT(settings_path=settings_path, rank=rank)
+    def clone(self, rank, settings_path=None, settings=None):
+        if settings_path != None:
+            new_env = RCT(settings_path=settings_path, rank=rank)
+        elif settings != None:
+            new_env = RCT(settings=settings, rank=rank)
         new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
        #new_env.path_finder = PathFinder(new_env.park.path_net)
        #new_env.rct_env.path_finder = self.rct_env.path_finder.clone()

@@ -45,6 +45,8 @@ class RCTEnv():
 
     def __init__(self, settings):
         if settings['general']['render']:
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
             screen_width = 1000
