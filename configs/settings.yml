@@ -8,8 +8,8 @@ parallelism:
     threads: 4
 environment:
     n_guests: 100
-    map_width: 30
-    map_height: 30
+    map_width: 32
+    map_height: 32
     n_actions: 10
 experiments:
     ticks: [500]

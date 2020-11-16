@@ -1,5 +1,5 @@
 from micro_rct.rct_env import RCTEnv
-from gym_micro_rct.envs.rct_env import RCT
+from micro_rct.gym_envs.rct_env import RCT
 
 from micro_rct.map_utility import placePath, placeRide
 from micro_rct.rct_test_objects import object_list as ride_list

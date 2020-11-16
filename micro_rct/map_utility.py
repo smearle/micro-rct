@@ -51,8 +51,10 @@ def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
 #   print_msg('place path tile: {} {} {}'.format(x, y, type_i), priority=4, verbose=verbose)
     pos = (x, y)
 
-    # will overwrite rides, but not their entrances
+    if park.map[Map.PATH, x, y] != -1:
+        return True
 
+    # will overwrite rides, but not their entrances
     if park.map[Map.RIDE, x, y] != -1 and park.map[Map.PATH, x, y] == -1:
 
         demolish_tile(park, x, y)
@@ -82,9 +84,30 @@ def update_path_net(park, pos, is_entrance=False):
                 adj_path.get_connecting(park.path_net)
 #   print('path placed')
 
+def try_demolish_tile(park, x, y):
+    pos = (x, y)
+    if park.map[Map.RIDE, pos[0], pos[1]] > -1 and not pos in park.locs_to_rides:
+        raise Exception('position {}, \n{}\n{}'.format(pos, park.map[Map.RIDE], park.locs_to_rides))
+#       park.map[Map.RIDE, pos[0], pos[1]] = -1
+    if pos in park.locs_to_rides:
+        center = park.locs_to_rides[pos]
+        if center not in park.rides_by_pos:
+            raise Exception
+
+        ride = park.rides_by_pos[center]
+        if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
+            return False
+        else:
+            demolish_tile(park, x, y)
+
+    #   for i in range(x, x + ride.size[0]):
+    #       for j in range(y, y + ride.size[1]):
+    #           if not (0 <= i < park.map.shape[0] and 0 <= j < park.map.shape[1]):
+    #               pass
+
 def demolish_tile(park, x, y):
     if park.map[Map.PEEP, x, y] != -1:
-        return False
+        raise Exception
    #print('demolishing tile {} {}'.format(x, y))
     pos = (x, y)
 
@@ -110,8 +133,8 @@ def demolish_tile(park, x, y):
             raise Exception
 
         ride = park.rides_by_pos[center]
-        if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
-            return False
+       #if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
+       #    return False
         ride = park.rides_by_pos.pop(center)
         assert center == ride.position
 
