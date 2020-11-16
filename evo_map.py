@@ -9,7 +9,7 @@ from shutil import copyfile
 
 import numpy as np
 
-from gym_micro_rct.envs.rct_env import RCT
+from micro_rct.gym_envs.rct_env import RCT
 
 # FIXME: If we reload a file with a different rendering option, pickled games will still
 # have the old option (newly cloned ones will not).

@@ -197,6 +197,7 @@ class Map():
             elif ride.name == 'CarRide':
                 self.screen.blit(self.car_tile, (i_pos, j_pos))
         pygame.display.flip()
+        img = pygame.surfarray.array3d(self.screen)
      #  while pygame.event.wait().type != pygame.locals.QUIT:
      #      pass
 
