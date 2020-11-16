@@ -47,7 +47,7 @@ class RCT(core.Env):
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
-        self.rank = kwargs.get('rank', 1)
+        settings = kwargs.get('settings', None)
         self.render_gui = kwargs.get('render_gui', False)
         kwargs['settings'] = settings
         if not settings:
@@ -58,7 +58,7 @@ class RCT(core.Env):
             try:
                 with open(settings_path) as file:
                     settings = yaml.load(file, yaml.FullLoader)
-                render_gui = settings['general']['render']
+                self.render_gui = settings['general']['render']
             except Exception as e:
                 print(e)
                 settings = {
@@ -77,7 +77,7 @@ class RCT(core.Env):
             if self.render_gui :#and self.rank == self.RENDER_RANK:
                 settings['general']['render'] = True
             else:
-                self.render_gui = render_gui = False
+                self.render_gui = False
                 settings['general']['render'] = False
         self.rct_env = RCTEnv(**kwargs)
         core.Env.__init__(self)
@@ -88,7 +88,7 @@ class RCT(core.Env):
         self.MAP_WIDTH = settings['environment']['map_width']
         self.MAP_HEIGHT = settings['environment']['map_height']
 
-        if render_gui:
+        if self.render_gui:
 #           print('render rank', render_gui, rank)
             pass
 
