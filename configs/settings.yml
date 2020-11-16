@@ -14,11 +14,11 @@ environment:
 experiments:
     ticks: [500]
 evolution:
-    population_size: 10
+    population_size: 100
     max_mutate_builds: 10
-    mutation_prob: 0.5
+    mutation_prob: 1.0
     dimension_keys: [ride_count]
-    fitness_type: 1
+    fitness_type: 2
     ride_range: [3, 8]
-    eval_ticks: 100
+    eval_ticks: 500
     gen_count: 5

@@ -70,11 +70,17 @@ class MapElitesRunner:
         [print(x) for x in self.get_grid()]
         # run mutation
         new_pop = []
+
         for i in range(0, self.settings.get('evolution', {}).get('population_size')):
             # take a random elite
             if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
                 # qualify for mutation
-                print('mutate!')
+                # pick a random cell and its elite
+                elite = random.choice(list(self.map.values())).elite
+                child = elite.mutate()
+                new_pop.append(child)
+        self.pop = new_pop
+
 
 def main(settings_path):
     with open(settings_path) as s_file:

@@ -47,8 +47,8 @@ class Chromosome:
         for i in range(n_builds):
             action = child.rct.action_space.sample()
 
-            if action['act'] == RCT.BUILDS.PATH:
-                action['act'] = RCT.BUILDS.DEMOLISH
+            # if action['act'] == RCT.BUILDS.PATH:
+            #     action['act'] = RCT.BUILDS.DEMOLISH
             child.rct.act(child.rct.action_space.sample())
 
         child.rct.delete_islands()
@@ -61,7 +61,7 @@ class Chromosome:
             self.rct.simulate(ticks)
             self.calculate_fitness()
         except Exception as e:
-            self.fitness = 0
+            self.fitness = -1
 
     def reset_sim(self):
         self.rct.resetSim()
@@ -77,10 +77,9 @@ class Chromosome:
             self.fitness = random.randrange(0, 1)
         elif self.fitness_type == 1:
             # happiness fitness
-            avg_happiness = 0
-            for peep in self.rct.rct_env.park.peepsList:
-                avg_happiness += peep.happiness
-            self.fitness = avg_happiness / len(self.rct.rct_env.park.peepsList)
+            self.fitness = self.rct.rct_env.park.avg_peep_happiness
+        elif self.fitness_type == 2:
+            self.fitness = self.rct.rct_env.park.income
 
     def calculate_dimensions(self):
         # ride total
