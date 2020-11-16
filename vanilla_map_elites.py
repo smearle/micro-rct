@@ -35,10 +35,12 @@ class MapElitesRunner:
                 self.map[key] = MECell(chrome.dimensions, 1)
             self.map[key].set_chromosome(chrome)
 
-    def eval_chromosome(self, index):
+    def eval_chromosome(self, index, child_conn=None):
         chrome = self.pop[index]
         # print('eval {}'.format(index))
         chrome.simulate(ticks=self.settings.get('evolution', {}).get('eval_ticks'))
+        if child_conn:
+            child_conn.send(chrome.fitness)
 
     def get_dimension_key(self, dimensions):
         return json.dumps(dimensions)
@@ -51,17 +53,33 @@ class MapElitesRunner:
             cells.append(rep)
         return cells
 
+    def join_procs(self, processes):
+        proc_idxs = list(processes.keys())
+        for i in proc_idxs:
+            # retrieve fitness scores and terminate parallel processes
+            p, parent_conn = processes.pop(i)
+            self.pop[i].fitness = parent_conn.recv()
+            p.join()
+            p.close()
+
     def run_generation(self, id):
         print('** running generation {}'.format(id))
         # run it all. RUN IT ALLLLLLL!!!!
         eval_partial = partial(self.eval_chromosome)
 
         if self.settings.get('parallelism', {}).get('enabled'):
-            pool = mp.Pool(self.settings.get('parallelism', {}).get('threads'))
-            pool.map(eval_partial, [i for i in range(0, len(self.pop))])
+            n_threads = self.settings.get('parallelism', {}).get('threads')
+            processes = {}
+            for i in range(0, len(self.pop)):
+                # initiate parallel simulations
+                parent_conn, child_conn = mp.Pipe()
+                p = mp.Process(target=eval_partial, args=(i, child_conn))
+                processes[i] = (p, parent_conn)
+                p.start()
+                if i % n_threads:
+                    self.join_procs(processes)
+            self.join_procs(processes)
 
-            pool.close()
-            pool.join()
         else:
             for i in range(0, len(self.pop)):
                 self.eval_chromosome(i)
