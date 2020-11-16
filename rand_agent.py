@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 np.random.seed(0)
 
-from gym_micro_rct.envs.rct_env import RCT
+from micro_rct.gym_envs.rct_env import RCT
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--settings-path',
@@ -47,7 +47,6 @@ def main(settings):
                 env.render()
         env.resetSim()
 
-        env.simulate(200)
         env.render()
 
 

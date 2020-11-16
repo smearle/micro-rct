@@ -5,6 +5,7 @@ from .path import Path
 from .pathfinding import PathFinder
 from .thoughts_enums import *
 from .utils.debug_utils import print_msg
+from .tilemap import Map
 
 #from collections import *
 
@@ -61,8 +62,13 @@ class Peep:
             return res
 
         if self.position not in self.park.path_net:
+            print(self.position)
+            print(self.park.map[Map.PATH])
+            try:
+                raise Exception('peep\'s current tile is not in path net')
+            except:
+                while True: pass
             return res
-#           raise Exception('peep\'s current tile is not in path net')
 
         if not self.headingTo:
             if self.hasMap:
@@ -73,54 +79,50 @@ class Peep:
                     self.wander()
             else:
                 self.wander()
-           #return res
         target = self.headingTo
 
         if not self.curr_route:
             self.wander()
-           #self.curr_route = [self.position]
-           #self.headingTo = None
 
-        #  when the target is not in the path_net dict,
-        # could be because of deletion
-
-#       if self.curr_route == -1:
-#           print(self.park.map)
-#           print(self.park.path_net)
-#           raise Exception(
-#               'invalid route {} to goal {} corresponding to ride at position {} with \
-#                   entrance at {}'.format(self.curr_route, self.headingTo,
-#                                          self.headingTo.position,
-#                                          self.headingTo.entrance))
-           #self.curr_route = [self.position]
-           #self.headingTo = None
         self.passingBy(vomitPath)
 
         if self.curr_route:
             ans = self.curr_route.pop(0)
 
             if ans not in self.park.path_net:
+                # If path interrupted by live player, wander
+                # TODO: should re-evaluate rides instead
                 self.wander()
-               #self.curr_route = []
-               #self.headingTo = None
             else:
                 self.position = ans
 
         if target is None:
             return res
 
-        if self.position == target.position or self.position == target.entrance:
+
+        at_target = (self.position == target.position or self.position == target.entrance)  
+        if not at_target and self.position in rides_by_pos:
+            # peep has wandered to a ride
+            if rides_by_pos[self.position].name == 'InformationKiosk':
+                #FIXME: this should cost money
+                self.hasMap = True
+            else:
+                ride = rides_by_pos[self.position]
+                self.updateThresholds()
+                if self.evaluateRide(ride):
+                    at_target = True
+                    target = ride
+
+        if at_target:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
 
             if not isinstance(target, Path):
 
-                # when peep get to kiosk we assume it will get the map for now
+                # when peep gets to kiosk we assume it will get the map for now
 
                 if target.name == 'InformationKiosk':
                     self.hasMap = True
-
-
 
                 if target.name == 'FirstAid':
                     self.inFirstAid = True
@@ -130,10 +132,9 @@ class Peep:
                     self.visited.add(target.name)
             self.headingTo = None
 
-        if self.position in rides_by_pos and rides_by_pos[self.position].name == 'InformationKiosk':
-            #FIXME: this should cost money
-            self.hasMap = True
 
+
+                
 
         return res
 
@@ -612,45 +613,57 @@ class Peep:
 
         return
 
+    def evaluateRide(self, ride):
+        ''' Calculate a peep's disposition toward a given ride. Must by updateThresholds. '''
+        goodIntensity = goodNausea = False
+        minIntensity, maxIntensity = self.minIntensity, self.maxIntensity
+        maxNausea = self.maxNausea
+
+        if maxIntensity >= ride.intensity >= minIntensity:
+            goodIntensity = True
+
+        if ride.nausea <= maxNausea:
+            goodNausea = True
+        # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
+
+        if self.nausea > 160 and ride.nausea >= 10:
+            goodNausea = False
+
+        if goodIntensity and goodNausea and not ride.isShop:
+            return True
+
+        if ride.name == 'FoodStall' and self.hunger < 50:
+        # FIXME: ad hoc to test food-eating functionality. This should tie in with thoughts.
+            return True
+
+        return False
+
+    def updateThresholds(self):
+        ''' Recalculate threshold stats for the peep, used to determine its disposition and response to rides.'''
+        # [problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+        alterNumber = 33
+        self.maxIntensity = (min(self.intensity[0] * 100, 1000) +
+                        self.happiness) // alterNumber
+        self.minIntensity = (max(self.intensity[1] * 100 - self.happiness,
+                            0)) // alterNumber
+        self.maxNausea = (self.nauseaMaximumThresholds() +
+                     self.happiness) // alterNumber
+
+
     def findNextRide(self, lst: list, specialCase=False):
 
         res = ['\nPeep {} is finding next ride\n'.format(self.id)]
 
         def filterLst():
-            # this code will filter unwanted ride for the peep
+            # this code will filter unwanted rides for the peep
             # [difference] didn't deal with ride's popularity
-            # [difference] didn't consider the situation the peep is at the ride
-            # [problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+            # [difference] didn't consider the situation when the peep is at the ride
             #           not ideal...?
-            alterNumber = 33
             newLst = []
-            maxIntensity = (min(self.intensity[0] * 100, 1000) +
-                            self.happiness) // alterNumber
-            minIntensity = (max(self.intensity[1] * 100 - self.happiness,
-                                0)) // alterNumber
-            maxNausea = (self.nauseaMaximumThresholds() +
-                         self.happiness) // alterNumber
-
+            self.updateThresholds() # update tolerance thresholds
             for ride in lst:
-                goodIntensity = goodNausea = False
-
-                if maxIntensity >= ride.intensity >= minIntensity:
-                    goodIntensity = True
-
-                if ride.nausea <= maxNausea:
-                    goodNausea = True
-                # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
-
-                if self.nausea > 160 and ride.nausea >= 10:
-                    goodNausea = False
-
-                if goodIntensity and goodNausea and not ride.isShop:
-                    newLst.append((ride))
-
-                # FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
-
-                if ride.name == 'FoodStall' and self.hunger < 50:
-                    newLst.append((ride))
+                if self.evaluateRide(ride):
+                    newLst.append(ride)
 
             return newLst
 

@@ -1,10 +1,23 @@
 general:
     render: False
     verbose: False
+    render_screen_width: 500
+    render_screen_height: 500
+parallelism:
+    enabled: True
+    threads: 4
 environment:
     n_guests: 100
-    map_width: 50
-    map_height: 50
+    map_width: 30
+    map_height: 30
     n_actions: 10
 experiments:
-    ticks: [500, 1000]
+    ticks: [500]
+evolution:
+    population_size: 10
+    max_mutate_builds: 10
+    dimension_keys: [ride_count]
+    fitness_type: 1
+    ride_range: [3, 8]
+    eval_ticks: 500
+    gen_count: 100

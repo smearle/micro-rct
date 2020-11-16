@@ -9,7 +9,7 @@ from shutil import copyfile
 
 import numpy as np
 
-from gym_micro_rct.envs.rct_env import RCT
+from micro_rct.gym_envs.rct_env import RCT
 
 # FIXME: If we reload a file with a different rendering option, pickled games will still
 # have the old option (newly cloned ones will not).
@@ -234,6 +234,8 @@ class LambdaMuEvolver():
         for game, _, _ in self.population.values():
             game.rct_env.screen = None
             game.rct_env.render_map = None
+        from os import environ
+        environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
         import pygame
         pygame.quit()
         copyfile(self.save_path, self.save_path + '.bkp')

@@ -50,7 +50,7 @@ def run_experiment(env, n_ticks, settings, n_trials=20):
 class RCTEnv():
     N_RIDES = len(ride_list)
 
-    def __init__(self, settings, **kwargs):
+    def __init__(self, settings, park=None, **kwargs):
         if settings is None:
             settings_path = os.path.dirname(
                 os.path.dirname(os.path.realpath(__file__)))
@@ -68,10 +68,12 @@ class RCTEnv():
 
         if settings['general']['render']:
             # if kwargs.get('render_gui', False):
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
-            screen_width = 1000
-            screen_height = 1000
+            screen_width = settings.get('general', {}).get('render_screen_width')
+            screen_height = settings.get('general', {}).get('render_screen_height')
             self.screen = pygame.display.set_mode(
                 (screen_width, screen_height))
             self.screen_width, self.screen_height = screen_width, screen_height
@@ -79,7 +81,11 @@ class RCTEnv():
             self.screen = None
         self.settings = settings
         self.render_map = None
-        self.park = Park(self.settings)
+        if park == None:
+            self.park = Park(self.settings)
+        else:
+            self.park = park
+            self.resetSim()
 
     def reset(self):
         print_msg('resetting park',
@@ -130,6 +136,8 @@ class RCTEnv():
             self.park.updateHuman(p)
 
         if not self.screen and self.settings['general']['render']:
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
             self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
