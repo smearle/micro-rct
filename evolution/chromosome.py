@@ -15,6 +15,7 @@ class Chromosome:
         self.fitness_type = settings.get('evolution', {}).get('fitness_type')
         self.fitness = 0
         self.dimensions = {}
+        self.age = 0
         for key in settings.get('evolution', {}).get('dimension_keys'):
             self.dimensions[key] = 0
         
@@ -68,7 +69,6 @@ class Chromosome:
     def clone(self, dimension_keys):
         new_env = self.rct.clone(rank=1, settings=self.settings)
         return Chromosome(self.settings, env=new_env)
-
 
     ######## CALCULATION FUNCTIONS
     def calculate_fitness(self):
