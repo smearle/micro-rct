@@ -79,7 +79,7 @@ class Chromosome:
             # happiness fitness
             self.fitness = self.rct.rct_env.park.avg_peep_happiness
         elif self.fitness_type == 2:
-            self.fitness = self.rct.rct_env.park.income
+            self.fitness = self.rct.rct_env.park.money
 
     def calculate_dimensions(self):
         # ride total

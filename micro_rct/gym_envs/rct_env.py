@@ -48,22 +48,23 @@ class RCT(core.Env):
         self.rank = kwargs.get('rank', 0)
         settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
-        self.render_gui = kwargs.get('render_gui', False)
         kwargs['settings'] = settings
-        if not settings:
-            if settings_path != None:
+        if settings:
+            self.render_gui = settings['general']['render']
+        else:
+            self.render_gui = kwargs.get('render_gui', False) and self.rank == RCT.RENDER_RANK
+            try:
+                # Supposing no settings, try finding local config file
                 with open(settings_path) as file:
                     settings = yaml.load(file, yaml.FullLoader) 
                     kwargs['settings'] = settings
-            try:
-                with open(settings_path) as file:
-                    settings = yaml.load(file, yaml.FullLoader)
-                self.render_gui = settings['general']['render']
+                    self.render_gui = settings['general']['render']
             except Exception as e:
+                # Otherwise, use some default values 
                 print(e)
                 settings = {
                         'general': {
-                            'render': render_gui and self.rank == RCT.RENDER_RANK,
+                            'render': self.render_gui,
                             'verbose': False,
                             },
                         'environment': {
@@ -380,8 +381,8 @@ class RCT(core.Env):
         self.rct_env.resetSim()
         self.render()
 
-    def clone(self, settings_path, rank):
-        new_env = RCT(settings_path=settings_path, rank=rank)
+    def clone(self, rank=0, settings=None, settings_path=None):
+        new_env = RCT(rank=rank, settings_path=settings_path, settings=settings)
         new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
        #new_env.path_finder = PathFinder(new_env.park.path_net)
        #new_env.rct_env.path_finder = self.rct_env.path_finder.clone()
