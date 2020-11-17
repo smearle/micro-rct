@@ -1,4 +1,5 @@
 import copy
+import math
 import os
 import random
 import sys
@@ -65,7 +66,7 @@ class RCT(core.Env):
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
     ACTION_SPACE = 1
-    N_SIM_STEP = 4
+    N_SIM_STEP = 100
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings = kwargs.get('settings', None)
@@ -92,16 +93,28 @@ class RCT(core.Env):
         self.width = self.map_width = self.MAP_WIDTH
 
         self.n_step = 0
+        max_num_rides = math.ceil(self.MAP_WIDTH * self.MAP_HEIGHT / 2)
+        # max income per tick
+        max_income = 25 * settings['environment']['n_guests']
+        max_happiness = 255
         self.metric_trgs = {
-            'happiness': 0,
+            'num_rides': max_num_rides,
+            'income': max_income,
+            'happiness': max_happiness,
         }
         self.param_bounds = {
-            'happiness': (0, 255),
+            'num_rides': (0, max_num_rides),
+            'income': (0,  max_income),
+            'happiness': (0, max_happiness),
         }
         self.init_metrics = {
+            'num_rides': 0,
+            'income': 0,
             'happiness': 128,
         }
         self.weights = {
+            'num_rides': 1,
+            'income': 5,
             'happiness': 1,
         }
         self.metrics = copy.deepcopy(self.init_metrics)
@@ -236,6 +249,8 @@ class RCT(core.Env):
 
     def update_metrics(self):
         self.metrics = {
+            'income': self.avg_income,
+            'num_rides': len(self.rct_env.park.rides_by_pos),
             'happiness': self.rct_env.park.avg_peep_happiness,
         }
 
@@ -244,12 +259,14 @@ class RCT(core.Env):
 
     def reset(self):
         self.rct_env.reset()
+        self.avg_income = 0
         for i in range(np.random.randint(0, self.map_width + 1)):
             self.rand_act()
 #       self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
+        self.update_metrics()
         obs = self.get_observation()
 
         return obs
@@ -315,20 +332,19 @@ class RCT(core.Env):
        #reward = 255 - self.rct_env.park.avg_peep_happiness
        #reward = len(self.rct_env.park.rides_by_pos)
         done = self.n_step >= self.max_step
-        reward = 0
+        net_income = 0
         if done:
             self.rct_env.park.populate_path_net()
-            for _ in range(100):
-           #for _ in range(RCT.N_SIM_STEP):
+            for _ in range(RCT.N_SIM_STEP):
                 self.step_sim()
-                reward += self.rct_env.park.income
                 self.render()
+        net_income = self.rct_env.park.money
         obs = self.get_observation()
-        reward = reward / (RCT.N_SIM_STEP)
+        self.avg_income = net_income
+        self.avg_income = net_income / (RCT.N_SIM_STEP)
+        reward = self.avg_income
         info = {}
-
-        if self.render_gui:
-            self.render()
+        self.update_metrics()
         self.n_step += 1
 
         return obs, reward, done, info
