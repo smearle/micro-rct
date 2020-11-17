@@ -35,6 +35,28 @@ def main(settings):
             if env.render_gui:
                 env.render()
 
+def parse_kwargs(kwargs):
+        ''' If we are missing a settings object, use kwargs to generate one.'''
+        settings = {
+                'general': {
+                    'render': kwargs['render'],
+                    'verbose': False,
+                    'render_screen_width': 500,
+                    'render_screen_height': 500,
+                    },
+                'environment': {
+                    'n_guests': 10,
+                    'map_width': kwargs.get('map_width', 16),
+                    'map_height': kwargs.get('map_width', 16),
+                    },
+                'experiments': {}
+                }
+        for kwarg in kwargs:
+            for s_type in settings:
+                if kwarg in settings[s_type]:
+                    settings[s_type][kwarg] = kwargs.get(kwarg)
+        return settings
+
 
 class RCT(core.Env):
     class BUILDS:
@@ -46,43 +68,17 @@ class RCT(core.Env):
     N_SIM_STEP = 4
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
-        settings_path = kwargs.get('settings_path', None)
         settings = kwargs.get('settings', None)
-        kwargs['settings'] = settings
+
         if settings:
             self.render_gui = settings['general']['render']
-        else:
-            self.render_gui = kwargs.get('render_gui', False) and self.rank == RCT.RENDER_RANK
-            try:
-                # Supposing no settings, try finding local config file
-                with open(settings_path) as file:
-                    settings = yaml.load(file, yaml.FullLoader) 
-                    kwargs['settings'] = settings
-                    self.render_gui = settings['general']['render']
-            except Exception as e:
-                # Otherwise, use some default values 
-                print(e)
-                settings = {
-                        'general': {
-                            'render': self.render_gui,
-                            'verbose': False,
-                            },
-                        'environment': {
-                            'n_guests': 10,
-                            'map_width': kwargs.get('map_width', 16),
-                            'map_height': kwargs.get('map_width', 16),
-                            },
-                        'experiments': {}
-                        }
 
-            if self.render_gui :#and self.rank == self.RENDER_RANK:
-                settings['general']['render'] = True
-            else:
-                self.render_gui = False
-                settings['general']['render'] = False
-        self.rct_env = RCTEnv(**kwargs)
+        else:
+            self.render_gui = kwargs['render'] = kwargs.get('render_gui', True) and self.rank == RCT.RENDER_RANK
+            settings = parse_kwargs(kwargs)
+        self.rct_env = RCTEnv(settings)
         core.Env.__init__(self)
-        settings = self.rct_env.settings
+       #settings = self.rct_env.settings
 
         self.max_step = kwargs.get('max_step', 200)
 #       print('gym-micro-rct rct_env render gui?', self.render_gui)
@@ -90,7 +86,7 @@ class RCT(core.Env):
         self.MAP_HEIGHT = settings['environment']['map_height']
 
         if self.render_gui:
-#           print('render rank', render_gui, rank)
+            print('render rank', self.render_gui, self.rank)
             pass
 
         self.width = self.map_width = self.MAP_WIDTH
@@ -185,6 +181,11 @@ class RCT(core.Env):
 
         while checking:
             curr = checking.pop(0)
+            curr_path  = self.rct_env.park.path_net[curr]
+            # cannot flow through entrances
+            if curr_path.is_entrance:
+                checked.append((curr))
+                continue
 
             for delta in [(0,1),(1,0),(-1,0),(0,-1)]:
                 x, y = curr[0] + delta[0], curr[1] + delta[1]
@@ -204,12 +205,10 @@ class RCT(core.Env):
 #                       checked.append(pos)
             checked.append((curr))
 
-
-        for i in range(arr.shape[1]):
-            for j in range(arr.shape[2]):
-                if (i, j) not in checked and (i, j) in path_net:
-                    self.demolish_tile(i, j)
-
+        path_idxs = list(path_net.keys())
+        for (i, j) in path_idxs:
+            if (i, j) not in checked:
+                assert self.demolish_tile(i, j)
 
     def connect_with_path(self, src, trg):
         path_seq = self.rct_env.path_finder.find_map(self.rct_env.park.map, src, trg)
@@ -219,6 +218,7 @@ class RCT(core.Env):
     def place_path_tile(self, x, y, type_i=0):
         if type_i % 2 == 0:
             map_utility.place_path_tile(self.rct_env.park, x, y)
+        self.rct_env.park.populate_path_net()
 
     def place_ride_tile(self, x, y, ride_i, rotation):
         #map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i)
@@ -230,10 +230,9 @@ class RCT(core.Env):
 
         for pos in path_seq:
             self.place_path_tile(*pos)
-        self.rct_env.park.populate_path_net()
 
     def demolish_tile(self, x, y):
-        map_utility.try_demolish_tile(self.rct_env.park, x, y)
+        return map_utility.try_demolish_tile(self.rct_env.park, x, y)
 
     def update_metrics(self):
         self.metrics = {
@@ -247,7 +246,7 @@ class RCT(core.Env):
         self.rct_env.reset()
         for i in range(np.random.randint(0, self.map_width + 1)):
             self.rand_act()
-       #self.rct_env.resetSim()
+#       self.rct_env.resetSim()
         self.n_step = 0
        #for i in range(random.randint(0, 10)):
        #    self.act(self.action_space.sample())
@@ -305,7 +304,7 @@ class RCT(core.Env):
             self.place_path_tile(x, y)
         else:
             self.demolish_tile(x, y)
-       #self.delete_islands()
+        self.delete_islands()
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)

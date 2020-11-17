@@ -62,12 +62,14 @@ class Peep:
             return res
 
         if self.position not in self.park.path_net:
+            print('n ticks')
+            print(self.n_ticks)
+            print('peep position')
             print(self.position)
+            print('path map')
             print(self.park.map[Map.PATH])
-            try:
-                raise Exception('peep\'s current tile is not in path net')
-            except:
-                while True: pass
+            raise Exception('peep\'s current tile is not in path net')
+            while True: pass
             return res
 
         if not self.headingTo:
@@ -720,13 +722,12 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-       #print('wandering')
         if self.position not in self.park.path_net:
            #self.park.populate_path_net()
            #print(self.park.printPark())
            #print(self.park.path_net)
            #print(self.position)
-           #raise Exception("peep's current tile not in path net")
+            raise Exception("peep's current tile not in path net")
             
             return
         current_tile = self.park.path_net[self.position]
