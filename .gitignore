@@ -1,6 +1,16 @@
 # testing log files
 out.txt
 testPeep.txt
+tmp/
+
+#stable baselines test files
+multienv.py
+multienvLR1.py
+multienvLR2.py
+multienvLR3.py
+sb-a2c cnn.py
+sb-a2c copy.py
+tmp.py
 
 # Python build files
 *.pyc
