@@ -66,7 +66,7 @@ class RCT(core.Env):
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
     ACTION_SPACE = 1
-    N_SIM_STEP = 100
+    N_SIM_STEP = 200
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings = kwargs.get('settings', None)
@@ -94,27 +94,29 @@ class RCT(core.Env):
 
         self.n_step = 0
         max_num_rides = math.ceil(self.MAP_WIDTH * self.MAP_HEIGHT / 2)
-        # max income per tick
-        max_income = 25 * settings['environment']['n_guests']
+        # max income per tick: most expensive ride is $20. Suppose each guest
+	# were riding it every tick
+        max_income = 20 * settings['environment']['n_guests']
         max_happiness = 255
         self.metric_trgs = {
-            'num_rides': max_num_rides,
             'income': max_income,
+            'num_rides': max_num_rides,
             'happiness': max_happiness,
         }
         self.param_bounds = {
-            'num_rides': (0, max_num_rides),
             'income': (0,  max_income),
+            'num_rides': (0, max_num_rides),
             'happiness': (0, max_happiness),
         }
+	# this is not used, is it?
         self.init_metrics = {
-            'num_rides': 0,
             'income': 0,
+            'num_rides': 0,
             'happiness': 128,
         }
         self.weights = {
+            'income': 10,
             'num_rides': 1,
-            'income': 5,
             'happiness': 1,
         }
         self.metrics = copy.deepcopy(self.init_metrics)
@@ -340,7 +342,7 @@ class RCT(core.Env):
                 self.render()
         net_income = self.rct_env.park.money
         obs = self.get_observation()
-        self.avg_income = net_income
+       #self.avg_income = net_income
         self.avg_income = net_income / (RCT.N_SIM_STEP)
         reward = self.avg_income
         info = {}

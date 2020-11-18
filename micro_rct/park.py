@@ -59,7 +59,7 @@ class Park():
 
         self.peepsList = set()
 #       self.listOfRides = []
-        self.avg_peep_happiness = 0
+        self.avg_peep_happiness = 128
         self.path_net = {}
         self.vomit_paths = {}
         self.money = Park.INIT_MONEY
@@ -154,11 +154,11 @@ class Park():
        #for k in self.rides_by_pos:
        #    print(self.rides_by_pos[k])
        #    print(self.path_net[k])
-        score = 0
+        net_happiness = 0
 
         for peep in self.peepsList:
-            score += peep.happiness
-        self.avg_peep_happiness = score / len(self.peepsList)
+            net_happiness += peep.happiness
+        self.avg_peep_happiness = net_happiness / len(self.peepsList)
 
     def returnScore(self):
         self.updateScore()
@@ -205,6 +205,7 @@ class Park():
         for peep in self.peepsList:
             res += self.updateHuman(peep)
         res += self.updateRides()
+	# actually updates avg_peep_happiness
         self.updateScore()
 
         if res != []:
