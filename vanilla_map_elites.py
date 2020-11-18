@@ -1,3 +1,5 @@
+import os
+import pickle
 import yaml
 import argparse
 import random
@@ -7,6 +9,7 @@ from evolution.map_elites.me_cell import MECell
 from functools import partial
 from micro_rct.rct_env import RCTEnv
 from evolution.chromosome import Chromosome
+from shutil import copyfile
 
 class MapElitesRunner:
 
@@ -44,6 +47,27 @@ class MapElitesRunner:
 
     def get_dimension_key(self, dimensions):
         return json.dumps(dimensions)
+    
+    def save_chromosome(self, chrome, path):
+        # destroy a bunch of references to GUI since we can't render this
+        with open(path, 'wb') as save_file:
+            chrome.rct.rct_env.screen = None
+            chrome.rct.rct_env.render_map = None
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+            import pygame
+            pygame.quit()
+            # copyfile(path, path + '.bkp')
+            pickle.dump(chrome, save_file)
+
+    def save_elites(self, gen_id):
+        path = self.settings.get('evolution', {}).get('save_path')
+        path = os.path.join(path, '{}'.format(gen_id))
+        os.makedirs(path, exist_ok=True)
+        for dimension, cell in self.map.items():
+            save_path = os.path.join(path, '{}.p'.format(dimension))
+            self.save_chromosome(cell.elite, save_path)
+            
 
     def get_grid(self):
         cells = []
@@ -86,6 +110,8 @@ class MapElitesRunner:
         # map elite grid
         self.assign_chromosomes()
         [print(x) for x in self.get_grid()]
+        # save gen
+        self.save_elites(gen_id=id)
         # run mutation
         new_pop = []
 

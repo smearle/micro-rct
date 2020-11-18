@@ -38,7 +38,6 @@ class Chromosome:
             self.rct.rand_connect()
 
     def mutate(self):
-        print('** mutating')
         child = self.clone(self.dimensions.keys())
 
         child.reset_sim()

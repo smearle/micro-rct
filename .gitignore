@@ -13,3 +13,6 @@ testPeep.txt
 *.swp
 *.swo
 *.psd
+
+# Evo result files
+results/
