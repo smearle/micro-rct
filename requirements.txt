@@ -6,12 +6,9 @@ opencv-python==4.4.0.44
 pyyaml==5.3.1
 tqdm==4.49.0
 gym==0.17.2
-<<<<<<< HEAD
 qdpy==0.1.2.1
 cma==3.0.3
 deap==1.3.1
 tables==3.6.1
 colorama==0.5.4
-=======
 stable-baselines3
->>>>>>> d807fe02e110fd4b728bf1734d2125c825e09210
