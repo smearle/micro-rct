@@ -24,8 +24,8 @@ class MapElitesRunner:
     
     def initialize(self):
         pop = []
-        for i in range(0, settings.get('evolution', {}).get('population_size')):
-            c = Chromosome(settings)
+        for i in range(0, self.settings.get('evolution', {}).get('population_size')):
+            c = Chromosome(self.settings)
             pop.append(c)
         self.pop = pop
         
