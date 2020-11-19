@@ -75,8 +75,8 @@ class RCTEnv():
             self.resetSim()
 
     def set_rendering(self, val):
-        self.settings['general']['render'] = val
         if val:
+            self.settings['general']['render'] = val
             from os import environ
             environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame

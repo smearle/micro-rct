@@ -1,5 +1,5 @@
 general:
-    render: True
+    render: False
     verbose: False
     render_screen_width: 500
     render_screen_height: 500
@@ -23,4 +23,4 @@ evolution:
     eval_ticks: 250
     gen_count: 5
     save_path: results/
-    action: analyze
+    action: evolve
