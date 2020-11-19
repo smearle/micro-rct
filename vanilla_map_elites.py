@@ -11,7 +11,10 @@ from functools import partial
 from micro_rct.rct_env import RCTEnv
 from evolution.chromosome import Chromosome
 from shutil import copyfile
-
+from colorama import Fore, Back, Style
+# colorama stuff
+from colorama import init as init_colorama
+init_colorama()
 class MapElitesRunner:
 
     def __init__(self, settings_path):
@@ -30,10 +33,10 @@ class MapElitesRunner:
         self.pop = pop
         
     def get_statistics(self):
-        stats = ''
+        stats = []
         for i, chrome in enumerate(self.pop):
             statline = '{} | fitness: {} | dimensions: {}'.format(i, chrome.fitness, chrome.dimensions)
-            stats += statline + '\n'
+            stats.append(statline)
         return stats
 
     def assign_chromosomes(self):
@@ -103,7 +106,7 @@ class MapElitesRunner:
         self.pop = new_pop
 
     def run_generation(self, id):
-        print('** running generation {}'.format(id))
+        print(Fore.BLUE + '** running generation {}'.format(id))
         # run it all. RUN IT ALLLLLLL!!!!
         eval_partial = partial(self.eval_chromosome)
 
@@ -163,11 +166,12 @@ def main(settings_path):
     if settings.get('evolution', {}).get('action') == 'evolve':
         runner = MapElitesRunner(settings_path)
         runner.initialize()
-        print('** POP BREAKDOWN **')
-        print(runner.get_statistics())
+        print(Fore.GREEN + '** POP BREAKDOWN **')
+        print(Fore.WHITE + '\n'.join(map(str, runner.get_statistics())))
+        # print(runner.get_statistics())
         for i in range(settings.get('evolution', {}).get('gen_count')):
             runner.run_generation(i)
-            print(runner.get_statistics())
+            print(Fore.WHITE + '\n'.join(map(str, runner.get_statistics())))
     else:
         analyzer = MapElitesAnalysis(settings_path)
         for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
