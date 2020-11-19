@@ -86,6 +86,7 @@ def update_path_net(park, pos, is_entrance=False):
 
 def try_demolish_tile(park, x, y):
     pos = (x, y)
+    res = False
     if park.map[Map.RIDE, pos[0], pos[1]] > -1 and not pos in park.locs_to_rides:
         raise Exception('position {}, \n{}\n{}'.format(pos, park.map[Map.RIDE], park.locs_to_rides))
 #       park.map[Map.RIDE, pos[0], pos[1]] = -1
@@ -94,11 +95,17 @@ def try_demolish_tile(park, x, y):
         if center not in park.rides_by_pos:
             raise Exception
 
+        # if we're about to demolish a ride tile, make sure we are good to demolish the entire ride
         ride = park.rides_by_pos[center]
         if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
             return False
         else:
-            demolish_tile(park, x, y)
+            return demolish_tile(park, center[0], center[1])
+    
+    if checkCanPlaceOrNot(park, x, y, 1, 1):
+        res = demolish_tile(park, x, y)
+        assert res
+    return res
 
     #   for i in range(x, x + ride.size[0]):
     #       for j in range(y, y + ride.size[1]):
@@ -108,7 +115,7 @@ def try_demolish_tile(park, x, y):
 def demolish_tile(park, x, y):
     if park.map[Map.PEEP, x, y] != -1:
         raise Exception
-   #print('demolishing tile {} {}'.format(x, y))
+#   print('demolishing tile {} {}'.format(x, y))
     pos = (x, y)
 
     if pos in park.path_net:
@@ -133,8 +140,10 @@ def demolish_tile(park, x, y):
             raise Exception
 
         ride = park.rides_by_pos[center]
-       #if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
-       #    return False
+        if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
+            raise Exception('demolishing tile but ride is not removable')
+            return False
+        # important to do this here, lest we recursively demolish entire ride patch repeatedly
         ride = park.rides_by_pos.pop(center)
         assert center == ride.position
 
@@ -142,10 +151,14 @@ def demolish_tile(park, x, y):
             if ride_pos in park.locs_to_rides:
                 park.locs_to_rides.pop(ride_pos)
             park.map[Map.RIDE, ride_pos[0], ride_pos[1]] = -1
+            park.map[Map.PATH, ride_pos[0], ride_pos[1]] = -1
+            assert park.map[Map.PEEP, ride_pos[0], ride_pos[1]] == -1
+            # this is strictly to get rid of the path object
             res = demolish_tile(park, ride_pos[0], ride_pos[1])
 
-            if not res:
-                return res
+           #if not res:
+           #    raise Exception
+           #    return res
     #   for i in range(x, x + ride.size[0]):
     #       for j in range(y, y + ride.size[1]):
     #           if not (0 <= i < park.map.shape[0] and 0 <= j < park.map.shape[1]):
@@ -200,6 +213,7 @@ def place_ride_tile(park, x, y, ride_i, rotation=0):
 
     if checkCanPlaceOrNot(park, x, y, size[0], size[1]):
         result = clear_for_placement(park, x, y, size[0], size[1])
+#       print('clear_for_placement result:', result)
 
         if not result:
             raise Exception
@@ -227,8 +241,10 @@ def place_ride_tile(park, x, y, ride_i, rotation=0):
        #park.updateMap((x, y), size, mark, _ride.entrance)
         assert _ride.entrance in park.path_net
 
+       #print('placed ride type {} at ({}, {})'.format(ride_i, x, y))
         return _ride
     else:
+       #print('failed to place ride type {} at ({}, {})'.format(ride_i, x, y))
         return None
 
 def placeRide(park, ride_i, verbose=False):
@@ -274,12 +290,16 @@ def checkCanPlaceOrNot(park, startX, startY, width, length):
 
     for i in range(startX, startX+width):
         for j in range(startY, startY+length):
+            if not (0 <= i < park.map.shape[1] and 0 <=  j < park.map.shape[2]):
+                # this would be off-map
+                return False
             checking.add((i, j))
 
     while checking:
         (i, j) = checking.pop()
 
         if not (0 <= i < park.map.shape[1] and 0 <=  j < park.map.shape[2]):
+            raise Exception('existing ride location off-map', i, j)
             return False
 
        #if not ride.entrance == (i, j) and park.map[Map.PATH, i, j] != -1: # can only have path at entrance
@@ -299,8 +319,10 @@ def checkCanPlaceOrNot(park, startX, startY, width, length):
                 print(ride_ij_pos)
                 print(park.locs_to_rides)
                 print(park.rides_by_pos)
+                raise Exception
             ride_ij = park.rides_by_pos[ride_ij_pos]
             for ride_pos in ride_ij.locs:
+               #print(ride_ij.locs)
                 checking.add(ride_pos)
             checked_rides.add((i, j))
 

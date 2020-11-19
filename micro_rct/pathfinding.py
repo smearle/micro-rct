@@ -140,10 +140,23 @@ class PathFinder:
 
         i = 0
 
-        while checking:
-            curr = checking[0]
-
+        def check_is_trg(trg):
             if i > 1 and map_arr[Map.PATH, curr[0], curr[1]] != -1:
+                assert curr in self.path_net
+                curr_path = self.path_net[curr]
+                if curr_path.is_entrance:
+                    return False
+                return True
+                
+
+        while checking:
+
+            # connect to any path
+            # connect to the trg
+#           if i > 1 and curr == trg:
+            curr = checking[0]
+            if check_is_trg(curr):
+
                 self.checked[curr] = 0
 
                 return pos_to_routes[curr]
