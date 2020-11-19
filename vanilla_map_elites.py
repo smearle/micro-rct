@@ -170,7 +170,8 @@ def main(settings_path):
             print(runner.get_statistics())
     else:
         analyzer = MapElitesAnalysis(settings_path)
-        analyzer.render_elites(0)
+        for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
+            analyzer.render_elites(int(generation))
 
 if __name__ == "__main__":
 
