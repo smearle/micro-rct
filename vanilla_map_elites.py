@@ -4,6 +4,7 @@ import yaml
 import argparse
 import random
 import json
+import pygame
 import multiprocessing as mp
 from evolution.map_elites.me_cell import MECell
 from functools import partial
@@ -16,14 +17,18 @@ class MapElitesRunner:
     def __init__(self, settings_path):
         with open(settings_path) as s_file:
             settings = yaml.load(s_file, yaml.FullLoader)
+        
+        self.pop = []
+        self.settings = settings
+        self.map = {}
+    
+    def initialize(self):
         pop = []
         for i in range(0, settings.get('evolution', {}).get('population_size')):
             c = Chromosome(settings)
             pop.append(c)
         self.pop = pop
-        self.settings = settings
-        self.map = {}
-
+        
     def get_statistics(self):
         stats = ''
         for i, chrome in enumerate(self.pop):
@@ -67,7 +72,6 @@ class MapElitesRunner:
         for dimension, cell in self.map.items():
             save_path = os.path.join(path, '{}.p'.format(dimension))
             self.save_chromosome(cell.elite, save_path)
-            
 
     def get_grid(self):
         cells = []
@@ -85,6 +89,18 @@ class MapElitesRunner:
             self.pop[i].fitness = parent_conn.recv()
             p.join()
             p.close()
+    def mutate_generation(self):
+        new_pop = []
+
+        for i in range(0, self.settings.get('evolution', {}).get('population_size')):
+            # take a random elite
+            if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
+                # qualify for mutation
+                # pick a random cell and its elite
+                elite = random.choice(list(self.map.values())).elite
+                child = elite.mutate()
+                new_pop.append(child)
+        self.pop = new_pop
 
     def run_generation(self, id):
         print('** running generation {}'.format(id))
@@ -113,28 +129,48 @@ class MapElitesRunner:
         # save gen
         self.save_elites(gen_id=id)
         # run mutation
-        new_pop = []
+        self.mutate_generation()
 
-        for i in range(0, self.settings.get('evolution', {}).get('population_size')):
-            # take a random elite
-            if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
-                # qualify for mutation
-                # pick a random cell and its elite
-                elite = random.choice(list(self.map.values())).elite
-                child = elite.mutate()
-                new_pop.append(child)
-        self.pop = new_pop
+class MapElitesAnalysis:
+    def __init__(self, settings_path):
+        with open(settings_path) as s_file:
+            self.settings = yaml.load(s_file, yaml.FullLoader)
 
+    def render_elites(self, gen_id):
+
+        filepath = self.settings.get('evolution', {}).get('save_path')
+        filepath = os.path.join(filepath, '{}'.format(gen_id))
+        for file in [entry for entry in os.listdir(filepath) if entry.endswith('.p')]:
+            
+            with open(os.path.join(filepath, file), 'rb') as f:
+                chrome = pickle.load(f)
+                chrome.settings['general']['render'] = True
+                chrome.rct.render_gui = True
+                chrome.rct.rct_env.set_rendering(True)
+                chrome.rct.rct_env.resetSim()
+                chrome.rct.rct_env.render_map.render_park()
+                img = chrome.rct.rct_env.screen
+                img_name = '{}.png'.format(file.split('.')[0])
+                # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                pygame.image.save(img, os.path.join(filepath, img_name))
+                    
+
+            
 
 def main(settings_path):
     with open(settings_path) as s_file:
         settings = yaml.load(s_file, yaml.FullLoader)
-    runner = MapElitesRunner(settings_path)
-    print('** POP BREAKDOWN **')
-    print(runner.get_statistics())
-    for i in range(settings.get('evolution', {}).get('gen_count')):
-        runner.run_generation(i)
+    if settings.get('evolution', {}).get('action') == 'evolve':
+        runner = MapElitesRunner(settings_path)
+        runner.initialize()
+        print('** POP BREAKDOWN **')
         print(runner.get_statistics())
+        for i in range(settings.get('evolution', {}).get('gen_count')):
+            runner.run_generation(i)
+            print(runner.get_statistics())
+    else:
+        analyzer = MapElitesAnalysis(settings_path)
+        analyzer.render_elites(0)
 
 if __name__ == "__main__":
 

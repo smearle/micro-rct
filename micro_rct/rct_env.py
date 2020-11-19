@@ -61,24 +61,11 @@ class RCTEnv():
         for kwarg in kwargs:
             #FIXME: inconsistent
 #           print('kwargs', kwarg)
-
             for s_type in settings:
                 if kwarg in settings[s_type]:
                     settings[s_type][kwarg] = kwargs.get(kwarg)
 
-        if settings['general']['render']:
-            # if kwargs.get('render_gui', False):
-            from os import environ
-            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-            import pygame
-            pygame.init()
-            screen_width = settings.get('general', {}).get('render_screen_width')
-            screen_height = settings.get('general', {}).get('render_screen_height')
-            self.screen = pygame.display.set_mode(
-                (screen_width, screen_height))
-            self.screen_width, self.screen_height = screen_width, screen_height
-        else:
-            self.screen = None
+        self.set_rendering(settings['general']['render'])
         self.settings = settings
         self.render_map = None
         if park == None:
@@ -86,6 +73,23 @@ class RCTEnv():
         else:
             self.park = park
             self.resetSim()
+
+    def set_rendering(self, val):
+        self.settings['general']['render'] = val
+        if val:
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+            import pygame
+            pygame.init()
+            screen_width = self.settings.get(
+                'general', {}).get('render_screen_width')
+            screen_height = self.settings.get(
+                'general', {}).get('render_screen_height')
+            self.screen = pygame.display.set_mode(
+                (screen_width, screen_height))
+            self.screen_width, self.screen_height = screen_width, screen_height
+        else:
+            self.screen = None
 
     def reset(self):
         print_msg('resetting park',
