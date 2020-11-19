@@ -95,8 +95,8 @@ class RCT(core.Env):
         self.n_step = 0
         max_num_rides = math.ceil(self.MAP_WIDTH * self.MAP_HEIGHT / 2)
         # max income per tick: most expensive ride is $20. Suppose each guest
-	# were riding it every tick
-        max_income = 20 * settings['environment']['n_guests']
+	# were riding it every other tick
+        max_income = 20 / 2 * settings['environment']['n_guests']
         max_happiness = 255
         self.metric_trgs = {
             'income': max_income,
