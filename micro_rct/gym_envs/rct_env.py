@@ -240,6 +240,7 @@ class RCT(core.Env):
 
         if self.FIXED_PATH:
             if build < len(ride_list) or len(self.rct_env.park.rides_by_pos) == 0:
+                build = build % len(ride_list)
                 self.place_ride_on_fixed_path(build)
             else:
                 self.delete_rand_ride()
