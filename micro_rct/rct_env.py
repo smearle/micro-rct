@@ -50,20 +50,7 @@ def run_experiment(env, n_ticks, settings, n_trials=20):
 class RCTEnv():
     N_RIDES = len(ride_list)
 
-    def __init__(self, settings, park=None, **kwargs):
-        if settings is None:
-            settings_path = os.path.dirname(
-                os.path.dirname(os.path.realpath(__file__)))
-            settings_path = os.path.join(settings_path, 'configs/settings.yml')
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
-
-        for kwarg in kwargs:
-            #FIXME: inconsistent
-#           print('kwargs', kwarg)
-            for s_type in settings:
-                if kwarg in settings[s_type]:
-                    settings[s_type][kwarg] = kwargs.get(kwarg)
+    def __init__(self, settings, park=None):
 
         self.set_rendering(settings['general']['render'])
         self.settings = settings
@@ -96,8 +83,7 @@ class RCTEnv():
                   priority=2,
                   verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
-    #   placePath(self.park, margin=3)
-        place_path_tile(self.park, Peep.ORIGIN[0], Peep.ORIGIN[1])
+        placePath(self.park, margin=3)
 
         self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
@@ -109,14 +95,14 @@ class RCTEnv():
         for p in peeps:
             self.park.updateHuman(p)
 
-        if not self.render_map:
-           #print('in rct env, initializing render map')
-            self.render_map = Map(self.park,
+#       if not self.render_map:
+#          #print('in rct env, initializing render map')
+        self.render_map = Map(self.park,
                                   render=self.settings['general']['render'],
                                   screen=self.screen)
-        else:
-           #print('in rct env, not initializing render map')
-            self.render_map.reset(self.park)
+#       else:
+#          #print('in rct env, not initializing render map')
+#           self.render_map.reset(self.park)
 
 
     def resetSim(self):

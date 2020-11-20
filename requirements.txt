@@ -10,5 +10,11 @@ qdpy==0.1.2.1
 cma==3.0.3
 deap==1.3.1
 tables==3.6.1
+<<<<<<< HEAD
 colorama==0.4.4
 stable-baselines3
+=======
+colorama==0.5.4
+stable-baselines3
+pyparsing
+>>>>>>> 3b921bf962ba7a7e9fd13c8e05703c895d93d605

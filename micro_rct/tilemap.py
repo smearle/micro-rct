@@ -105,19 +105,19 @@ class Map():
         
 
     def render_park(self):
-        if self.frame == 0:
-            for i in range(self.map.shape[1]):
-                for j in range(self.map.shape[2]):
-                    i_pix = i*self.tile_width
-                    j_pix = j*self.tile_height
-                    self.screen.blit(self.grass_tile, (i_pix, j_pix))
+#       self.map = self.park.map
+    #   if self.frame == 0:
+        for i in range(self.map.shape[1]):
+            for j in range(self.map.shape[2]):
+                i_pix = i*self.tile_width
+                j_pix = j*self.tile_height
+                self.screen.blit(self.grass_tile, (i_pix, j_pix))
         self.frame += 1
 
         tile_width, tile_height = self.tile_width, self.tile_height
-        self.map = self.park.map
         for i in range(self.map.shape[1]):
             for j in range(self.map.shape[2]):
-                curr_ride_tile = self.map[0, i, j]
+                curr_ride_tile = self.map[Map.RIDE, i, j]
                 if curr_ride_tile == -1:
                     curr_ride_tile = ' '
                 else:
