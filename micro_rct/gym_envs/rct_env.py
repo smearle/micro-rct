@@ -239,8 +239,10 @@ class RCT(core.Env):
             rotation = action[3]
 
         if self.FIXED_PATH:
-            if build < len(ride_list):
+            if build < len(ride_list) or len(self.rct_env.park.rides_by_pos) == 0:
                 self.place_ride_on_fixed_path(build)
+            else:
+                self.delete_rand_ride()
         else:
             if build < len(ride_list):
                 self.place_ride_tile(x, y, build, rotation)
@@ -249,6 +251,10 @@ class RCT(core.Env):
             else:
                 self.demolish_tile(x, y)
         self.delete_islands()
+
+    def delete_rand_ride(self):
+        x, y = random.choice(list(self.rct_env.park.rides_by_pos.keys()))
+        return self.demolish_tile(x, y)
 
     def place_ride_on_fixed_path(self, ride_i):
         return map_utility.placeRide(self.rct_env.park, ride_i)
