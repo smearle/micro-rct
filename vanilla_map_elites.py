@@ -130,7 +130,7 @@ class MapElitesRunner:
                 self.eval_chromosome(i)
         # map elite grid
         self.assign_chromosomes()
-        [print(x) for x in self.get_grid()]
+        # [print(x) for x in self.get_grid()]
         # save gen
         self.save_elites(gen_id=id)
         # run mutation
