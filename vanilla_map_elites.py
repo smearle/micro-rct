@@ -4,6 +4,7 @@ import yaml
 import argparse
 import random
 import json
+import time
 import pygame
 import multiprocessing as mp
 from evolution.map_elites.me_cell import MECell
@@ -14,7 +15,7 @@ from shutil import copyfile
 from colorama import Fore, Back, Style
 # colorama stuff
 from colorama import init as init_colorama
-init_colorama()
+init_colorama(autoreset=True)
 class MapElitesRunner:
 
     def __init__(self, settings_path):
@@ -80,7 +81,8 @@ class MapElitesRunner:
         cells = []
         for dimen, cell in self.map.items():
             elite = cell.elite
-            rep = 'Dimension: {} | Fitness: {} | Age: {}'.format(dimen, elite.fitness, elite.age)
+            rep = '{dimen_color}Dimensions: {reg_1}{:<20s} | {fit_color}Fitness: {reg_2}{:>5d} | {age_color}Age: {reg_3}{:>3d}'.format(
+                dimen, elite.fitness, elite.age, dimen_color=Fore.GREEN, fit_color=Fore.BLUE, age_color=Fore.MAGENTA, reg_1=Fore.WHITE, reg_2=Fore.WHITE, reg_3=Fore.WHITE)
             cells.append(rep)
         return cells
 
@@ -164,14 +166,21 @@ def main(settings_path):
     with open(settings_path) as s_file:
         settings = yaml.load(s_file, yaml.FullLoader)
     if settings.get('evolution', {}).get('action') == 'evolve':
+        start = time.time()
         runner = MapElitesRunner(settings_path)
         runner.initialize()
-        print(Fore.GREEN + '** POP BREAKDOWN **')
-        print(Fore.WHITE + '\n'.join(map(str, runner.get_statistics())))
+        init_time = time.time() - start
+        print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, init_time))
+        # print(Fore.GREEN + '** POP BREAKDOWN **')
+        # print('\n'.join(map(str, runner.get_statistics())))
         # print(runner.get_statistics())
         for i in range(settings.get('evolution', {}).get('gen_count')):
+            start = time.time()
             runner.run_generation(i)
-            print(Fore.WHITE + '\n'.join(map(str, runner.get_statistics())))
+            end = time.time()
+            print('\n'.join(map(str, runner.get_grid())))
+            print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, (end-start)))
+
     else:
         analyzer = MapElitesAnalysis(settings_path)
         for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
