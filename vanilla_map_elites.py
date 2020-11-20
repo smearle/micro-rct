@@ -121,7 +121,7 @@ class MapElitesRunner:
                 p = mp.Process(target=eval_partial, args=(i, child_conn))
                 processes[i] = (p, parent_conn)
                 p.start()
-                if i % n_threads:
+                if i % n_threads == 0:
                     self.join_procs(processes)
             self.join_procs(processes)
 
