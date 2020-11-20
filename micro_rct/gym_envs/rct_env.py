@@ -65,7 +65,7 @@ class RCT(core.Env):
         DEMOLISH = PATH + 1
     RENDER_RANK = 0
     ACTION_SPACE = 1
-    N_SIM_STEP = 4
+    N_SIM_STEP = 100
     def __init__(self, **kwargs):
         self.rank = kwargs.get('rank', 0)
         settings = kwargs.get('settings', None)
@@ -78,19 +78,18 @@ class RCT(core.Env):
             settings = parse_kwargs(kwargs)
         self.rct_env = RCTEnv(settings)
         core.Env.__init__(self)
-       #settings = self.rct_env.settings
-
         self.max_step = kwargs.get('max_step', 200)
-#       print('gym-micro-rct rct_env render gui?', self.render_gui)
         self.MAP_WIDTH = settings['environment']['map_width']
         self.MAP_HEIGHT = settings['environment']['map_height']
+        # N.B.: the environment will use different data structures depending on whether or not paths are fixed, so we
+        # cannot change this variable mid-game.
+        self.FIXED_PATH = settings.get('environment', {}).get('fixed_path', True)
+        self.ride_range = settings.get('environment', {}).get('ride_range', (0, 1))
 
         if self.render_gui:
             print('render rank', self.render_gui, self.rank)
             pass
-
         self.width = self.map_width = self.MAP_WIDTH
-
         self.n_step = 0
         self.metric_trgs = {
             'happiness': 0,
@@ -105,11 +104,8 @@ class RCT(core.Env):
             'happiness': 1,
         }
         self.metrics = copy.deepcopy(self.init_metrics)
-        # if render_gui:
-        #    self.park_map = self.rct_env.render_map
-
-        N_CHAN = len(ride_list) + 3  # path and peeps, lack of ride
-        obs_shape = (N_CHAN, self.MAP_WIDTH, self.MAP_HEIGHT)
+        N_OBS_CHAN = len(ride_list) + 3  # path and peeps, lack of ride
+        obs_shape = (N_OBS_CHAN, self.MAP_WIDTH, self.MAP_HEIGHT)
         low = np.zeros(obs_shape)
         high = np.ones(obs_shape)
         self.observation_space = gym.spaces.Box(low, high)
@@ -118,38 +114,10 @@ class RCT(core.Env):
         high = np.zeros(act_shape)
         high[0] = self.MAP_WIDTH
         high[1] = self.MAP_HEIGHT
-        self.N_ACT_CHAN = len(ride_list) + 2
-       #self.map_space = gym.spaces.Discrete(
-       #    self.MAP_WIDTH * self.MAP_HEIGHT)
-        self.x_space = gym.spaces.Discrete(self.MAP_WIDTH)
-        self.y_space = gym.spaces.Discrete(self.MAP_HEIGHT)
-       #low = np.zeros((2))
-       #high = np.array([self.MAP_WIDTH - 1, self.MAP_HEIGHT - 1])
-       #self.map_space = gym.spaces.Box(low, high)
-       #if False:
-        self.act_space = gym.spaces.Discrete(self.N_ACT_CHAN)
-        self.rotation_space = gym.spaces.Discrete(4)
-       #if RCT.ACTION_SPACE == 0:
-       #    self.action_space = gym.spaces.Discrete((
-       #        self.MAP_WIDTH * self.MAP_HEIGHT * (self.N_ACT_CHAN + 4)))
+        self.N_ACT_CHAN = len(ride_list) + 2  # build a ride, place path, or demolish
         self.action_space = gym.spaces.MultiDiscrete(
                 (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
                 )
-#       self.action_space = gym.spaces.Dict({
-#          #'map':
-#          #self.map_space,
-#           'x': self.x_space,
-#           'y': self.y_space,
-#           'act': self.act_space,
-#           'rotation': self.rotation_space
-#       })
-        # self.action_space = gym.spaces.Dict({
-        #    'position': gym.spaces.Box(low, high),
-        #    # path
-        #    'build': gym.spaces.Discrete(len(ride_list) * 3),
-        #    })
-        self.place_rand_path_net()
-        self.ints_to_actions = self.mapIntsToActions()
 
     def configure(self):
         pass
@@ -158,12 +126,14 @@ class RCT(core.Env):
         pass
 
     def rand_connect(self):
+        ''' Deprecated. Connects two random path tiles. Redundant if we're always either using a fixed path or rides
+        with automatically connected paths.'''
         waypoints = [ride.entrance for ride in self.rct_env.park.rides_by_pos.values()] + [Peep.ORIGIN]
         try:
             src = waypoints.pop(random.randint(0, len(waypoints)))
             trg = waypoints.pop(random.randint(0, len(waypoints)))
         except IndexError:
-        #   print('not enough potential waypoints to create connecting path')
+            print('not enough potential waypoints to create connecting path')
             return
         path_seq = self.connect_with_path(src, trg)
 
@@ -193,16 +163,7 @@ class RCT(core.Env):
                 if (x, y) not in checking and (x, y) not in checked and \
                     0 <= x < arr.shape[1] and 0 <= y < arr.shape[2] and \
                     arr[Map.PATH, x, y] != -1:
-
                     checking.append((x, y))
-                # if this is an entrance, the attached ride is safe from deletion
-#               if curr in rides_by_pos:
-#                   ride = rides_by_pos[curr]
-#                   for pos in ride.locs:
-#                       if pos == curr:
-#                           continue
-#                       print(pos)
-#                       checked.append(pos)
             checked.append((curr))
 
         path_idxs = list(path_net.keys())
@@ -221,7 +182,6 @@ class RCT(core.Env):
         self.rct_env.park.populate_path_net()
 
     def place_ride_tile(self, x, y, ride_i, rotation):
-        #map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i)
         ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
                                     rotation)
         if not ride:
@@ -244,12 +204,10 @@ class RCT(core.Env):
 
     def reset(self):
         self.rct_env.reset()
-        for i in range(np.random.randint(0, self.map_width + 1)):
-            self.rand_act()
-#       self.rct_env.resetSim()
+        rides_count = random.randint(self.ride_range[0], self.ride_range[1])
+        for i in range(0, rides_count):
+            self.act(self.action_space.sample())
         self.n_step = 0
-       #for i in range(random.randint(0, 10)):
-       #    self.act(self.action_space.sample())
         obs = self.get_observation()
 
         return obs
@@ -261,9 +219,6 @@ class RCT(core.Env):
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(
             (len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT))
-        # print(ride_obs.shape)
-        # print(ride_obs_onehot.shape)
-       #ride_obs_onehot.scatter(0, ride_obs, 1)
         xs, ys = np.indices(ride_obs.shape[1:])
         ride_obs_onehot[ride_obs, xs, ys] = 1
         obs[2:, :, :] = ride_obs_onehot
@@ -277,34 +232,26 @@ class RCT(core.Env):
             action = action[:, 0]
         if RCT.ACTION_SPACE == 0:
             x, y, build, rotation = self.ravel_action(action)
-       #x, y = action['map']
         elif RCT.ACTION_SPACE == 1:
-           #x = action['x']
             x = action[0]
-           #y = action['y']
             y = action[1]
-           #build = action['act']
             build = action[2]
-           #rotation = action['rotation']
             rotation = action[3]
-            #x = int(action['position'][0])
-    #       x = (self.MAP_WIDTH - 1) / 2 + (x * (self.MAP_WIDTH - 1) / 2)
-    #       y = (self.MAP_HEIGHT - 1) / 2 + (y * (self.MAP_HEIGHT - 1) / 2)
-    #       x = x % self.MAP_WIDTH
-    #       y = y % self.MAP_HEIGHT
-    #       x, y = int(x), int(y)
-            #y = int(action['position'][1])
-            #print('x y build', x, y, build)
-            #build = action['build']
-            #       print('build', x, y, build)
 
-        if build < len(ride_list):
-            self.place_ride_tile(x, y, build, rotation)
-        elif build < len(ride_list) + 1:
-            self.place_path_tile(x, y)
+        if self.FIXED_PATH:
+            if build < len(ride_list):
+                self.place_ride_on_fixed_path(build)
         else:
-            self.demolish_tile(x, y)
+            if build < len(ride_list):
+                self.place_ride_tile(x, y, build, rotation)
+            elif build < len(ride_list) + 1:
+                self.place_path_tile(x, y)
+            else:
+                self.demolish_tile(x, y)
         self.delete_islands()
+
+    def place_ride_on_fixed_path(self, ride_i):
+        return map_utility.placeRide(self.rct_env.park, ride_i)
 
     def step_sim(self):
         self.rct_env.park.update(self.n_step)
@@ -312,14 +259,11 @@ class RCT(core.Env):
 
     def step(self, action):
         self.act(action)
-       #reward = 255 - self.rct_env.park.avg_peep_happiness
-       #reward = len(self.rct_env.park.rides_by_pos)
         done = self.n_step >= self.max_step
         reward = 0
         if done:
             self.rct_env.park.populate_path_net()
-            for _ in range(100):
-           #for _ in range(RCT.N_SIM_STEP):
+            for _ in range(RCT.N_SIM_STEP):
                 self.step_sim()
                 reward += self.rct_env.park.income
                 self.render()
@@ -332,9 +276,6 @@ class RCT(core.Env):
         self.n_step += 1
 
         return obs, reward, done, info
-
-
-#       print('len of pathnet', len(self.rct_env.park.path_net))
 
     def render(self, mode='human', close=False):
         if self.render_gui:
@@ -351,30 +292,6 @@ class RCT(core.Env):
             scores.append(self.metrics['happiness'])
 
         return np.mean(scores)
-#       frame = 0
-#       park_map = Map(self.rct_env.park, render=self.render_gui)
-
-#       while frame < n_ticks or n_ticks == -1:
-#           self.rct_env.park.update(frame)
-#           park_map.render_park()
-#           frame += 1
-
-    def mapIntsToActions(self):
-        ''' Unrolls the action vector in the same order as the pytorch model
-        on its forward pass.'''
-        intsToActions = {}
-       #chunk_width = 1
-        i = 0
-
-        for x in range(self.MAP_WIDTH):
-            for y in range(self.MAP_HEIGHT):
-                intsToActions[i] = [x, y]
-                    #self.actionsToInts[z, x, y] = i
-                i += 1
-#       print('len of intsToActions: {}\n num tools: {}'.format(
-#           len(intsToActcopy.deepcopy(par_game)ions), self.N_ACT_CHAN))
-
-        return intsToActions
 
     def resetSim(self):
         self.rct_env.resetSim()
@@ -383,8 +300,5 @@ class RCT(core.Env):
     def clone(self, rank=0, settings=None, settings_path=None):
         new_env = RCT(rank=rank, settings_path=settings_path, settings=settings)
         new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
-       #new_env.path_finder = PathFinder(new_env.park.path_net)
-       #new_env.rct_env.path_finder = self.rct_env.path_finder.clone()
-       #new_env.resetSim()
-#       new_env.rct_env.park.populate_path_net()
+
         return new_env

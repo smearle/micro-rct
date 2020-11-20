@@ -18,16 +18,16 @@ with open(settings_path) as s_file:
 
 def main(settings):
 
+    print(settings, 'thems the settings in rand_agent.py')
     env = RCT(settings=settings, rank=1)
 
     while True:
         env.reset()
         env.render()
 
-        env.demolish_tile(0,1)
-#       for j in range(30):
-#           env.act(env.action_space.sample())
-#           env.render()
+        for j in range(100):
+            env.act(env.action_space.sample())
+            env.render()
         for i in range(100):
             env.step_sim()
             env.render()

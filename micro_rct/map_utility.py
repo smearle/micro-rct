@@ -25,21 +25,21 @@ def placePath(park, margin, verbose=False):
     for i in range(margin+1):
         for j in range(1,margin+1):
             if i==0 and j==1:
-#               fixedSpace.pop((i,j))
-#               interactiveSpace[(i,j)] = PARK.pathMark
+               #fixedSpace.pop((i,j))
+               #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
             elif j == 1 or (i==margin and j!=margin):
-#               freeSpace.pop((i,j))
-#               interactiveSpace[(i,j)] = PARK.pathMark
+               #freeSpace.pop((i,j))
+               #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
 
     for i in range(margin, park.size[1] - margin):
         for j in range(margin, park.size[0] - margin):
             if i == margin or i == park.size[1] - margin-1 or j == margin or j == park.size[0] - margin - 1:
-#               freeSpace.pop((i,j))
-#               interactiveSpace[(i,j)] = PARK.pathMark
+               #freeSpace.pop((i,j))
+               #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
 
@@ -191,14 +191,45 @@ def clear_for_placement(park, x, y, dx, dy):
 
     return result
 
-def place_ride_tile(park, x, y, ride_i, rotation=0):
+def _add_ride(park, _ride, x, y, ride_i, entrance):
+    '''
+    Adding ride to relevant data structures, once placement is confirmed.
+    '''
+    size = _ride.size
+    place_path_tile(park, *entrance, is_entrance=True)
+    _ride.entrance = entrance
+    _ride.position = (x, y)
+#   _ride.rotation = rotation
+    park.rides_by_pos[(x, y)] = _ride
+
+    for i in range(x, x + size[0]):
+        for j in range(y, y + size[1]):
+            if (not 0 <= i <= park.map.shape[1]) or (not 0 <= j <= park.map.shape[2]):
+               #continue
+               raise Exception('trying to place ride out of map boundaries')
+
+            if (i, j) == entrance:
+                pass
+           #else:
+           #    demolish_tile(park, i, j)
+            park.map[Map.RIDE, i, j] = ride_i
+            park.locs_to_rides[(i, j)] = (x, y)
+            _ride.locs.append((i, j))
+   #park.updateMap((x, y), size, mark, _ride.entrance)
+    assert _ride.entrance in park.path_net
+    return _ride
+
+def place_ride_tile(park, x, y, ride_i, rotation=0, destructive=True):
+    '''
+    destructive: are we allowed to delete path and other rides?
+    '''
 #   print('placing ride', x, y, ride_i)
     _ride = ride_list[ride_i]()
+    size = _ride.size
 
     if ride_i < 0:
         ride_i = len(ride_list) + ride_i
     mark = str(symbol_list[ride_i])
-    size = _ride.size
 
     if rotation == 0:
         entrance = (x, y)
@@ -211,7 +242,7 @@ def place_ride_tile(park, x, y, ride_i, rotation=0):
     else:
         raise Exception('invalid entrance position index')
 
-    if checkCanPlaceOrNot(park, x, y, size[0], size[1]):
+    if checkCanPlaceOrNot(park, x, y, size[0], size[1], destructive=destructive):
         result = clear_for_placement(park, x, y, size[0], size[1])
 #       print('clear_for_placement result:', result)
 
@@ -219,37 +250,17 @@ def place_ride_tile(park, x, y, ride_i, rotation=0):
             raise Exception
 
             return result
-        place_path_tile(park, *entrance, is_entrance=True)
-        _ride.entrance = entrance
-        _ride.position = (x, y)
-        _ride.rotation = rotation
-        park.rides_by_pos[(x, y)] = _ride
-
-        for i in range(x, x + size[0]):
-            for j in range(y, y + size[1]):
-                if (not 0 <= i <= park.map.shape[1]) or (not 0 <= j <= park.map.shape[2]):
-                   #continue
-                   raise Exception('trying to place ride out of map boundaries')
-
-                if (i, j) == entrance:
-                    pass
-               #else:
-               #    demolish_tile(park, i, j)
-                park.map[Map.RIDE, i, j] = ride_i
-                park.locs_to_rides[(i, j)] = (x, y)
-                _ride.locs.append((i, j))
-       #park.updateMap((x, y), size, mark, _ride.entrance)
-        assert _ride.entrance in park.path_net
+        _ride = _add_ride(park, _ride, x, y, ride_i, entrance)
 
        #print('placed ride type {} at ({}, {})'.format(ride_i, x, y))
         return _ride
     else:
        #print('failed to place ride type {} at ({}, {})'.format(ride_i, x, y))
-        return None
+        return False
 
 def placeRide(park, ride_i, verbose=False):
-    # print('try to place {}'.format(_ride.name))
     _ride = ride_list[ride_i]()
+   #print('try to place {}'.format(_ride.name))
     mark = str(symbol_list[ride_i])
 
     size = _ride.size
@@ -257,7 +268,7 @@ def placeRide(park, ride_i, verbose=False):
     potentialPlace = park.freeSpaceNextToInteractiveSpace()
     seen = set()
 
-    while not placed and len(seen) != len(potentialPlace):
+    while len(seen) < len(potentialPlace):
         placed = False
         potentialPlaces = list(potentialPlace.keys())
 
@@ -275,14 +286,21 @@ def placeRide(park, ride_i, verbose=False):
 
         while startList and not placed:
             rand = startList.pop()
-            placed = checkCanPlaceOrNot(park, rand[0], rand[1], size[0], size[1])
+            placed = checkCanPlaceOrNot(park,rand[0],rand[1],size[0],size[1], destructive=False)
 
         if placed:
             _ride.entrance = entrance
-            place_path_tile(park, entrance, is_entrance=True)
+            _ride.position = rand
+            _add_ride(park, _ride, rand[0], rand[1], ride_i, entrance)
+           #park.updateMap(rand,size,mark,_ride.entrance)
+            
             print_msg('ride {} is placed at {}'.format(_ride.name,_ride.position), priority=3, verbose=verbose)
+            return
 
-def checkCanPlaceOrNot(park, startX, startY, width, length):
+def checkCanPlaceOrNot(park, startX, startY, width, length, destructive=True):
+    '''
+    destructive: are we allowed to delete paths and rides?
+    '''
     # print("check ({},{}) to ({},{})".format(startX,startY,startX+width-1,startY+length-1))
 
     checked_rides = set()
@@ -308,6 +326,10 @@ def checkCanPlaceOrNot(park, startX, startY, width, length):
 
         if park.map[Map.PEEP, i, j] != -1:  # cannot have peeps
             return False
+
+        if not destructive:
+            if park.map[Map.RIDE, i, j] != -1 or park.map[Map.PATH, i, j] != -1:
+                return False
 
         if park.map[Map.RIDE, i, j] != -1:  # can overwrite rides
             ride_ij_pos = park.locs_to_rides[(i, j)]
