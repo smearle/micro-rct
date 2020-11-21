@@ -1,0 +1,36 @@
+MANIFEST.in
+README.md
+setup.py
+gym_micro_rct.egg-info/PKG-INFO
+gym_micro_rct.egg-info/SOURCES.txt
+gym_micro_rct.egg-info/dependency_links.txt
+gym_micro_rct.egg-info/requires.txt
+gym_micro_rct.egg-info/top_level.txt
+micro_rct/object_list.txt
+micro_rct/tilemap/img/3D Cinema.png
+micro_rct/tilemap/img/Chicken Nuggets Stall.png
+micro_rct/tilemap/img/Circus.png
+micro_rct/tilemap/img/Cotton Candy Stall.png
+micro_rct/tilemap/img/Crooked House.png
+micro_rct/tilemap/img/Fried Chicken Stall.png
+micro_rct/tilemap/img/balloon.png
+micro_rct/tilemap/img/burger.png
+micro_rct/tilemap/img/car_ride.png
+micro_rct/tilemap/img/first aid.png
+micro_rct/tilemap/img/grass_neutral.png
+micro_rct/tilemap/img/guest.png
+micro_rct/tilemap/img/guest_2.png
+micro_rct/tilemap/img/guest_3.png
+micro_rct/tilemap/img/info.png
+micro_rct/tilemap/img/junior_coaster.png
+micro_rct/tilemap/img/launched_freefall.png
+micro_rct/tilemap/img/magic_carpet.png
+micro_rct/tilemap/img/motion_simulator.png
+micro_rct/tilemap/img/observation_tower.png
+micro_rct/tilemap/img/path_grey.png
+micro_rct/tilemap/img/soda.png
+micro_rct/tilemap/img/spiral_slide.png
+micro_rct/tilemap/img/toilet.png
+micro_rct/tilemap/img/twist.png
+micro_rct/tilemap/img/vomit.png
+micro_rct/tilemap/img/wooden_coaster.png

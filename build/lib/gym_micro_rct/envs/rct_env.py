@@ -308,20 +308,20 @@ class RCT(core.Env):
     def step(self, action):
         self.act(action)
         #reward = 255 - self.rct_env.park.avg_peep_happiness
-        reward = len(self.rct_env.park.rides_by_pos)
+        #reward = len(self.rct_env.park.rides_by_pos)
         #reward = self.rct_env.park.income
         done = self.n_step >= self.max_step
         self.rct_env.park.populate_path_net()
         
-        '''
+        
         reward = 0
         for _ in range(RCT.N_SIM_STEP):
             self.step_sim()
-            reward += self.rct_env.park.avg_peep_happiness
+            reward += 255 - self.rct_env.park.avg_peep_happiness
             self.render()
         obs = self.get_observation()
         reward = reward / (RCT.N_SIM_STEP)
-        '''
+        
         info = {}
 
         if self.render_gui:

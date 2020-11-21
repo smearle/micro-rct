@@ -1,0 +1,14 @@
+Metadata-Version: 1.2
+Name: micro-rct
+Version: 0.0.1
+Summary: A minimal rollercoaster tycoon-like simulation for training evolutionary and reinforcement learning-based planning agents.
+Home-page: https://github.com/smearle/micro-rct
+Author: Sam Earle
+Author-email: smearle93@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License:: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independend
+Requires-Python: >=3.6
