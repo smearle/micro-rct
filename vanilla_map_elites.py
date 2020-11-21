@@ -27,12 +27,27 @@ class MapElitesRunner:
         self.map = {}
     
     def initialize(self):
-        pop = []
-        for i in range(0, self.settings.get('evolution', {}).get('population_size')):
-            c = Chromosome(self.settings)
-            pop.append(c)
-        self.pop = pop
-        
+        if self.settings.get('evolution', {}).get('checkpoint', {}).get('initialize_enabled'):
+            self.initialize_from_save()
+        else:
+            pop = []
+            for i in range(0, self.settings.get('evolution', {}).get('population_size')):
+                c = Chromosome(self.settings)
+                pop.append(c)
+            self.pop = pop
+
+    def initialize_from_save(self):
+        checkpoint_path = self.settings.get('evolution', {}).get('checkpoint', {}).get('elite_path')
+        for elite in [elite for elite in os.listdir(checkpoint_path) if elite.endswith('.p')]:
+            elite_path = os.path.join(checkpoint_path, elite)
+            with open(elite_path, 'rb') as f:
+                chrome = pickle.load(f)
+                key = self.get_dimension_key(chrome.dimensions)
+                self.map[key] = MECell(chrome.dimensions, 1)
+                self.map[key].set_chromosome(chrome)
+        # init pop from elites
+        self.mutate_generation()
+
     def get_statistics(self):
         stats = []
         for i, chrome in enumerate(self.pop):

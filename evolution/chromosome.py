@@ -74,6 +74,7 @@ class Chromosome:
             # happiness fitness
             self.fitness = self.rct.rct_env.park.avg_peep_happiness
         elif self.fitness_type == 2:
+            # park money fitness
             self.fitness = self.rct.rct_env.park.money
 
     def calculate_dimensions(self):
@@ -84,7 +85,7 @@ class Chromosome:
             avg_happiness = 0
             for peep in self.rct.rct_env.park.peepsList:
                 avg_happiness += peep.happiness
-            self.dimensions['happiness'] = avg_happiness / len(self.peepsList)
+            self.dimensions['happiness'] = avg_happiness / len(self.rct.rct_env.park.peepsList)
              
     
     ####### UTILITY FUNCTIONS
