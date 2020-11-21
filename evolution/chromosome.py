@@ -28,17 +28,12 @@ class Chromosome:
 
     def initialize(self):
         self.rct.reset()
-        rides_count = random.randint(self.settings.get('evolution', {}).get('ride_range')[
-            0], self.settings.get('evolution', {}).get('ride_range')[1])
-        for i in range(0, rides_count):
-                # for i in range(1000):
-            self.rct.act(self.rct.action_space.sample())
 
-        for i in range(random.randint(0, 3)):
-            self.rct.rand_connect()
+        # I don't think we need/want this
+#       for i in range(random.randint(0, 3)):
+#           self.rct.rand_connect()
 
     def mutate(self):
-        print('** mutating')
         child = self.clone(self.dimensions.keys())
 
         child.reset_sim()

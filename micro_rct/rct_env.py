@@ -52,26 +52,31 @@ class RCTEnv():
 
     def __init__(self, settings, park=None):
 
-        if settings['general']['render']:
-            # if kwargs.get('render_gui', False):
-            from os import environ
-            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-            import pygame
-            pygame.init()
-            screen_width = settings.get('general', {}).get('render_screen_width')
-            screen_height = settings.get('general', {}).get('render_screen_height')
-            self.screen = pygame.display.set_mode(
-                (screen_width, screen_height))
-            self.screen_width, self.screen_height = screen_width, screen_height
-        else:
-            self.screen = None
         self.settings = settings
+        self.set_rendering(settings['general']['render'])
         self.render_map = None
         if park == None:
             self.park = Park(self.settings)
         else:
             self.park = park
             self.resetSim()
+
+    def set_rendering(self, val):
+        if val:
+            self.settings['general']['render'] = val
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+            import pygame
+            pygame.init()
+            screen_width = self.settings.get(
+                'general', {}).get('render_screen_width')
+            screen_height = self.settings.get(
+                'general', {}).get('render_screen_height')
+            self.screen = pygame.display.set_mode(
+                (screen_width, screen_height))
+            self.screen_width, self.screen_height = screen_width, screen_height
+        else:
+            self.screen = None
 
     def reset(self):
         print_msg('resetting park',
