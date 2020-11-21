@@ -317,3 +317,9 @@ class Park():
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
         return res
+
+    def n_unique_rides(self):
+        rides = defaultdict(int)
+        for ride in self.rides_by_pos.values():
+            rides[ride.name]+=1
+        return len(rides)
