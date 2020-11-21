@@ -52,8 +52,8 @@ class RCTEnv():
 
     def __init__(self, settings, park=None):
 
-        self.set_rendering(settings['general']['render'])
         self.settings = settings
+        self.set_rendering(settings['general']['render'])
         self.render_map = None
         if park == None:
             self.park = Park(self.settings)
