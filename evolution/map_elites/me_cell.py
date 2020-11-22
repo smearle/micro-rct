@@ -24,7 +24,6 @@ class MECell:
     def get_chromosome(self, elite_prob):
         if len(self.pop) == 0 or (self.elite != None and random.random() < elite_prob):
             return self.elite  
-        print('rank selection')
         return self.rank_selection(self.pop)
         
     def set_chromosome(self, chrome):
@@ -35,4 +34,3 @@ class MECell:
             if len(self.pop) > self.size:
                 self.pop.remove(random.choice(self.pop))
             self.pop.append(chrome)
-            print('saving in pop')
