@@ -6,8 +6,10 @@ import random
 import json
 import time
 import pygame
+import pandas as pd
 import multiprocessing as mp
 from evolution.map_elites.me_cell import MECell
+from evolution.visualization.grid_visualizer import GridVisualizer
 from functools import partial
 from micro_rct.rct_env import RCTEnv
 from evolution.chromosome import Chromosome
@@ -170,8 +172,29 @@ class MapElitesRunner:
         # save gen
         if id % self.settings.get('evolution', {}).get('checkpoint', {}).get('save_nth_epoch') == 0 or id == int(self.settings.get('evolution', {}).get('gen_count')) - 1:
             self.save_elites(gen_id=id)
+            # save grid image
+            df = self.convert_map_to_df()
+            visualizer = GridVisualizer(df)
+            write_path = path = self.settings.get(
+                'evolution', {}).get('save_path')
+            write_path = os.path.join(write_path, '{}_map.html'.format(id))
+            visualizer.visualize(x='happiness', y='ride_count', val='fitness', write_path=write_path)
         # run mutation
         self.mutate_generation()
+
+    def convert_map_to_df(self):
+        df = pd.DataFrame()
+        
+        df = pd.DataFrame([[value for value in cell.elite.dimensions.values()] for cell in self.map.values()], columns=[
+            dimen for dimen in random.choice(list(self.map.values())).elite.dimensions.keys()])
+        fitness_df = pd.DataFrame([cell.elite.fitness for cell in self.map.values()], columns=['fitness'])
+        age_df = pd.DataFrame([cell.elite.age for cell in self.map.values()], columns=['age'])
+        df = df.join(fitness_df)
+        df = df.join(age_df)
+        # for dimen, cell in self.map.items():
+        #     elite_df = pd.DataFrame([cell.elite.fitness], columns=[cell.elite])
+        #     df = df.join(elite_df)
+        return df
 
 class MapElitesAnalysis:
     def __init__(self, settings_path):
