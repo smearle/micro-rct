@@ -7,7 +7,7 @@ class MECell:
         self.elite = None
 
     def rank_selection(self, pop):
-        ranks = [i for i in range(0, len(pop.length))]
+        ranks = [i for i in range(0, len(pop))]
         ranks[0] = 1
         for i in range(1, len(pop)):
             ranks[i] = ranks[i-1] + i + 1
@@ -21,10 +21,10 @@ class MECell:
                 return pop[i]   
         return pop[pop.length - 1]
         
-
     def get_chromosome(self, elite_prob):
         if len(self.pop) == 0 or (self.elite != None and random.random() < elite_prob):
-            return elite  
+            return self.elite  
+        print('rank selection')
         return self.rank_selection(self.pop)
         
     def set_chromosome(self, chrome):
@@ -35,3 +35,4 @@ class MECell:
             if len(self.pop) > self.size:
                 self.pop.remove(random.choice(self.pop))
             self.pop.append(chrome)
+            print('saving in pop')

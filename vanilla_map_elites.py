@@ -59,7 +59,6 @@ class MapElitesRunner:
         self.mutate_generation()
         return gen_id
 
-
     def get_statistics(self):
         stats = []
         for i, chrome in enumerate(self.pop):
@@ -79,7 +78,7 @@ class MapElitesRunner:
         # print('eval {}'.format(index))
         chrome.simulate(ticks=self.settings.get('evolution', {}).get('eval_ticks'))
         if child_conn:
-            child_conn.send(chrome.fitness)
+            child_conn.send((chrome.fitness, chrome.dimensions))
 
     def get_dimension_key(self, dimensions):
         return json.dumps(dimensions)
@@ -125,7 +124,9 @@ class MapElitesRunner:
         for i in proc_idxs:
             # retrieve fitness scores and terminate parallel processes
             p, parent_conn = processes.pop(i)
-            self.pop[i].fitness = parent_conn.recv()
+            signal = parent_conn.recv()
+            self.pop[i].fitness = signal[0]
+            self.pop[i].dimensions = signal[1]
             p.join()
             p.close()
 
@@ -137,7 +138,7 @@ class MapElitesRunner:
             if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
                 # qualify for mutation
                 # pick a random cell and its elite
-                elite = random.choice(list(self.map.values())).elite
+                elite = random.choice(list(self.map.values())).get_chromosome(self.settings.get('evolution', {}).get('elite_prob'))
                 child = elite.mutate()
                 new_pop.append(child)
         self.pop = new_pop
@@ -210,9 +211,6 @@ class MapElitesAnalysis:
                     img_name = '{}.png'.format(dim)
                     # with open(os.path.join(filepath, img_name), 'w+') as save_file:
                     pygame.image.save(img, os.path.join(filepath.split('.')[0], img_name))
-                    
-
-            
 
 def main(settings_path):
     with open(settings_path) as s_file:

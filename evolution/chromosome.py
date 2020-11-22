@@ -80,10 +80,6 @@ class Chromosome:
     def calculate_dimensions(self):
         # ride total
         if 'ride_count' in self.dimensions.keys():
-            self.dimensions['ride_count'] = len(self.rct.rct_env.park.rides_by_pos.keys())
+            self.dimensions['ride_count'] = self.rct.rct_env.park.n_unique_rides()
         if 'happiness' in self.dimensions.keys():
             self.dimensions['happiness'] = int(self.rct.rct_env.park.returnScore())
-             
-    
-    ####### UTILITY FUNCTIONS
-

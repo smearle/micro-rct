@@ -4,10 +4,10 @@ general:
     render_screen_width: 500
     render_screen_height: 500
 parallelism:
-    enabled: False
-    threads: 4
+    enabled: True
+    threads: 3
 environment:
-    n_guests: 100
+    n_guests: 20
     map_width: 30
     map_height: 30
     n_actions: 10
@@ -21,11 +21,12 @@ evolution:
     mutation_prob: 1.0
     fitness_type: 2
     eval_ticks: 250
-    gen_count: 5
+    gen_count: 10
     save_path: results/
     action: evolve
     dimension_keys: [ride_count, happiness]
     cell_pop_size: 3
+    elite_prob: 0.5
     checkpoint:
         initialize_enabled: False
         elite_path: results/9.p
