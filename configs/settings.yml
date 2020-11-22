@@ -18,7 +18,6 @@ experiments:
 evolution:
     population_size: 10
     max_mutate_builds: 10
-    mutation_prob: 1.0
     fitness_type: 2
     eval_ticks: 250
     gen_count: 10
@@ -27,6 +26,7 @@ evolution:
     dimension_keys: [ride_count, happiness]
     cell_pop_size: 3
     elite_prob: 0.5
+    mutation_prob: 1.0
     checkpoint:
         initialize_enabled: False
         elite_path: results/9.p

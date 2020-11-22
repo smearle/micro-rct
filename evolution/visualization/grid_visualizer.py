@@ -8,13 +8,14 @@ class GridVisualizer:
 
     def visualize(self, x, y, val, write_path=None):
         temp = self.df.pivot(index=y, columns=x)[val]
-        temp = temp.fillna(-10)
-        temp = temp.reindex(list(range(temp.index.min(), temp.index.max()+1)), fill_value=-10)
+        # temp = temp.fillna(-10)
+        temp = temp.reindex(list(range(temp.index.min(), temp.index.max()+1)), fill_value=np.nan)
         #temporary transpose to fill in missing column values
         temp = temp.T
-        temp = temp.reindex(list(range(temp.index.min(), temp.index.max()+1)), fill_value=-10)
+        temp = temp.reindex(list(range(temp.index.min(), temp.index.max()+1)), fill_value=np.nan)
         temp = temp.T
         fig = px.imshow(temp)
+        fig['layout'].update(plot_bgcolor='rgb(203, 213, 232)')
         if write_path != None:
             fig.write_html(write_path)
         
