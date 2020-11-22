@@ -19,13 +19,14 @@ evolution:
     population_size: 10
     max_mutate_builds: 10
     mutation_prob: 1.0
-    dimension_keys: [ride_count, happiness]
     fitness_type: 2
     eval_ticks: 250
     gen_count: 5
     save_path: results/
     action: evolve
+    dimension_keys: [ride_count, happiness]
+    cell_pop_size: 3
     checkpoint:
         initialize_enabled: False
-        elite_path: results/51
-        save_nth_epoch: 50 
+        elite_path: results/9.p
+        save_nth_epoch: 5

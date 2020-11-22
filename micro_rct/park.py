@@ -89,8 +89,7 @@ class Park():
             place_ride_tile(new_park,
                              x,
                              y,
-                             ride_i,
-                             rotation=ride.rotation)
+                             ride_i)
            #for loc in ride.locs:
            #    new_park.locs_to_rides[loc] = pos
            #new_park.rides_by_pos[(x, y)] = ride

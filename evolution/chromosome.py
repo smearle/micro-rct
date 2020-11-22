@@ -24,7 +24,7 @@ class Chromosome:
             self.initialize()
         else:
             self.rct = env
-        self.calculate_dimensions()
+        # self.calculate_dimensions()
 
     def initialize(self):
         self.rct.reset()
@@ -47,7 +47,6 @@ class Chromosome:
             child.rct.act(child.rct.action_space.sample())
 
         child.rct.delete_islands()
-        child.calculate_dimensions()
         return child
 
 
@@ -55,6 +54,7 @@ class Chromosome:
         try:
             self.rct.simulate(ticks)
             self.calculate_fitness()
+            self.calculate_dimensions()
         except Exception as e:
             self.fitness = -1
 
@@ -72,7 +72,7 @@ class Chromosome:
             self.fitness = random.randrange(0, 1)
         elif self.fitness_type == 1:
             # happiness fitness
-            self.fitness = self.rct.rct_env.park.avg_peep_happiness
+            self.fitness = self.rct.rct_env.park.returnScore()
         elif self.fitness_type == 2:
             # park money fitness
             self.fitness = self.rct.rct_env.park.money
@@ -82,10 +82,7 @@ class Chromosome:
         if 'ride_count' in self.dimensions.keys():
             self.dimensions['ride_count'] = len(self.rct.rct_env.park.rides_by_pos.keys())
         if 'happiness' in self.dimensions.keys():
-            avg_happiness = 0
-            for peep in self.rct.rct_env.park.peepsList:
-                avg_happiness += peep.happiness
-            self.dimensions['happiness'] = avg_happiness / len(self.rct.rct_env.park.peepsList)
+            self.dimensions['happiness'] = int(self.rct.rct_env.park.returnScore())
              
     
     ####### UTILITY FUNCTIONS

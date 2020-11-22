@@ -25,28 +25,40 @@ class MapElitesRunner:
         self.pop = []
         self.settings = settings
         self.map = {}
+
+        os.makedirs(settings.get('evolution', {}).get('save_path'), exist_ok=True)
     
     def initialize(self):
+        gen_id = 0
         if self.settings.get('evolution', {}).get('checkpoint', {}).get('initialize_enabled'):
-            self.initialize_from_save()
+            gen_id = int(self.initialize_from_save()) + 1
         else:
             pop = []
             for i in range(0, self.settings.get('evolution', {}).get('population_size')):
                 c = Chromosome(self.settings)
                 pop.append(c)
             self.pop = pop
+        return gen_id
 
     def initialize_from_save(self):
         checkpoint_path = self.settings.get('evolution', {}).get('checkpoint', {}).get('elite_path')
-        for elite in [elite for elite in os.listdir(checkpoint_path) if elite.endswith('.p')]:
-            elite_path = os.path.join(checkpoint_path, elite)
-            with open(elite_path, 'rb') as f:
-                chrome = pickle.load(f)
-                key = self.get_dimension_key(chrome.dimensions)
-                self.map[key] = MECell(chrome.dimensions, 1)
-                self.map[key].set_chromosome(chrome)
+        gen_id = os.path.basename(checkpoint_path)
+        if 0:
+            for elite in [elite for elite in os.listdir(checkpoint_path) if elite.endswith('.p')]:
+                elite_path = os.path.join(checkpoint_path, elite)
+                with open(elite_path, 'rb') as f:
+                    chrome = pickle.load(f)
+                    key = self.get_dimension_key(chrome.dimensions)
+                    self.map[key] = MECell(chrome.dimensions, self.settings.get('evolution', {}).get('cell_pop_size'))
+                    self.map[key].set_chromosome(chrome)
+        else:
+            with open(checkpoint_path, 'rb') as f:
+                self.map = pickle.load(f)
+            gen_id = gen_id.split('.')[0]
         # init pop from elites
         self.mutate_generation()
+        return gen_id
+
 
     def get_statistics(self):
         stats = []
@@ -59,7 +71,7 @@ class MapElitesRunner:
         for chrome in self.pop:
             key = self.get_dimension_key(chrome.dimensions);
             if key not in self.map.keys():
-                self.map[key] = MECell(chrome.dimensions, 1)
+                self.map[key] = MECell(chrome.dimensions, self.settings.get('evolution', {}).get('cell_pop_size'))
             self.map[key].set_chromosome(chrome)
 
     def eval_chromosome(self, index, child_conn=None):
@@ -85,18 +97,25 @@ class MapElitesRunner:
             pickle.dump(chrome, save_file)
 
     def save_elites(self, gen_id):
-        path = self.settings.get('evolution', {}).get('save_path')
-        path = os.path.join(path, '{}'.format(gen_id))
-        os.makedirs(path, exist_ok=True)
-        for dimension, cell in self.map.items():
-            save_path = os.path.join(path, '{}.p'.format(dimension))
-            self.save_chromosome(cell.elite, save_path)
+        if 0:
+            path = self.settings.get('evolution', {}).get('save_path')
+            path = os.path.join(path, '{}'.format(gen_id))
+            os.makedirs(path, exist_ok=True)
+            for dimension, cell in self.map.items():
+                save_path = os.path.join(path, '{}.p'.format(dimension))
+                self.save_chromosome(cell.elite, save_path)
+        else:
+            path = self.settings.get('evolution', {}).get('save_path')
+            path = os.path.join(path, '{}.p'.format(gen_id))
+            with open(path, 'wb') as f:
+                pickle.dump(self.map, f)
+
 
     def get_grid(self):
         cells = []
         for dimen, cell in self.map.items():
             elite = cell.elite
-            rep = '{dimen_color}Dimensions: {reg_1}{:<20s} | {fit_color}Fitness: {reg_2}{:>5d} | {age_color}Age: {reg_3}{:>3d}'.format(
+            rep = '{dimen_color}Dimensions: {reg_1}{:<38s} | {fit_color}Fitness: {reg_2}{:>5d} | {age_color}Age: {reg_3}{:>3d}'.format(
                 dimen, elite.fitness, elite.age, dimen_color=Fore.GREEN, fit_color=Fore.BLUE, age_color=Fore.MAGENTA, reg_1=Fore.WHITE, reg_2=Fore.WHITE, reg_3=Fore.WHITE)
             cells.append(rep)
         return cells
@@ -109,6 +128,7 @@ class MapElitesRunner:
             self.pop[i].fitness = parent_conn.recv()
             p.join()
             p.close()
+
     def mutate_generation(self):
         new_pop = []
 
@@ -147,7 +167,8 @@ class MapElitesRunner:
         self.assign_chromosomes()
         # [print(x) for x in self.get_grid()]
         # save gen
-        self.save_elites(gen_id=id)
+        if id % self.settings.get('evolution', {}).get('checkpoint', {}).get('save_nth_epoch') == 0 or id == int(self.settings.get('evolution', {}).get('gen_count')) - 1:
+            self.save_elites(gen_id=id)
         # run mutation
         self.mutate_generation()
 
@@ -157,22 +178,38 @@ class MapElitesAnalysis:
             self.settings = yaml.load(s_file, yaml.FullLoader)
 
     def render_elites(self, gen_id):
-
         filepath = self.settings.get('evolution', {}).get('save_path')
-        filepath = os.path.join(filepath, '{}'.format(gen_id))
-        for file in [entry for entry in os.listdir(filepath) if entry.endswith('.p')]:
+        if 0:
+            gen_id = int(gen_id)
+            filepath = os.path.join(filepath, '{}'.format(gen_id))
+            for file in [entry for entry in os.listdir(filepath) if entry.endswith('.p')]:
             
-            with open(os.path.join(filepath, file), 'rb') as f:
-                chrome = pickle.load(f)
-                chrome.settings['general']['render'] = True
-                chrome.rct.render_gui = True
-                chrome.rct.rct_env.set_rendering(True)
-                chrome.rct.rct_env.resetSim()
-                chrome.rct.rct_env.render_map.render_park()
-                img = chrome.rct.rct_env.screen
-                img_name = '{}.png'.format(file.split('.')[0])
-                # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-                pygame.image.save(img, os.path.join(filepath, img_name))
+                with open(os.path.join(filepath, file), 'rb') as f:
+                    chrome = pickle.load(f)
+                    chrome.settings['general']['render'] = True
+                    chrome.rct.render_gui = True
+                    chrome.rct.rct_env.set_rendering(True)
+                    chrome.rct.rct_env.resetSim()
+                    chrome.rct.rct_env.render_map.render_park()
+                    img = chrome.rct.rct_env.screen
+                    img_name = '{}.png'.format(file.split('.')[0])
+                    # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                    pygame.image.save(img, os.path.join(filepath, img_name))
+        else:
+            filepath = os.path.join(filepath, '{}'.format(gen_id))
+            os.makedirs(filepath.split('.')[0], exist_ok=True)
+            with open(filepath, 'rb') as f:
+                self.map = pickle.load(f)
+                for dim, cell in self.map.items():
+                    cell.elite.settings['general']['render'] = True
+                    cell.elite.rct.render_gui = True
+                    cell.elite.rct.rct_env.set_rendering(True)
+                    cell.elite.rct.rct_env.resetSim()
+                    cell.elite.rct.rct_env.render_map.render_park()
+                    img = cell.elite.rct.rct_env.screen
+                    img_name = '{}.png'.format(dim)
+                    # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                    pygame.image.save(img, os.path.join(filepath.split('.')[0], img_name))
                     
 
             
@@ -183,13 +220,13 @@ def main(settings_path):
     if settings.get('evolution', {}).get('action') == 'evolve':
         start = time.time()
         runner = MapElitesRunner(settings_path)
-        runner.initialize()
+        gen_id = runner.initialize()
         init_time = time.time() - start
         print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, init_time))
         # print(Fore.GREEN + '** POP BREAKDOWN **')
         # print('\n'.join(map(str, runner.get_statistics())))
         # print(runner.get_statistics())
-        for i in range(settings.get('evolution', {}).get('gen_count')):
+        for i in range(gen_id, settings.get('evolution', {}).get('gen_count') + gen_id):
             start = time.time()
             runner.run_generation(i)
             end = time.time()
@@ -199,7 +236,7 @@ def main(settings_path):
     else:
         analyzer = MapElitesAnalysis(settings_path)
         for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
-            analyzer.render_elites(int(generation))
+            analyzer.render_elites(generation)
 
 if __name__ == "__main__":
 

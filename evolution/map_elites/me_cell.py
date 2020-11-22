@@ -6,7 +6,7 @@ class MECell:
         self.pop = []
         self.elite = None
 
-    def rank_selection(pop):
+    def rank_selection(self, pop):
         ranks = [i for i in range(0, len(pop.length))]
         ranks[0] = 1
         for i in range(1, len(pop)):
@@ -22,16 +22,16 @@ class MECell:
         return pop[pop.length - 1]
         
 
-    # public Chromosome getChromosome(double eliteProb) {
-	# Chromosome elite = this.getElite()
-	# Chromosome[] infeasible = this.getInfeasible(false)
-	# if(infeasible.length == 0 | | (elite != null & & this._rnd.nextDouble() < eliteProb)) {
-	#     return elite
-    #     }
-	# return this.rankSelection(infeasible)
-    # }
+    def get_chromosome(self, elite_prob):
+        if len(self.pop) == 0 or (self.elite != None and random.random() < elite_prob):
+            return elite  
+        return self.rank_selection(self.pop)
+        
     def set_chromosome(self, chrome):
         if self.elite == None or chrome.fitness > self.elite.fitness:
             self.elite = chrome
         else:
             self.elite.age += 1
+            if len(self.pop) > self.size:
+                self.pop.remove(random.choice(self.pop))
+            self.pop.append(chrome)
