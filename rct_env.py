@@ -91,6 +91,8 @@ class RCTEnv():
 
 
 
+
+
 #def run_trial(n_ticks):
 #    park = Park(MAP_HEIGHT, MAP_WIDTH)
 #    #place the path

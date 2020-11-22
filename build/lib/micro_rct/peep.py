@@ -432,7 +432,7 @@ class Peep:
                         self.thoughts[-1].type = PEEP_THOUGHT_TYPE_NONE
                         self.thoughts[-1].item = PEEP_THOUGHT_ITEM_NONE
                         self.thoughts[-1].freshness = 0
-                        self.thoguhts[-1].fresh_timeout = 0
+                        self.thoughts[-1].fresh_timeout = 0
             else:
                 fresh_thought = i
             if add_fresh and fresh_thought != -1:
