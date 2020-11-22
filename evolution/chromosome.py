@@ -72,7 +72,7 @@ class Chromosome:
             self.fitness = random.randrange(0, 1)
         elif self.fitness_type == 1:
             # happiness fitness
-            self.fitness = self.rct.rct_env.park.returnScore()
+            self.fitness = (0 if self.rct.rct_env.park.returnScore() < 0 else self.rct.rct_env.park.returnScore())
         elif self.fitness_type == 2:
             # park money fitness
             self.fitness = self.rct.rct_env.park.money
@@ -82,4 +82,4 @@ class Chromosome:
         if 'ride_count' in self.dimensions.keys():
             self.dimensions['ride_count'] = self.rct.rct_env.park.n_unique_rides()
         if 'happiness' in self.dimensions.keys():
-            self.dimensions['happiness'] = int(self.rct.rct_env.park.returnScore())
+            self.dimensions['happiness'] = int((0 if self.rct.rct_env.park.returnScore() < 0 else self.rct.rct_env.park.returnScore()))
