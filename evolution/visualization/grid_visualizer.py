@@ -16,6 +16,7 @@ class GridVisualizer:
         temp = temp.T
         fig = px.imshow(temp)
         fig['layout'].update(plot_bgcolor='rgb(203, 213, 232)')
+        fig['layout']['yaxis']['autorange'] = "reversed"
         if write_path != None:
             fig.write_html(write_path)
         
