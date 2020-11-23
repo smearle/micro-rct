@@ -560,12 +560,12 @@ class Peep:
                 self.happinessTarget = min(self.happinessTarget + 10, maxValue)
         elif highestSatisfaction == 3:
             if lowestSatisfaction == 0:
-                self.happinessTarget = min(self.happinessTarget - 35, maxValue)
+                self.happinessTarget = min(self.happinessTarget - 35, 0)
 
             if lowestSatisfaction == 1:
-                self.happinessTarget = min(self.happinessTarget - 50, maxValue)
+                self.happinessTarget = min(self.happinessTarget - 50, 0)
             else:
-                self.happinessTarget = min(self.happinessTarget - 60, maxValue)
+                self.happinessTarget = min(self.happinessTarget - 60, 0)
 
     def nauseaToleranceConvert(self):
         if self.nauseaTolerance == 0:
