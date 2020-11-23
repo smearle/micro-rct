@@ -251,7 +251,8 @@ def main(settings_path):
             start = time.time()
             runner.run_generation(i)
             end = time.time()
-            print('\n'.join(map(str, runner.get_grid())))
+            if settings.get('evolution', {}).get('print_map'):
+                print('\n'.join(map(str, runner.get_grid())))
             print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, (end-start)))
 
     else:

@@ -27,6 +27,7 @@ evolution:
     cell_pop_size: 3
     elite_prob: 0.5
     mutation_prob: 1.0
+    print_map: False
     checkpoint:
         initialize_enabled: False
         elite_path: results/9.p
