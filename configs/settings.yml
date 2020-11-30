@@ -20,8 +20,8 @@ evolution:
     max_mutate_builds: 10
     fitness_type: 2
     eval_ticks: 250
-    gen_count: 10
-    save_path: results/
+    gen_count: 700
+    save_path: results/test4-changed/
     action: evolve
     dimension_keys: [ride_count, happiness]
     cell_pop_size: 3
@@ -31,4 +31,4 @@ evolution:
     checkpoint:
         initialize_enabled: False
         elite_path: results/9.p
-        save_nth_epoch: 5
+        save_nth_epoch: 20

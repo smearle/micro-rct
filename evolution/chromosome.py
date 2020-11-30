@@ -82,4 +82,5 @@ class Chromosome:
         if 'ride_count' in self.dimensions.keys():
             self.dimensions['ride_count'] = self.rct.rct_env.park.n_unique_rides()
         if 'happiness' in self.dimensions.keys():
-            self.dimensions['happiness'] = int((0 if self.rct.rct_env.park.returnScore() < 0 else self.rct.rct_env.park.returnScore()))
+            tmp = int(self.rct.rct_env.park.returnScore())
+            self.dimensions['happiness'] = tmp//5 * 5
