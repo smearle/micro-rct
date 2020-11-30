@@ -84,3 +84,7 @@ class Chromosome:
         if 'happiness' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore())
             self.dimensions['happiness'] = tmp//5 * 5
+        if 'nausea' in self.dimensions.keys():
+            tmp = int(self.rct.rct_env.park.returnScore(2))
+            self.dimensions['nausea'] = tmp//5 * 5
+        

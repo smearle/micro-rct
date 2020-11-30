@@ -21,9 +21,9 @@ evolution:
     fitness_type: 2
     eval_ticks: 250
     gen_count: 700
-    save_path: results/test4-changed/
+    save_path: results/test5-nausea-changed/
     action: evolve
-    dimension_keys: [ride_count, happiness]
+    dimension_keys: [ride_count, nausea]
     cell_pop_size: 3
     elite_prob: 0.5
     mutation_prob: 1.0

@@ -178,7 +178,8 @@ class MapElitesRunner:
             write_path = path = self.settings.get(
                 'evolution', {}).get('save_path')
             write_path = os.path.join(write_path, '{}_map.html'.format(id))
-            visualizer.visualize(x='happiness', y='ride_count', val='fitness', write_path=write_path)
+            # visualizer.visualize(x='happiness', y='ride_count', val='fitness', write_path=write_path)
+            visualizer.visualize(x='nausea', y='ride_count', val='fitness', write_path=write_path)
         # run mutation
         self.mutate_generation()
 
