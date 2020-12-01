@@ -158,18 +158,23 @@ class Park():
        #    print(self.path_net[k])
         score = 0
         n_score = 0
+        v_score = 0
         
         for peep in self.peepsList:
             score += peep.happiness
             n_score += peep.nausea
+            v_score += peep.vomitCount
         self.avg_peep_happiness = score / len(self.peepsList)
         self.avg_peep_nausea = n_score / len(self.peepsList)
+        self.total_vomit = v_score
 
     def returnScore(self,opt=1):
         self.updateScore()
         if opt == 1:
             return self.avg_peep_happiness
-        return self.avg_peep_nausea
+        if opt == 2:
+            return self.avg_peep_nausea
+        return self.total_vomit
         
 
 

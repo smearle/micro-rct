@@ -87,4 +87,6 @@ class Chromosome:
         if 'nausea' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(2))
             self.dimensions['nausea'] = tmp//5 * 5
+        if 'vomit' in self.dimensions.keys():
+            self.dimensions['vomit'] = int(self.rct.rct_env.park.returnScore(3))
         

@@ -31,6 +31,7 @@ class Peep:
         self.nauseaTolerance = self.distributeTolerance()
         self.thirst = random.randint(0, maxValue)
         self.angriness = 0
+        self.vomitCount = 0
         self.toilet = 0
         self.timeToConsume = 0
         self.disgustingCount = 0
@@ -291,6 +292,7 @@ class Peep:
 
     def vomit(self):
         #       print('Peep {} vomits '.format(self.id))
+        self.vomitCount += 1
         self.nauseaTarget /= 2
         self.hunger /= 2
 
