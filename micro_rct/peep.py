@@ -512,7 +512,12 @@ class Peep:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_THIRSTY, PEEP_THOUGHT_ITEM_NONE)
             else:
                 self.hasDrink = True
-
+        
+        if ride.name == 'FoodStall' or ride.name == 'DrinkStall':
+            happinessGrowth = ride.price * 4
+            
+            self.happinessTarget = min((self.happinessTarget + happinessGrowth), maxValue)
+            self.happiness = min((self.happiness + happinessGrowth), maxValue)
         self.park.money += ride.price
 
         return res if len(res) > 0 else []
