@@ -333,3 +333,10 @@ class Park():
         for ride in self.rides_by_pos.values():
             rides[ride.name]+=1
         return len(rides)
+
+    def n_shop_rides(self):
+        total = 0
+        for ride in self.rides_by_pos.values():
+            if ride.name == 'FoodStall' or ride.name == 'DrinkStall' or ride.name == 'Shop':
+                total +=1
+        return total

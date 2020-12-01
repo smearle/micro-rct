@@ -520,6 +520,7 @@ class Peep:
             
             self.happinessTarget = min((self.happinessTarget + happinessGrowth), maxValue)
             self.happiness = min((self.happiness + happinessGrowth), maxValue)
+            
         self.park.money += ride.price
 
         return res if len(res) > 0 else []
