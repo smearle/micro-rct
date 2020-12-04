@@ -42,20 +42,23 @@ class Park():
         self.startTime = time.time()
         # channels for rides, paths, peeps
         self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int) - 1
-#       self.freeSpace = defaultdict(str)
-#       self.fixedSpace = defaultdict(str)
+        self.freeSpace = defaultdict(str)
+        self.fixedSpace = defaultdict(str)
 #       self.interactiveSpace = defaultdict(str)
         self.rides_by_pos = {}
         self.locs_to_rides = {}
 
-#       for i in range(self.size[0]):
-#           for j in range(self.size[1]):
+        for i in range(self.size[0]):
+            for j in range(self.size[1]):
+                # I'm ignoring walls for now. Do we need/want them?
+                if False:
+                    pass
 #               if i == 0 or j == 0 or j == self.size[0] - 1 or i == self.size[1] - 1:
 #                   self.fixedSpace[(i,j)] = Park.wallMark
 #                   self.map[[0,1], i, j] = -1
-#               else:
-#                   self.freeSpace[(i,j)] = Park.emptyMark
-#                   self.map[0, i, j] = -1
+                else:
+                    self.freeSpace[(i, j)] = Park.emptyMark
+                    self.map[0, i, j] = -1
 
         self.peepsList = set()
 #       self.listOfRides = []
@@ -86,8 +89,7 @@ class Park():
             place_ride_tile(new_park,
                              x,
                              y,
-                             ride_i,
-                             rotation=ride.rotation)
+                             ride_i)
            #for loc in ride.locs:
            #    new_park.locs_to_rides[loc] = pos
            #new_park.rides_by_pos[(x, y)] = ride
@@ -138,7 +140,7 @@ class Park():
         for x,y in self.path_net:
             path = self.path_net[(x, y)]
             if path.is_entrance:
-                return
+                continue
             for _x,_y in neighbors:
                 neighbor = (_x+x,_y+y)
 
@@ -155,14 +157,27 @@ class Park():
        #    print(self.rides_by_pos[k])
        #    print(self.path_net[k])
         net_happiness = 0
+        net_nausea = 0
+        net_vomit = 0
 
         for peep in self.peepsList:
             net_happiness += peep.happiness
+            net_nausea += peep.nausea
+            net_vomit += peep.vomitCount
         self.avg_peep_happiness = net_happiness / len(self.peepsList)
 
-    def returnScore(self):
+        self.avg_peep_happiness = net_happiness / len(self.peepsList)
+        self.avg_peep_nausea = net_nausea / len(self.peepsList)
+        self.total_vomit = net_vomit
+
+    def returnScore(self,opt=1):
         self.updateScore()
-        return self.avg_peep_happiness
+        if opt == 1:
+            return self.avg_peep_happiness
+        if opt == 2:
+            return self.avg_peep_nausea
+        return self.total_vomit
+        
 
 
     # TODO: I think this function is mostly redundanat at this point?
@@ -173,7 +188,7 @@ class Park():
 #                   self.freeSpace.pop((i, j))
 
 #                   if mark == PARK.pathMark:
-#                       self.#nteractiveSpace[(i, j)] = mark
+#                       self.interactiveSpace[(i, j)] = mark
 #                       self.map[1, i, j] = 1
 #                   else:
 #                       if (entrance and i == entrance[0] and j == entrance[1]) or (not entrance and i==start[0] and j==start[1]): #ride entrance
@@ -194,7 +209,6 @@ class Park():
 #               elif (i, j) in self.interactiveSpace:
 #                   self.interactiveSpace[(i,j)] = mark
 
-                #elf.map[0, i, j] = symbol_dict[mark][0]
 
 #       return
 
@@ -316,3 +330,16 @@ class Park():
         print_msg(res, priority=2, verbose=self.settings['general']['verbose'])
         self.printCount += 1
         return res
+
+    def n_unique_rides(self):
+        rides = defaultdict(int)
+        for ride in self.rides_by_pos.values():
+            rides[ride.name]+=1
+        return len(rides)
+
+    def n_shop_rides(self):
+        total = 0
+        for ride in self.rides_by_pos.values():
+            if ride.name == 'FoodStall' or ride.name == 'DrinkStall' or ride.name == 'Shop':
+                total +=1
+        return total

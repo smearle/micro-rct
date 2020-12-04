@@ -5,20 +5,30 @@ general:
     render_screen_height: 500
 parallelism:
     enabled: True
-    threads: 4
+    threads: 3
 environment:
-    n_guests: 100
+    n_guests: 20
     map_width: 30
     map_height: 30
     n_actions: 10
+    ride_range: [3, 8]
+    fixed_path: True # all ride placements along fixed square path
 experiments:
     ticks: [500]
 evolution:
-    population_size: 100
+    population_size: 10
     max_mutate_builds: 10
-    mutation_prob: 1.0
-    dimension_keys: [ride_count]
     fitness_type: 2
-    ride_range: [3, 8]
-    eval_ticks: 500
-    gen_count: 5
+    eval_ticks: 250
+    gen_count: 700
+    save_path: results/test5-nausea-changed/
+    action: evolve
+    dimension_keys: [ride_count, nausea]
+    cell_pop_size: 3
+    elite_prob: 0.5
+    mutation_prob: 1.0
+    print_map: False
+    checkpoint:
+        initialize_enabled: False
+        elite_path: results/9.p
+        save_nth_epoch: 20
