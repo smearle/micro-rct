@@ -16,8 +16,11 @@ class Chromosome:
         self.fitness = 0
         self.dimensions = {}
         self.age = 0
-        for key in settings.get('evolution', {}).get('dimension_keys'):
-            self.dimensions[key] = 0
+        dimensions = self.settings.get('evolution', {}).get('dimensions').get('keys')
+        self.dimensions[dimensions.get('x')] = 0
+        self.dimensions[dimensions.get('y')] = 0
+        # for key in settings.get('evolution', {}).get('dimension_keys'):
+        #     self.dimensions[key] = 0
         
         if env == None:
             self.rct = RCT(settings=self.settings)
