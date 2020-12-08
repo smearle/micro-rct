@@ -21,18 +21,11 @@ class GridVisualizer:
             z=temp.values.tolist(),
             x=temp.columns.tolist(),
             y=temp.index.tolist(),
-            colorscale='Viridis'))
-        # fig['layout'].update(plot_bgcolor='rgb(203, 213, 232)')
+            colorscale='Magma'))
         fig['layout'].update(
             xaxis=dict(
-                # tickmode='linear',
-                # tick0=0,
-                # dtick=x_skip,
                 showgrid=False),
             yaxis=dict(
-                # tickmode='linear',
-                # tick0=0,
-                # dtick=y_skip,
                 showgrid=False)
         )
 
