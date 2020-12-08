@@ -16,8 +16,11 @@ class Chromosome:
         self.fitness = 0
         self.dimensions = {}
         self.age = 0
-        for key in settings.get('evolution', {}).get('dimension_keys'):
-            self.dimensions[key] = 0
+        dimensions = self.settings.get('evolution', {}).get('dimensions').get('keys')
+        self.dimensions[dimensions.get('x')] = 0
+        self.dimensions[dimensions.get('y')] = 0
+        # for key in settings.get('evolution', {}).get('dimension_keys'):
+        #     self.dimensions[key] = 0
         
         if env == None:
             self.rct = RCT(settings=self.settings)
@@ -79,16 +82,31 @@ class Chromosome:
 
     def calculate_dimensions(self):
         # ride total
+        
         if 'ride_count' in self.dimensions.keys():
-            self.dimensions['ride_count'] = self.rct.rct_env.park.n_unique_rides()
+            tmp = self.rct.rct_env.park.n_unique_rides()
+            self.dimensions['ride_count'] = self.rebucket('ride_count', tmp)
         if 'shop_count' in self.dimensions.keys():
-            self.dimensions['shop_count'] = self.rct.rct_env.park.n_shop_rides()
+            tmp = self.rct.rct_env.park.n_shop_rides()
+            self.dimensions['shop_count'] = self.rebucket('happiness', tmp)
         if 'happiness' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore())
-            self.dimensions['happiness'] = tmp//5 * 5
+            self.dimensions['happiness'] = self.rebucket('happiness', tmp)
         if 'nausea' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(2))
-            self.dimensions['nausea'] = tmp//5 * 5
+            self.dimensions['nausea'] = self.rebucket('nausea', tmp)
         if 'vomit' in self.dimensions.keys():
-            self.dimensions['vomit'] = int(self.rct.rct_env.park.returnScore(3))
-        
+            tmp = int(self.rct.rct_env.park.returnScore(3))
+            self.dimensions['vomit'] = self.rebucket('vomit', tmp)
+
+    def rebucket(self, key, value):
+        dimensions = self.settings.get('evolution', {}).get('dimensions')
+
+        x = dimensions.get('keys', {}).get('x')
+        y = dimensions.get('keys', {}).get('y')
+        if key == x:
+            bucket = dimensions.get('skip', {}).get('x') 
+        elif key == y:
+            bucket = dimensions.get('skip', {}).get('y')
+        value = value // bucket * bucket
+        return value
