@@ -16,7 +16,7 @@ environment:
 experiments:
     ticks: [500]
 evolution:
-    population_size: 10
+    population_size: 2
     max_mutate_builds: 10
     fitness_type: 2
     eval_ticks: 50

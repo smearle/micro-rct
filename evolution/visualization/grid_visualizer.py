@@ -19,14 +19,19 @@ class GridVisualizer:
             z=temp.values.tolist(),
             x=temp.columns.tolist(),
             y=temp.index.tolist(),
-            colorscale='Magma'))
+            # labels=dict(x="X", y="Y", Z="Fitness"),
+            colorscale='Plasma'))
         fig['layout'].update(
+            title=dict(
+                text="Elite Map"
+            ),
             xaxis=dict(
-                showgrid=False),
+                showgrid=False,
+                title=dict(text=temp.columns.name)),
             yaxis=dict(
-                showgrid=False)
+                showgrid=False,
+                title=dict(text=temp.index.name)),
         )
-
         fig['layout']['yaxis']['autorange'] = "reversed"
 
         
