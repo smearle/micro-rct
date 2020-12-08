@@ -21,14 +21,14 @@ evolution:
     fitness_type: 2
     eval_ticks: 50
     gen_count: 10
-    save_path: results/test5-nausea-changed/
+    save_path: results/
     action: evolve
     dimensions: 
         keys:
             x: happiness
             y: ride_count
         skip:
-            x: 5
+            x: 10
             y: 1
     cell_pop_size: 3
     elite_prob: 0.5
