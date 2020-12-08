@@ -1,4 +1,3 @@
-import plotly.express as px
 import plotly.graph_objects as go
 
 import pandas as pd
@@ -16,7 +15,6 @@ class GridVisualizer:
         temp = temp.T
         temp = temp.reindex(list(range(0, temp.index.max()+1, x_skip)), fill_value=np.nan)
         temp = temp.T
-        # fig = px.imshow(temp)
         fig = go.Figure(data=go.Heatmap(
             z=temp.values.tolist(),
             x=temp.columns.tolist(),
