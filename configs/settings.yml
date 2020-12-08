@@ -22,7 +22,7 @@ evolution:
     eval_ticks: 250
     gen_count: 10
     save_path: results/
-    action: evolve
+    action: analyze
     dimension_keys: [ride_count, happiness]
     cell_pop_size: 3
     elite_prob: 0.5

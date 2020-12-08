@@ -7,6 +7,7 @@ class MECell:
         self.elite = None
 
     def rank_selection(self, pop):
+        # TODO order the population by fitness
         ranks = [i for i in range(0, len(pop))]
         ranks[0] = 1
         for i in range(1, len(pop)):

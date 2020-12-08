@@ -143,6 +143,13 @@ class MapElitesRunner:
                 elite = random.choice(list(self.map.values())).get_chromosome(self.settings.get('evolution', {}).get('elite_prob'))
                 child = elite.mutate()
                 new_pop.append(child)
+
+            # TODO change this to add a chromosome without mutation       
+            else:
+                elite = random.choice(list(self.map.values())).get_chromosome(
+                    self.settings.get('evolution', {}).get('elite_prob')).clone()
+                child = elite.clone(elite.dimensions.keys())
+                new_pop.append(child)
         self.pop = new_pop
 
     def run_generation(self, id):
@@ -258,7 +265,8 @@ def main(settings_path):
     else:
         analyzer = MapElitesAnalysis(settings_path)
         for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
-            analyzer.render_elites(generation)
+            if generation.endswith('.p'):
+                analyzer.render_elites(generation)
 
 if __name__ == "__main__":
 
