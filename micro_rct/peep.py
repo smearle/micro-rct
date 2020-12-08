@@ -31,6 +31,7 @@ class Peep:
         self.nauseaTolerance = self.distributeTolerance()
         self.thirst = random.randint(0, maxValue)
         self.angriness = 0
+        self.vomitCount = 0
         self.toilet = 0
         self.timeToConsume = 0
         self.disgustingCount = 0
@@ -291,6 +292,7 @@ class Peep:
 
     def vomit(self):
         #       print('Peep {} vomits '.format(self.id))
+        self.vomitCount += 1
         self.nauseaTarget /= 2
         self.hunger /= 2
 
@@ -512,7 +514,13 @@ class Peep:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_THIRSTY, PEEP_THOUGHT_ITEM_NONE)
             else:
                 self.hasDrink = True
-
+        
+        if ride.name == 'FoodStall' or ride.name == 'DrinkStall':
+            happinessGrowth = ride.price * 4
+            
+            self.happinessTarget = min((self.happinessTarget + happinessGrowth), maxValue)
+            self.happiness = min((self.happiness + happinessGrowth), maxValue)
+            
         self.park.money += ride.price
 
         return res if len(res) > 0 else []
@@ -560,12 +568,12 @@ class Peep:
                 self.happinessTarget = min(self.happinessTarget + 10, maxValue)
         elif highestSatisfaction == 3:
             if lowestSatisfaction == 0:
-                self.happinessTarget = min(self.happinessTarget - 35, 0)
+                self.happinessTarget = max(self.happinessTarget - 35, 0)
 
             if lowestSatisfaction == 1:
-                self.happinessTarget = min(self.happinessTarget - 50, 0)
+                self.happinessTarget = max(self.happinessTarget - 50, 0)
             else:
-                self.happinessTarget = min(self.happinessTarget - 60, 0)
+                self.happinessTarget = max(self.happinessTarget - 60, 0)
 
     def nauseaToleranceConvert(self):
         if self.nauseaTolerance == 0:

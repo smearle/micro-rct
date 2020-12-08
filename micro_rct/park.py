@@ -157,14 +157,25 @@ class Park():
        #    print(self.rides_by_pos[k])
        #    print(self.path_net[k])
         score = 0
-
+        n_score = 0
+        v_score = 0
+        
         for peep in self.peepsList:
             score += peep.happiness
+            n_score += peep.nausea
+            v_score += peep.vomitCount
         self.avg_peep_happiness = score / len(self.peepsList)
+        self.avg_peep_nausea = n_score / len(self.peepsList)
+        self.total_vomit = v_score
 
-    def returnScore(self):
+    def returnScore(self,opt=1):
         self.updateScore()
-        return self.avg_peep_happiness
+        if opt == 1:
+            return self.avg_peep_happiness
+        if opt == 2:
+            return self.avg_peep_nausea
+        return self.total_vomit
+        
 
 
     # TODO: I think this function is mostly redundanat at this point?
@@ -322,3 +333,10 @@ class Park():
         for ride in self.rides_by_pos.values():
             rides[ride.name]+=1
         return len(rides)
+
+    def n_shop_rides(self):
+        total = 0
+        for ride in self.rides_by_pos.values():
+            if ride.name == 'FoodStall' or ride.name == 'DrinkStall' or ride.name == 'Shop':
+                total +=1
+        return total
