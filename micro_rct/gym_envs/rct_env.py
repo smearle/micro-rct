@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import copy
 import math
 import os
@@ -49,6 +50,7 @@ def parse_kwargs(kwargs):
                     'n_guests': 10,
                     'map_width': kwargs.get('map_width', 16),
                     'map_height': kwargs.get('map_width', 16),
+                    'fixed_path': False,
                     },
                 'experiments': {}
                 }
@@ -155,7 +157,7 @@ class RCT(core.Env):
 
         for (x, y) in path_seq:
             self.place_path_tile(x, y)
-            self.render()
+#           self.render()
 
     def delete_islands(self):
         rides_by_pos = self.rct_env.park.rides_by_pos
@@ -167,6 +169,9 @@ class RCT(core.Env):
 
         while checking:
             curr = checking.pop(0)
+            if curr not in self.rct_env.park.path_net:
+                #FIXME: well this is totally fucked
+                continue
             curr_path  = self.rct_env.park.path_net[curr]
             # cannot flow through entrances
             if curr_path.is_entrance:
@@ -185,7 +190,8 @@ class RCT(core.Env):
         path_idxs = list(path_net.keys())
         for (i, j) in path_idxs:
             if (i, j) not in checked:
-                assert self.demolish_tile(i, j)
+               #assert self.demolish_tile(i, j)
+                self.demolish_tile(i, j)
 
     def connect_with_path(self, src, trg):
         path_seq = self.rct_env.path_finder.find_map(self.rct_env.park.map, src, trg)
@@ -194,18 +200,18 @@ class RCT(core.Env):
 
     def place_path_tile(self, x, y, type_i=0):
         if type_i % 2 == 0:
-            map_utility.place_path_tile(self.rct_env.park, x, y)
-        self.rct_env.park.populate_path_net()
+            map_utility.try_place_path_tile(self.rct_env.park, x, y)
 
     def place_ride_tile(self, x, y, ride_i, rotation):
         ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
                                     rotation)
         if not ride:
             return
-        path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
+        if False:
+            path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
 
-        for pos in path_seq:
-            self.place_path_tile(*pos)
+            for pos in path_seq:
+                self.place_path_tile(*pos)
 
     def demolish_tile(self, x, y):
         return map_utility.try_demolish_tile(self.rct_env.park, x, y)
@@ -221,6 +227,7 @@ class RCT(core.Env):
         return self.act(self.action_space.sample())
 
     def reset(self):
+        self.last_incomes = np.zeros(10)
         self.rct_env.reset()
         rides_count = random.randint(self.ride_range[0], self.ride_range[1])
         for i in range(0, rides_count):
@@ -270,7 +277,7 @@ class RCT(core.Env):
                 self.place_path_tile(x, y)
             else:
                 self.demolish_tile(x, y)
-        self.delete_islands()
+    #   self.delete_islands()
 
     def delete_rand_ride(self):
         x, y = random.choice(list(self.rct_env.park.rides_by_pos.keys()))
@@ -280,22 +287,21 @@ class RCT(core.Env):
         return map_utility.placeRide(self.rct_env.park, ride_i)
 
     def step_sim(self):
+        self.rct_env.park.update_peeps()
         self.rct_env.park.update(self.n_step)
         self.update_metrics()
 
     def step(self, action):
         self.act(action)
         done = self.n_step >= self.max_step
-        net_income = 0
-        if done:
-            self.rct_env.park.populate_path_net()
-            for _ in range(RCT.N_SIM_STEP):
-                self.step_sim()
-                self.render()
-        net_income = self.rct_env.park.money
+        # FIXME: unnecessary?
+        self.step_sim()
+        self.last_incomes[:-1] = self.last_incomes[1:]
+        self.last_incomes[-1] = self.rct_env.park.income
+        self.avg_income = np.mean(self.last_incomes)
+        self.render()
         obs = self.get_observation()
        #self.avg_income = net_income
-        self.avg_income = net_income / (RCT.N_SIM_STEP)
         reward = self.avg_income
         info = {}
         self.update_metrics()

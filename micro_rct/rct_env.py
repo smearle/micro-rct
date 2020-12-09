@@ -83,9 +83,9 @@ class RCTEnv():
                   priority=2,
                   verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
-        placePath(self.park, margin=3)
+       #placePath(self.park, margin=3)
+        place_path_tile(self.park, Peep.ORIGIN[0], Peep.ORIGIN[1])
 
-        self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
         self.path_finder = path_finder
         peeps = generate(self.settings['environment']['n_guests'], self.park,
@@ -116,7 +116,6 @@ class RCTEnv():
        #for pos, ride in self.park.rides_by_pos.items():
        #    self.park.map[Map.RIDE, pos[0], pos[1]] = ride.ride_i
         self.park.vomit_paths = {}
-        self.park.populate_path_net()
         self.path_finder = PathFinder(self.park.path_net)
         peeps = generate(self.settings['environment']['n_guests'], self.park,
                          0.2, 0.2, self.path_finder)

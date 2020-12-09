@@ -116,6 +116,7 @@ class Park():
         TODO: A simpler version of this in the case where path changes
         '''
         # locate all paths on the map
+        return
         path_coords = np.nonzero(self.map[Map.PATH] > 0)
         path_coords = np.array(path_coords)
         path_coords_T = path_coords.transpose()
@@ -212,12 +213,16 @@ class Park():
 
 #       return
 
+    def update_peeps(self):
+        res = []
+        for peep in self.peepsList:
+            res += self.updateHuman(peep)
+        return res
+
 
     def update(self, frame):
         res = []
-
-        for peep in self.peepsList:
-            res += self.updateHuman(peep)
+#       res += self.updatePeeps()
         res += self.updateRides()
 	# actually updates avg_peep_happiness
         self.updateScore()

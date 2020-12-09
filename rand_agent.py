@@ -25,10 +25,9 @@ def main(settings):
         env.reset()
         env.render()
 
-        for j in range(100):
+        while True:
+#       for j in range(100):
             env.act(env.action_space.sample())
-            env.render()
-        for i in range(100):
             env.step_sim()
             env.render()
 

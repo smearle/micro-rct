@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import copy
 import random
 from collections import defaultdict
@@ -88,10 +89,10 @@ class PathFinder:
                 # return first route to goal
 
                 return pos_to_routes[curr]
-            if curr not in path_net:
-                print(park.printPark())
-                print(curr)
-                print(path_net)
+#           if curr not in path_net:
+#               print(park.printPark())
+#               print(curr)
+#               print(path_net)
             #FIXME: why is this happening?
             assert curr in path_net
             path = path_net[curr]
@@ -103,11 +104,11 @@ class PathFinder:
 
                 next_pos = next_path.position
                 if next_pos not in path_net:
-                    print(park.printPark())
-                    print(curr)
-                    print(next_pos)
-                    print(path_net.keys())
-                assert next_pos in path_net
+                    continue
+#                   print(park.printPark())
+#                   print(curr)
+#                   print(next_pos)
+#                   print(path_net.keys())
 
                 if next_path and next_pos not in checking and next_pos not in checked \
                         and not (next_path.is_entrance and path.position != next_path.entrance_connected):
@@ -141,8 +142,12 @@ class PathFinder:
         i = 0
 
         def check_is_trg(trg):
+            curr = trg
             if i > 1 and map_arr[Map.PATH, curr[0], curr[1]] != -1:
-                assert curr in self.path_net
+              # assert curr in self.path_net
+                # Well this is royally fucked up
+                if curr not in self.path_net:
+                    return False
                 curr_path = self.path_net[curr]
                 if curr_path.is_entrance:
                     return False

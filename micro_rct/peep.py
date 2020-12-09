@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import random
 
 #from peeps_path_finding import PathFinder
@@ -53,6 +54,19 @@ class Peep:
         self.n_ticks = 0
         self.thoughts = [Thought()]*5
 
+    def random_wander(self):
+        ''' Giving up on preventing guests from ending up off-road. How does this happen though? WTF?'''
+        res = []
+        adjs = [(0,1), (1, 0), (0,-1), (-1,0)]
+        random.shuffle(adjs)
+        for adj in adjs:
+            trg = (self.position[0] + adj[0], self.position[1] + adj[1]) 
+            if 0 <= trg[0] < self.park.map.shape[1] and 0 <= trg[1] < self.park.map.shape[2]:
+            # just make sure they don't float on top of a ride, otherwise who cares
+               #if self.park.map[Map.RIDE, trg[0], trg[1]] == -1:
+                self.curr_route = [trg]
+                return res
+        return res
 
     def updatePosition(self, space, rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
@@ -63,17 +77,20 @@ class Peep:
             return res
 
         if self.position not in self.park.path_net:
-            print('n ticks')
-            print(self.n_ticks)
-            print('peep position')
-            print(self.position)
-            print('path map')
-            print(self.park.map[Map.PATH])
-            raise Exception('peep\'s current tile is not in path net')
-            while True: pass
-            return res
+            self.random_wander()
+           #print('n ticks')
+           #print(self.n_ticks)
+           #print('peep position')
+           #print(self.position)
+           #print('path map')
+           #print(self.park.map[Map.PATH])
+           #err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
+           #print(err_msg)
+           #T()
+           #raise Exception('peep\'s current tile is not in path net')
+           #return res
 
-        if not self.headingTo:
+        if not self.headingTo and not self.curr_route:
             if self.hasMap:
                 res += self.findNextRide(lst)
                 if self.headingTo:
@@ -92,12 +109,12 @@ class Peep:
         if self.curr_route:
             ans = self.curr_route.pop(0)
 
-            if ans not in self.park.path_net:
-                # If path interrupted by live player, wander
-                # TODO: should re-evaluate rides instead
-                self.wander()
-            else:
-                self.position = ans
+           #if ans not in self.park.path_net:
+           #    # If path interrupted by live player, wander
+           #    # TODO: should re-evaluate rides instead
+           #    self.wander()
+           #else:
+            self.position = ans
 
         if target is None:
             return res

@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import datetime
 import random
 import time
@@ -45,6 +46,9 @@ def placePath(park, margin, verbose=False):
 
     return
 
+def try_place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
+    if checkCanPlaceOrNot(park, x, y, 1, 1):
+        place_path_tile(park, x, y, type_i=type_i, verbose=verbose, is_entrance=is_entrance)
 
 def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
 #   print('place path at {}, {}'.format(x, y))
@@ -69,6 +73,7 @@ def place_path_tile(park, x, y, type_i=0, verbose=False, is_entrance=False):
    #if pos in park.freeSpace:
    #    park.freeSpace.pop(pos)
    #park.interactiveSpace[(x, y)] = PARK.pathMark
+    assert park.map[Map.RIDE, x, y] == -1
     update_path_net(park, pos, is_entrance=is_entrance)
 
 def update_path_net(park, pos, is_entrance=False):
@@ -115,7 +120,6 @@ def try_demolish_tile(park, x, y):
 def demolish_tile(park, x, y):
     if park.map[Map.PEEP, x, y] != -1:
         raise Exception
-#   print('demolishing tile {} {}'.format(x, y))
     pos = (x, y)
 
     if pos in park.path_net:
@@ -141,6 +145,7 @@ def demolish_tile(park, x, y):
 
         ride = park.rides_by_pos[center]
         if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
+            T()
             raise Exception('demolishing tile but ride is not removable')
             return False
         # important to do this here, lest we recursively demolish entire ride patch repeatedly
@@ -169,6 +174,7 @@ def demolish_tile(park, x, y):
 #   park.freeSpace[pos] = PARK.emptyMark
     park.map[Map.PATH, x, y] = -1
     park.map[Map.RIDE, x, y] = -1
+    assert pos not in park.path_net
 
     return True
 
@@ -176,6 +182,7 @@ def demolish_tile(park, x, y):
 def clear_for_placement(park, x, y, dx, dy):
     ''' delete everything in a patch. We must already know that this is a valid thing to do.'''
     result = True
+    park.populate_path_net()
 
     for i in range(x, x + dx):
         for j in range(y, y + dy):
@@ -188,6 +195,7 @@ def clear_for_placement(park, x, y, dx, dy):
                 raise Exception
 
                 return res_ij
+            assert (i, j) not in park.path_net
 
     return result
 
@@ -208,13 +216,15 @@ def _add_ride(park, _ride, x, y, ride_i, entrance):
                #continue
                raise Exception('trying to place ride out of map boundaries')
 
-            if (i, j) == entrance:
-                pass
+           #if (i, j) == entrance:
+           #    continue
            #else:
            #    demolish_tile(park, i, j)
             park.map[Map.RIDE, i, j] = ride_i
             park.locs_to_rides[(i, j)] = (x, y)
             _ride.locs.append((i, j))
+            if (i, j) != entrance and (i, j) in park.path_net:
+                T()
    #park.updateMap((x, y), size, mark, _ride.entrance)
     assert _ride.entrance in park.path_net
     return _ride
