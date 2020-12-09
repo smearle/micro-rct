@@ -20,7 +20,7 @@ class GridVisualizer:
             x=temp.columns.tolist(),
             y=temp.index.tolist(),
             # labels=dict(x="X", y="Y", Z="Fitness"),
-            colorscale='Plasma'))
+            colorscale='Viridis'))
         fig['layout'].update(
             title=dict(
                 text="Elite Map"
