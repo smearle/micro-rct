@@ -752,9 +752,9 @@ class Peep:
            #print(self.park.printPark())
            #print(self.park.path_net)
            #print(self.position)
-            raise Exception("peep's current tile not in path net")
+           #raise Exception("peep's current tile not in path net")
             
-            return
+            return self.random_wander()
         current_tile = self.park.path_net[self.position]
 #       current_tile.get_connecting(self.park.path_net)
         traversible_tiles = current_tile.get_junctions(self.park.path_net)

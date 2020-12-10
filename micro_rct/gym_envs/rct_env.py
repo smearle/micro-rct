@@ -51,6 +51,7 @@ def parse_kwargs(kwargs):
                     'map_width': kwargs.get('map_width', 16),
                     'map_height': kwargs.get('map_width', 16),
                     'fixed_path': False,
+                    'ride_range': (0, 10),
                     },
                 'experiments': {}
                 }
@@ -126,16 +127,39 @@ class RCT(core.Env):
         low = np.zeros(obs_shape)
         high = np.ones(obs_shape)
         self.observation_space = gym.spaces.Box(low, high)
-        act_shape = (2)
-        low = np.zeros(act_shape)
-        high = np.zeros(act_shape)
-        high[0] = self.MAP_WIDTH
-        high[1] = self.MAP_HEIGHT
-        self.N_ACT_CHAN = len(ride_list) + 2  # build a ride, place path, or demolish
-        self.action_space = gym.spaces.MultiDiscrete(
-                (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
+        self.N_TOOLS = len(ride_list) + 2  # build a ride, place path, or demolish
+        self.N_ROTATIONS = 4
+        if RCT.ACTION_SPACE == 0:
+            self.action_space = gym.spaces.Discrete(
+                    self.MAP_WIDTH * self.MAP_HEIGHT * self.N_TOOLS * self.N_ROTATIONS
+                    )
+            self.get_ints_to_actions()
+        elif RCT.ACTION_SPACE == 1:
+            act_shape = (2)
+            low = np.zeros(act_shape)
+            high = np.zeros(act_shape)
+            high[0] = self.MAP_WIDTH
+            high[1] = self.MAP_HEIGHT
+            self.action_space = gym.spaces.MultiDiscrete(
+                (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_TOOLS, self.N_ROTATIONS)
                 )
         self.avg_income = 0
+
+    def get_ints_to_actions(self):
+        ''' Ravels the action int in the same order as the pytorch model
+        unravels it during its forward pass.'''
+        i = 0
+        self.ints_to_actions = {}
+#       self.actions_to_ints = np.zeros((self.N_ROTATIONS
+        for w in range(self.N_ROTATIONS):
+            for z in range(self.N_TOOLS):
+                for x in range(self.MAP_WIDTH):
+                    for y in range(self.MAP_HEIGHT):
+                        self.ints_to_actions[i] = (x, y, z, w)
+#                       self.actions_to_ints[x, y, z, w] = i
+                        i += 1
+#       print('len of ints_to_actions: {}\n num tools: {}'.format(
+#           len(self.intsToActions), self.num_tools))
 
     def configure(self):
         pass
@@ -252,13 +276,13 @@ class RCT(core.Env):
         return obs
 
     def act(self, action):
-        # FIXME: hack to support gym-city implementation
-        if len(action.shape) > 1:
-            assert action.shape[1] == 1
-            action = action[:, 0]
         if RCT.ACTION_SPACE == 0:
-            x, y, build, rotation = self.ravel_action(action)
+            x, y, build, rotation = self.ints_to_actions[action]
         elif RCT.ACTION_SPACE == 1:
+            # FIXME: hack to support gym-city implementation
+            if len(action.shape) > 1:
+                assert action.shape[1] == 1
+                action = action[:, 0]
             x = action[0]
             y = action[1]
             build = action[2]
