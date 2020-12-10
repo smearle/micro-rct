@@ -315,17 +315,18 @@ class RCT(core.Env):
         obs = self.get_observation()
         #reward = len(self.rct_env.park.rides_by_pos)
         #reward = self.rct_env.park.avg_peep_happiness
-        reward = self.rct_env.park.n_unique_rides()
+        #reward = self.rct_env.park.n_unique_rides()
         
-        '''
+        
         reward = 0
         for _ in range(RCT.N_SIM_STEP):
             self.step_sim()
-            reward += self.rct_env.park.avg_peep_happiness
+            #reward += self.rct_env.park.avg_peep_happiness
+            reward = self.rct_env.park.income
             self.render()
         obs = self.get_observation()
         reward = reward / (RCT.N_SIM_STEP)
-        '''
+        
         info = {}
 
         if self.render_gui:
