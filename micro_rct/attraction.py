@@ -6,7 +6,8 @@ class Path:
 
 class Attraction:
     def __init__(self, name, thirst, hunger, toilet, excitement, intensity, nausea, time, cost, price, size_x, size_y,
-            mark, position_x=0, position_y=0):
+            mark, ride_i, position_x=0, position_y=0):
+        self.ride_i = ride_i
         self.name = name
         self.mark = mark
         if thirst!=0 or hunger!=0 or toilet!=0 or name == 'FirstAid' or name =='InformationKiosk' or name=='Shop':
