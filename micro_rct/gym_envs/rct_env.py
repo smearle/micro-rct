@@ -231,11 +231,10 @@ class RCT(core.Env):
                                     rotation)
         if not ride:
             return
-        if False:
-            path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
+        path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
 
-            for pos in path_seq:
-                self.place_path_tile(*pos)
+        for pos in path_seq:
+            self.place_path_tile(*pos)
 
     def demolish_tile(self, x, y):
         return map_utility.try_demolish_tile(self.rct_env.park, x, y)
