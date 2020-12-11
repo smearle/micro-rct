@@ -166,8 +166,6 @@ class Park():
             net_nausea += peep.nausea
             net_vomit += peep.vomitCount
         self.avg_peep_happiness = net_happiness / len(self.peepsList)
-
-        self.avg_peep_happiness = net_happiness / len(self.peepsList)
         self.avg_peep_nausea = net_nausea / len(self.peepsList)
         self.total_vomit = net_vomit
 
