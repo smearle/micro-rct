@@ -118,12 +118,13 @@ class CnnAttn(nn.Module):
     :param features_dim: Number of features extracted.
         This corresponds to the number of unit for the last layer.
     """
-    self.features_dim = features_dim
+    
     def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 512):
         super(CnnAttn, self).__init__()
         # We assume CxHxW images (channels first)
         # Re-ordering will be done by pre-preprocessing or wrapper
-
+        
+        self.features_dim = features_dim
         n_input_channels=observation_space.shape[0]
         self.cnn = nn.Sequential(
             #nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4, padding=0),
@@ -264,8 +265,8 @@ class NewCNN1(BaseFeaturesExtractor):
 env = RCT(settings_path='configs/settings.yml')
 #new = NatureCNN(env.observation_space)
 #new = Self_Attn(29)
-new = CnnAttn(env.observation_space)
-#new = AttnCnnMin(env.observation_space)
+#new = CnnAttn(env.observation_space)
+new = AttnCnnMin(env.observation_space)
 #print(env.observation_space.shape[0])
 ins = th.randn(50, 29,16,16)
 outs = new(ins)

@@ -29,7 +29,8 @@ def make_RCT_env(rank: int, seed: int = 0) -> Callable:
     :return: (Callable)
     """
     def _init() -> gym.Env:
-        env = RCT(settings_path='configs/settings.yml')
+        #env = RCT(settings_path='configs/settings.yml')
+        env = RCT(settings_path='/home/mae236/DeepLearning/micro-rct/configs/settings.yml')
         env.seed(seed + rank)
         env = Monitor(env, log_dir)
         return env
@@ -37,7 +38,7 @@ def make_RCT_env(rank: int, seed: int = 0) -> Callable:
     return _init
 
 if __name__ == '__main__':
-    num_cpu = 5  # Number of processes to use
+    num_cpu = 12 # Number of processes to use
     # Create the vectorized environment
     tb_logs = "./tmp/test"
     os.makedirs(tb_logs, exist_ok=True)

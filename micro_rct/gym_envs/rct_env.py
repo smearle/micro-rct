@@ -326,7 +326,10 @@ class RCT(core.Env):
         self.render()
         obs = self.get_observation()
        #self.avg_income = net_income
-        reward = self.avg_income
+        #reward = self.avg_income
+        #reward = self.avg_peep_happiness
+        reward = self.rct_env.park.n_unique_rides()
+        #reward = len(self.rct_env.park.rides_by_pos)
         info = {}
         self.update_metrics()
         self.n_step += 1

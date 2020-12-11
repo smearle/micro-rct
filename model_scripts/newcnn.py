@@ -30,8 +30,8 @@ def make_RCT_env(rank: int, seed: int = 0) -> Callable:
     :return: (Callable)
     """
     def _init() -> gym.Env:
-        env = RCT(settings_path='configs/settings.yml')
-        #env = RCT(settings_path='/home/mae236/DeepLearning/micro-rct/configs/settings.yml')
+        #env = RCT(settings_path='configs/settings.yml')
+        env = RCT(settings_path='/home/mae236/DeepLearning/micro-rct/configs/settings.yml')
 
         env.seed(seed + rank)
         env = Monitor(env, log_dir)
@@ -40,7 +40,7 @@ def make_RCT_env(rank: int, seed: int = 0) -> Callable:
     return _init
 
 if __name__ == '__main__':
-    num_cpu = 1  # Number of processes to use
+    num_cpu = 12  # Number of processes to use
     # Create the vectorized environment
     tb_logs = "./tmp/test"
     os.makedirs(tb_logs, exist_ok=True)
@@ -52,8 +52,8 @@ if __name__ == '__main__':
 
     #tf.debugging.experimental.enable_dump_debug_info(tb_logs, tensor_debug_mode="FULL_HEALTH", circular_buffer_size=-1)
 
-    env = DummyVecEnv([make_RCT_env(rank=i, seed=0) for i in range(num_cpu)])
-    #env = SubprocVecEnv([make_RCT_env(rank=1, seed=0) for i in range(num_cpu)])
+    #env = DummyVecEnv([make_RCT_env(rank=i, seed=0) for i in range(num_cpu)])
+    env = SubprocVecEnv([make_RCT_env(rank=1, seed=0) for i in range(num_cpu)])
 
     cnn= A2C(NewCnnPolicy, env, learning_rate = 1e-5, tensorboard_log=tb_logs, verbose=1)
 
