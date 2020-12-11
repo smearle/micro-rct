@@ -73,7 +73,6 @@ class Self_Attn(nn.Module):
         out = out.view(m_batchsize,C,width,height)
         
         out = self.gamma*out + x
-        print(attention.shape)
         return attention[:, None, :,:,]
 
 class AttnCnn(nn.Module):
@@ -89,7 +88,7 @@ class AttnCnn(nn.Module):
         # Re-ordering will be done by pre-preprocessing or wrapper
 
         self.attn = Self_Attn(observation_space.shape[0])
-
+        self.features_dim = features_dim
         n_input_channels = 1
         self.cnn = nn.Sequential(
             #nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4, padding=0),
@@ -112,6 +111,46 @@ class AttnCnn(nn.Module):
         
     def forward(self, observations: th.Tensor) -> th.Tensor:
         return self.linear(self.cnn(self.attn(observations)))
+
+class CnnAttn(nn.Module):
+    """
+    :param observation_space:
+    :param features_dim: Number of features extracted.
+        This corresponds to the number of unit for the last layer.
+    """
+    self.features_dim = features_dim
+    def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 512):
+        super(CnnAttn, self).__init__()
+        # We assume CxHxW images (channels first)
+        # Re-ordering will be done by pre-preprocessing or wrapper
+
+        n_input_channels=observation_space.shape[0]
+        self.cnn = nn.Sequential(
+            #nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4, padding=0),
+            nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=1, padding=0),
+            nn.ReLU(),
+            #nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=0),
+            nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=0),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=2, stride=1, padding=0),
+            nn.ReLU(),
+        )
+
+        # Compute shape by doing one forward pass
+        with th.no_grad():
+            in_attn = (self.cnn(th.as_tensor(observation_space.sample()[None])).float()).shape[1]
+            
+        self.attn = Self_Attn(in_attn)
+        self.flatten = (nn.Flatten())
+
+       # Compute shape by doing one forward pass
+        with th.no_grad():
+            n_flatten = (self.flatten(self.attn(self.cnn(th.as_tensor(observation_space.sample()[None])).float()))).shape[1]
+        self.linear = nn.Sequential(nn.Flatten(), nn.Linear(n_flatten, features_dim), nn.ReLU())
+
+        
+    def forward(self, observations: th.Tensor) -> th.Tensor:
+        return self.linear(self.attn(self.cnn(observations)))
 
 
 class NatureCNN(BaseFeaturesExtractor):
@@ -147,8 +186,7 @@ class NatureCNN(BaseFeaturesExtractor):
             n_flatten = self.cnn(th.as_tensor(observation_space.sample()[None]).float()).shape[1]
             
         self.linear = nn.Sequential(nn.Linear(n_flatten, features_dim), nn.ReLU())
-        print(n_flatten)
-        
+             
     def forward(self, observations: th.Tensor) -> th.Tensor:
         return self.linear(self.cnn(observations))
 
@@ -226,7 +264,7 @@ class NewCNN1(BaseFeaturesExtractor):
 env = RCT(settings_path='configs/settings.yml')
 #new = NatureCNN(env.observation_space)
 #new = Self_Attn(29)
-new = AttnCnn(env.observation_space)
+new = CnnAttn(env.observation_space)
 #new = AttnCnnMin(env.observation_space)
 #print(env.observation_space.shape[0])
 ins = th.randn(50, 29,16,16)
@@ -235,7 +273,7 @@ outs = new(ins)
 #print(len(outs))
 print(outs.shape)
 
-l1 =  nn.Conv2d(29, 32, kernel_size=6, stride=1, padding=0)
+l1 = nn.Conv2d(29, 32, kernel_size=6, stride=1, padding=0)
 l2 = nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=0)
 l3 = nn.Conv2d(64, 128, kernel_size=4, stride=1, padding=0)
 l4 = nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0)

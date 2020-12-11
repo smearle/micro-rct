@@ -1,10 +1,34 @@
 general:
     render: False
     verbose: False
+    render_screen_width: 500
+    render_screen_height: 500
+parallelism:
+    enabled: True
+    threads: 3
 environment:
-    n_guests: 100
-    map_width: 16
-    map_height: 16
+    n_guests: 50
+    map_width: 30
+    map_height: 30
     n_actions: 10
+    ride_range: [3, 8]
+    fixed_path: False # all ride placements along fixed square path
 experiments:
-    ticks: [500, 1000]
+    ticks: [500]
+evolution:
+    population_size: 10
+    max_mutate_builds: 10
+    fitness_type: 2
+    eval_ticks: 250
+    gen_count: 700
+    save_path: results/
+    action: evolve
+    dimension_keys: [ride_count, nausea]
+    cell_pop_size: 3
+    elite_prob: 0.5
+    mutation_prob: 1.0
+    print_map: False
+    checkpoint:
+        initialize_enabled: False
+        elite_path: results/9.p
+        save_nth_epoch: 20

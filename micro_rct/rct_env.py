@@ -50,46 +50,42 @@ def run_experiment(env, n_ticks, settings, n_trials=20):
 class RCTEnv():
     N_RIDES = len(ride_list)
 
-    def __init__(self, settings, **kwargs):
-        if settings is None:
-            settings_path = os.path.dirname(
-                os.path.dirname(os.path.realpath(__file__)))
-            settings_path = os.path.join(settings_path, 'configs/settings.yml')
-            with open(settings_path) as file:
-                settings = yaml.load(file, yaml.FullLoader)
+    def __init__(self, settings, park=None):
 
-        for kwarg in kwargs:
-            #FIXME: inconsistent
-#           print('kwargs', kwarg)
+        self.settings = settings
+        self.set_rendering(settings['general']['render'])
+        self.render_map = None
+        if park == None:
+            self.park = Park(self.settings)
+        else:
+            self.park = park
+            self.resetSim()
 
-            for s_type in settings:
-                if kwarg in settings[s_type]:
-                    settings[s_type][kwarg] = kwargs.get(kwarg)
-
-        if settings['general']['render']:
-            # if kwargs.get('render_gui', False):
+    def set_rendering(self, val):
+        if val:
+            self.settings['general']['render'] = val
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
-            screen_width = 1000
-            screen_height = 1000
+            screen_width = self.settings.get(
+                'general', {}).get('render_screen_width')
+            screen_height = self.settings.get(
+                'general', {}).get('render_screen_height')
             self.screen = pygame.display.set_mode(
                 (screen_width, screen_height))
             self.screen_width, self.screen_height = screen_width, screen_height
         else:
             self.screen = None
-        self.settings = settings
-        self.render_map = None
-        self.park = Park(self.settings)
 
     def reset(self):
         print_msg('resetting park',
                   priority=2,
                   verbose=self.settings['general']['verbose'])
         self.park = Park(self.settings)
-    #   placePath(self.park, margin=3)
+       #placePath(self.park, margin=3)
         place_path_tile(self.park, Peep.ORIGIN[0], Peep.ORIGIN[1])
 
-        self.park.populate_path_net()
         path_finder = PathFinder(self.park.path_net)
         self.path_finder = path_finder
         peeps = generate(self.settings['environment']['n_guests'], self.park,
@@ -99,14 +95,14 @@ class RCTEnv():
         for p in peeps:
             self.park.updateHuman(p)
 
-        if not self.render_map:
-           #print('in rct env, initializing render map')
-            self.render_map = Map(self.park,
+#       if not self.render_map:
+#          #print('in rct env, initializing render map')
+        self.render_map = Map(self.park,
                                   render=self.settings['general']['render'],
                                   screen=self.screen)
-        else:
-           #print('in rct env, not initializing render map')
-            self.render_map.reset(self.park)
+#       else:
+#          #print('in rct env, not initializing render map')
+#           self.render_map.reset(self.park)
 
 
     def resetSim(self):
@@ -120,7 +116,6 @@ class RCTEnv():
        #for pos, ride in self.park.rides_by_pos.items():
        #    self.park.map[Map.RIDE, pos[0], pos[1]] = ride.ride_i
         self.park.vomit_paths = {}
-        self.park.populate_path_net()
         self.path_finder = PathFinder(self.park.path_net)
         peeps = generate(self.settings['environment']['n_guests'], self.park,
                          0.2, 0.2, self.path_finder)
@@ -130,6 +125,8 @@ class RCTEnv():
             self.park.updateHuman(p)
 
         if not self.screen and self.settings['general']['render']:
+            from os import environ
+            environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
             import pygame
             pygame.init()
             self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))

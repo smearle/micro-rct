@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import random
 
 #from peeps_path_finding import PathFinder
@@ -5,6 +6,7 @@ from .path import Path
 from .pathfinding import PathFinder
 from .thoughts_enums import *
 from .utils.debug_utils import print_msg
+from .tilemap import Map
 
 #from collections import *
 
@@ -22,7 +24,7 @@ class Peep:
         self.position = self.ORIGIN
         self.type = 0 # type 0 = normal, type 1 = coward, type 2 = brave
         self.intensity = [random.randint(8,15),random.randrange(0,7)] ###
-        self.happiness = 128
+        self.happiness = 128 - random.randint(-15,16)
         self.happinessTarget = 128
         self.nausea = 0
         self.nauseaTarget = 0
@@ -30,6 +32,7 @@ class Peep:
         self.nauseaTolerance = self.distributeTolerance()
         self.thirst = random.randint(0, maxValue)
         self.angriness = 0
+        self.vomitCount = 0
         self.toilet = 0
         self.timeToConsume = 0
         self.disgustingCount = 0
@@ -51,6 +54,19 @@ class Peep:
         self.n_ticks = 0
         self.thoughts = [Thought()]*5
 
+    def random_wander(self):
+        ''' Giving up on preventing guests from ending up off-road. How does this happen though? WTF?'''
+        res = []
+        adjs = [(0,1), (1, 0), (0,-1), (-1,0)]
+        random.shuffle(adjs)
+        for adj in adjs:
+            trg = (self.position[0] + adj[0], self.position[1] + adj[1]) 
+            if 0 <= trg[0] < self.park.map.shape[1] and 0 <= trg[1] < self.park.map.shape[2]:
+            # just make sure they don't float on top of a ride, otherwise who cares
+               #if self.park.map[Map.RIDE, trg[0], trg[1]] == -1:
+                self.curr_route = [trg]
+                return res
+        return res
 
     def updatePosition(self, space, rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
@@ -61,10 +77,20 @@ class Peep:
             return res
 
         if self.position not in self.park.path_net:
-            return res
-#           raise Exception('peep\'s current tile is not in path net')
+            self.random_wander()
+           #print('n ticks')
+           #print(self.n_ticks)
+           #print('peep position')
+           #print(self.position)
+           #print('path map')
+           #print(self.park.map[Map.PATH])
+           #err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
+           #print(err_msg)
+           #T()
+           #raise Exception('peep\'s current tile is not in path net')
+           #return res
 
-        if not self.headingTo:
+        if not self.headingTo and not self.curr_route:
             if self.hasMap:
                 res += self.findNextRide(lst)
                 if self.headingTo:
@@ -73,54 +99,50 @@ class Peep:
                     self.wander()
             else:
                 self.wander()
-           #return res
         target = self.headingTo
 
         if not self.curr_route:
             self.wander()
-           #self.curr_route = [self.position]
-           #self.headingTo = None
 
-        #  when the target is not in the path_net dict,
-        # could be because of deletion
-
-#       if self.curr_route == -1:
-#           print(self.park.map)
-#           print(self.park.path_net)
-#           raise Exception(
-#               'invalid route {} to goal {} corresponding to ride at position {} with \
-#                   entrance at {}'.format(self.curr_route, self.headingTo,
-#                                          self.headingTo.position,
-#                                          self.headingTo.entrance))
-           #self.curr_route = [self.position]
-           #self.headingTo = None
         self.passingBy(vomitPath)
 
         if self.curr_route:
             ans = self.curr_route.pop(0)
 
-            if ans not in self.park.path_net:
-                self.wander()
-               #self.curr_route = []
-               #self.headingTo = None
-            else:
-                self.position = ans
+           #if ans not in self.park.path_net:
+           #    # If path interrupted by live player, wander
+           #    # TODO: should re-evaluate rides instead
+           #    self.wander()
+           #else:
+            self.position = ans
 
         if target is None:
             return res
 
-        if self.position == target.position or self.position == target.entrance:
+
+        at_target = (self.position == target.position or self.position == target.entrance)  
+        if not at_target and self.position in rides_by_pos:
+            # peep has wandered to a ride
+            if rides_by_pos[self.position].name == 'InformationKiosk':
+                #FIXME: this should cost money
+                self.hasMap = True
+            else:
+                ride = rides_by_pos[self.position]
+                self.updateThresholds()
+                if self.evaluateRide(ride):
+                    at_target = True
+                    target = ride
+
+        if at_target:
             str1 = 'Peep {} arrived at {}\n'.format(self.id, target.name)
             res.append(str1)
 
             if not isinstance(target, Path):
 
-                # when peep get to kiosk we assume it will get the map for now
+                # when peep gets to kiosk we assume it will get the map for now
 
                 if target.name == 'InformationKiosk':
                     self.hasMap = True
-
-
 
                 if target.name == 'FirstAid':
                     self.inFirstAid = True
@@ -130,10 +152,9 @@ class Peep:
                     self.visited.add(target.name)
             self.headingTo = None
 
-        if self.position in rides_by_pos and rides_by_pos[self.position].name == 'InformationKiosk':
-            #FIXME: this should cost money
-            self.hasMap = True
 
+
+                
 
         return res
 
@@ -288,6 +309,7 @@ class Peep:
 
     def vomit(self):
         #       print('Peep {} vomits '.format(self.id))
+        self.vomitCount += 1
         self.nauseaTarget /= 2
         self.hunger /= 2
 
@@ -432,7 +454,7 @@ class Peep:
                         self.thoughts[-1].type = PEEP_THOUGHT_TYPE_NONE
                         self.thoughts[-1].item = PEEP_THOUGHT_ITEM_NONE
                         self.thoughts[-1].freshness = 0
-                        self.thoughts[-1].fresh_timeout = 0
+                        self.thoguhts[-1].fresh_timeout = 0
             else:
                 fresh_thought = i
             if add_fresh and fresh_thought != -1:
@@ -479,9 +501,10 @@ class Peep:
                 format(self.nauseaTarget, self.happinessTarget))
 
         if ride.name == 'FirstAid':
-            if self.nausea <= 35:  # leave first aid when nausea below 35
-                res.append('Peep {} is recovered from nausea\n'.format(
-                    self.id))
+            if self.nausea <= 35:   #leave first aid when nausea below 35
+                res.append('Peep {} is recovered from nausea\n'.format(self.id))
+                self.happinessTarget = max(maxValue,self.happinessTarget+30)
+                self.happiness = self.happinessTarget
                 self.inFirstAid = False
                 ride.queue.remove(self)
             else:
@@ -508,13 +531,13 @@ class Peep:
                 self.insertNewThought(PEEP_THOUGHT_TYPE_NOT_THIRSTY, PEEP_THOUGHT_ITEM_NONE)
             else:
                 self.hasDrink = True
-
+        
         if ride.name == 'FoodStall' or ride.name == 'DrinkStall':
-            happinessGrowth = ride.price*4
-
+            happinessGrowth = ride.price * 4
+            
             self.happinessTarget = min((self.happinessTarget + happinessGrowth), maxValue)
             self.happiness = min((self.happiness + happinessGrowth), maxValue)
-
+            
         self.park.money += ride.price
 
         return res if len(res) > 0 else []
@@ -617,45 +640,57 @@ class Peep:
 
         return
 
+    def evaluateRide(self, ride):
+        ''' Calculate a peep's disposition toward a given ride. Must by updateThresholds. '''
+        goodIntensity = goodNausea = False
+        minIntensity, maxIntensity = self.minIntensity, self.maxIntensity
+        maxNausea = self.maxNausea
+
+        if maxIntensity >= ride.intensity >= minIntensity:
+            goodIntensity = True
+
+        if ride.nausea <= maxNausea:
+            goodNausea = True
+        # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
+
+        if self.nausea > 160 and ride.nausea >= 10:
+            goodNausea = False
+
+        if goodIntensity and goodNausea and not ride.isShop:
+            return True
+
+        if ride.name == 'FoodStall' and self.hunger < 50:
+        # FIXME: ad hoc to test food-eating functionality. This should tie in with thoughts.
+            return True
+
+        return False
+
+    def updateThresholds(self):
+        ''' Recalculate threshold stats for the peep, used to determine its disposition and response to rides.'''
+        # [problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+        alterNumber = 33
+        self.maxIntensity = (min(self.intensity[0] * 100, 1000) +
+                        self.happiness) // alterNumber
+        self.minIntensity = (max(self.intensity[1] * 100 - self.happiness,
+                            0)) // alterNumber
+        self.maxNausea = (self.nauseaMaximumThresholds() +
+                     self.happiness) // alterNumber
+
+
     def findNextRide(self, lst: list, specialCase=False):
 
         res = ['\nPeep {} is finding next ride\n'.format(self.id)]
 
         def filterLst():
-            # this code will filter unwanted ride for the peep
+            # this code will filter unwanted rides for the peep
             # [difference] didn't deal with ride's popularity
-            # [difference] didn't consider the situation the peep is at the ride
-            # [problem] using alterNumber since the number cannot fit into the object's nasuea and intensity range
+            # [difference] didn't consider the situation when the peep is at the ride
             #           not ideal...?
-            alterNumber = 33
             newLst = []
-            maxIntensity = (min(self.intensity[0] * 100, 1000) +
-                            self.happiness) // alterNumber
-            minIntensity = (max(self.intensity[1] * 100 - self.happiness,
-                                0)) // alterNumber
-            maxNausea = (self.nauseaMaximumThresholds() +
-                         self.happiness) // alterNumber
-
+            self.updateThresholds() # update tolerance thresholds
             for ride in lst:
-                goodIntensity = goodNausea = False
-
-                if maxIntensity >= ride.intensity >= minIntensity:
-                    goodIntensity = True
-
-                if ride.nausea <= maxNausea:
-                    goodNausea = True
-                # if peep's nausea > 160 it only consider gentle ride, in our case ride's nausea <10
-
-                if self.nausea > 160 and ride.nausea >= 10:
-                    goodNausea = False
-
-                if goodIntensity and goodNausea and not ride.isShop:
-                    newLst.append((ride))
-
-                # FIXME: ad hoc to test food-eating functionality. How is this selected in OpenRCT2?
-
-                if ride.name == 'FoodStall' and self.hunger < 50:
-                    newLst.append((ride))
+                if self.evaluateRide(ride):
+                    newLst.append(ride)
 
             return newLst
 
@@ -712,7 +747,6 @@ class Peep:
 
     def wander(self):
         '''Pick a random destination.'''
-       #print('wandering')
         if self.position not in self.park.path_net:
            #self.park.populate_path_net()
            #print(self.park.printPark())
@@ -720,7 +754,7 @@ class Peep:
            #print(self.position)
            #raise Exception("peep's current tile not in path net")
             
-            return
+            return self.random_wander()
         current_tile = self.park.path_net[self.position]
 #       current_tile.get_connecting(self.park.path_net)
         traversible_tiles = current_tile.get_junctions(self.park.path_net)
