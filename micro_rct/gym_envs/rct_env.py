@@ -231,11 +231,10 @@ class RCT(core.Env):
                                     rotation)
         if not ride:
             return
-        if False:
-            path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
+        path_seq = self.connect_with_path(ride.entrance, Peep.ORIGIN)
 
-            for pos in path_seq:
-                self.place_path_tile(*pos)
+        for pos in path_seq:
+            self.place_path_tile(*pos)
 
     def demolish_tile(self, x, y):
         return map_utility.try_demolish_tile(self.rct_env.park, x, y)
@@ -313,25 +312,20 @@ class RCT(core.Env):
     def step_sim(self):
         self.rct_env.park.update_peeps()
         self.rct_env.park.update(self.n_step)
+        self.last_incomes[:-1] = self.last_incomes[1:]
+        self.last_incomes[-1] = self.rct_env.park.income
+        self.avg_income = np.mean(self.last_incomes)
         self.update_metrics()
 
     def step(self, action):
         self.act(action)
         done = self.n_step >= self.max_step
-        # FIXME: unnecessary?
         self.step_sim()
-        self.last_incomes[:-1] = self.last_incomes[1:]
-        self.last_incomes[-1] = self.rct_env.park.income
-        self.avg_income = np.mean(self.last_incomes)
+        reward = self.avg_income
+       #reward = self.metrics['happiness']
         self.render()
         obs = self.get_observation()
-       #self.avg_income = net_income
-        #reward = self.avg_income
-        #reward = self.avg_peep_happiness
-        reward = self.rct_env.park.n_unique_rides()
-        #reward = len(self.rct_env.park.rides_by_pos)
         info = {}
-        self.update_metrics()
         self.n_step += 1
 
         return obs, reward, done, info

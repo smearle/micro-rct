@@ -7,15 +7,16 @@ import os
 from gym_micro_rct.envs.rct_env import RCT
 
 from stable_baselines3 import A2C
-from stable_baselines3.common.policies import ActorCriticCnnPolicy
-from stable_baselines3.a2c import MlpPolicy
+#from stable_baselines3.common.policies import MlpLstmPolicy
+from stable_baselines3.common.policies import SelfAttnPolicy
+#from stable_baselines3.a2c import MlpPolicy
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv
 #from stable_baselines3.common.noise import NormalActionNoise
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.callbacks import CheckpointCallback
 from typing import Callable
-
+import tensorflow as tf
 
 
 def make_RCT_env(rank: int, seed: int = 0) -> Callable:
@@ -29,7 +30,9 @@ def make_RCT_env(rank: int, seed: int = 0) -> Callable:
     :return: (Callable)
     """
     def _init() -> gym.Env:
-        env = RCT(settings_path='configs/settings.yml')
+        env = RCT(settings_path='/configs/settings.yml')
+        #env = RCT(settings_path='/home/mae236/DeepLearning/micro-rct/configs/settings.yml')
+
         env.seed(seed + rank)
         env = Monitor(env, log_dir)
         return env
@@ -52,12 +55,12 @@ if __name__ == '__main__':
     env = DummyVecEnv([make_RCT_env(rank=i, seed=0) for i in range(num_cpu)])
     #env = SubprocVecEnv([make_RCT_env(rank=1, seed=0) for i in range(num_cpu)])
 
-    model5 = A2C(MlpPolicy, env, learning_rate = 1e-4, tensorboard_log=tb_logs, verbose=1)
+    attn= A2C(SelfAttnPolicy, env, learning_rate = 1e-5, tensorboard_log=tb_logs, verbose=1)
 
-    callback = CheckpointCallback(save_freq = 50, save_path = model_dir)
+    callback = CheckpointCallback(save_freq = int(1e6), save_path = model_dir)
 
     try:
-      model5.learn(total_timesteps=int(1e8), callback = callback)
-      model5.save("./tmp/LR1model")
+      attn.learn(total_timesteps=int(1e8), callback = callback)
+      attn.save("./tmp/model")
     except KeyboardInterrupt:
-      model5.save("./tmp/test")
+      attn.save("./tmp/model")
