@@ -276,7 +276,10 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:3, :, :] = np.clip(self.rct_env.park.map[:3, :, :] + 1, 0, 1)
+        # clip ride and path types
+        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
+        # adjust to show true numner of peeps (whereas before, 0 was represented as -1. Just cuz.
+        obs[2, :, :] = self.rct_env.park.map[2, :, :] + 1
         ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(

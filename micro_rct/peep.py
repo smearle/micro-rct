@@ -114,11 +114,11 @@ class Peep:
             ans = self.curr_route.pop(0)
 
             if ans not in self.park.path_net:
-                err_msg = "peep is about to step to a tile {} that is not in the path net".format(ans)
-                # If path interrupted by live player, wander
-                # TODO: should re-evaluate rides instead
-                print(err_msg)
-                T()
+#               err_msg = "peep is about to step to a tile {} that is not in the path net".format(ans)
+#               # If path interrupted by live player, wander
+#               # TODO: should re-evaluate rides instead
+#               print(err_msg)
+#               T()
                 self.wander()
             else:
                 self._set_pos(ans)
