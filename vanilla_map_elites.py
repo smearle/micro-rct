@@ -132,14 +132,14 @@ class MapElitesRunner:
             if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
                 # qualify for mutation
                 # pick a random cell and its elite
-                elite=random.choice(elite_list.get_chromosome(
-                    self.settings.get('evolution', {}).get('elite_prob')))
+                elite=random.choice(elite_list).get_chromosome(
+                    self.settings.get('evolution', {}).get('elite_prob'))
                 child = elite.mutate()
                 new_pop.append(child)
 
             # TODO change this to add a chromosome without mutation       
             else:
-                elite = random.choice(list(self.map.values())).get_chromosome(
+                elite = random.choice(elite_list).get_chromosome(
                     self.settings.get('evolution', {}).get('elite_prob')).clone()
                 child = elite.clone(elite.dimensions.keys())
                 new_pop.append(child)
