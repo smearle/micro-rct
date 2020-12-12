@@ -68,6 +68,7 @@ class Park():
         self.money = Park.INIT_MONEY
         self.last_money = self.money
         self.income = 0
+        self.net_vomits = 0
 
     def clone(self, settings):
         new_park = Park(settings)
@@ -109,6 +110,7 @@ class Park():
         path_tile = self.path_net[x, y]
         path_tile.vom_time = PARK.VOMIT_LIFESPAN
         self.vomit_paths[x, y] = path_tile
+        self.net_vomits += 1
 
     def populate_path_net(self):
         '''

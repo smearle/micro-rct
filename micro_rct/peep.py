@@ -486,7 +486,7 @@ class Peep:
         if ride.name == 'FirstAid':
             if self.nausea <= 35:   #leave first aid when nausea below 35
                 res.append('Peep {} is recovered from nausea\n'.format(self.id))
-                self.happinessTarget = max(maxValue,self.happinessTarget+30)
+                self.happinessTarget = min(maxValue,self.happinessTarget+30)
                 self.happiness = self.happinessTarget
                 self.inFirstAid = False
                 ride.queue.remove(self)

@@ -21,10 +21,11 @@ with open(obj_list_path, 'r') as fp:
             if line and line[0] != "#":
                 arr = line.replace("\t", "").split(",")
                 symbol = arr[-1]
-                arr = arr[:1]+[int(arr[i]) for i in range(1,len(arr)-1)]+arr[-1:] + [i]
+                arr = arr[:1]+[int(arr[j]) for j in range(1,len(arr)-1)]+arr[-1:] + [i]
                 #newObj = RS.alt_init(arr)
                 object_list.append(create_attraction(arr))
                 symbol_list.append(symbol)
+                i += 1
     i = 0
     for symb in symbol_list:
         symbol_dict[symb[0]] = (i, object_list[i]().name)
