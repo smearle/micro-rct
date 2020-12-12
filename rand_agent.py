@@ -25,13 +25,12 @@ def main(settings):
         env.reset()
         env.render()
 
-        while True:
-#       for j in range(100):
-            env.act(env.action_space.sample())
+        for j in range(200):
+            env.step(env.action_space.sample())
             env.step_sim()
             env.render()
-
-        env.render()
+        env.update_terminal_metrics()
+        
 
 
 if __name__ == "__main__":
