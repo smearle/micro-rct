@@ -93,6 +93,8 @@ class RCTEnv():
                          0.2, 0.2, path_finder)
         for peep in peeps:
             self.park.map[Map.PEEP, peep.position[0], peep.position[1]] += 1
+        # FIXME: hack
+        self.park.peeps_by_pos[Peep.ORIGIN] = peep
         self.park.peepsList = peeps
 
         for p in peeps:
