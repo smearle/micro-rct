@@ -126,13 +126,14 @@ class MapElitesRunner:
 
     def mutate_generation(self):
         new_pop = []
-
+        elite_list = list(self.map.values())
         for i in range(0, self.settings.get('evolution', {}).get('population_size')):
             # take a random elite
             if random.random() <= self.settings.get('evolution', {}).get('mutation_prob'):
                 # qualify for mutation
                 # pick a random cell and its elite
-                elite = random.choice(list(self.map.values())).get_chromosome(self.settings.get('evolution', {}).get('elite_prob'))
+                elite=random.choice(elite_list.get_chromosome(
+                    self.settings.get('evolution', {}).get('elite_prob')))
                 child = elite.mutate()
                 new_pop.append(child)
 

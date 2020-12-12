@@ -98,7 +98,7 @@ class Chromosome:
         if 'vomit' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(3))
             self.dimensions['vomit'] = self.rebucket('vomit', tmp)
-        if  'excitement' in self.dimensions.keys():
+        if 'excitement' in self.dimensions.keys():
             tmp = int(self.rct.avg_ride_excitement)
             self.dimensions['excitement'] = self.rebucket('excitement', tmp)
         if 'intensity' in self.dimensions.keys():

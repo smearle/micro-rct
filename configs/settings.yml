@@ -11,7 +11,7 @@ environment:
     map_width: 30
     map_height: 30
     n_actions: 10
-    ride_range: [3, 8]
+    ride_range: [0, 4]
     fixed_path: True # all ride placements along fixed square path
 experiments:
     ticks: [500]
