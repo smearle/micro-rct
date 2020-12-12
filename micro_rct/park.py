@@ -1,4 +1,3 @@
-from pdb import set_trace as T
 import copy
 import datetime
 import random
@@ -282,7 +281,6 @@ class Park():
        #    channel = 4
             
         if peep not in self.peepsList:
-            T()
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:

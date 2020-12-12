@@ -1,4 +1,3 @@
-from pdb import set_trace as T
 import argparse
 from .peep import Peep
 import copy
@@ -112,7 +111,6 @@ class RCTEnv():
         ''' This resets the park but leaves the map (path and ride placement) intact.
         This allows for more efficient mutation during evolution, preventing us from
         having to store potentially arbitrarily long build sequences. '''
-        T()
         for peep in self.park.peepsList:
             self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
         for (x, y) in self.park.path_net:

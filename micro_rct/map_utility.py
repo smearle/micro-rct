@@ -1,4 +1,3 @@
-from pdb import set_trace as T
 import datetime
 import random
 import time
@@ -149,7 +148,6 @@ def demolish_tile(park, x, y):
 
         ride = park.rides_by_pos[center]
         if not checkCanPlaceOrNot(park, center[0], center[1], ride.size[0], ride.size[1]):
-            T()
             raise Exception('demolishing tile but ride is not removable')
             return False
         # important to do this here, lest we recursively demolish entire ride patch repeatedly
@@ -228,7 +226,7 @@ def _add_ride(park, _ride, x, y, ride_i, entrance):
             park.locs_to_rides[(i, j)] = (x, y)
             _ride.locs.append((i, j))
             if (i, j) != entrance and (i, j) in park.path_net:
-                T()
+                raise Exception
    #park.updateMap((x, y), size, mark, _ride.entrance)
     assert _ride.entrance in park.path_net
     return _ride

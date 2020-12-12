@@ -7,7 +7,7 @@ parallelism:
     enabled: True
     threads: 3
 environment:
-    n_guests: 1
+    n_guests: 50
     map_width: 16
     map_height: 16
     n_actions: 10

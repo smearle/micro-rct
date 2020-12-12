@@ -1,4 +1,3 @@
-from pdb import set_trace as T
 import random
 
 #from peeps_path_finding import PathFinder
@@ -88,9 +87,8 @@ class Peep:
            #print(self.position)
            #print('path map')
            #print(self.park.map[Map.PATH])
-            err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
-            print(err_msg)
-            T()
+           #err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
+           #print(err_msg)
            #raise Exception('peep\'s current tile is not in path net')
            #return res
 
@@ -114,11 +112,8 @@ class Peep:
             ans = self.curr_route.pop(0)
 
             if ans not in self.park.path_net:
-                err_msg = "peep is about to step to a tile {} that is not in the path net".format(ans)
                 # If path interrupted by live player, wander
                 # TODO: should re-evaluate rides instead
-                print(err_msg)
-                T()
                 self.wander()
             else:
                 self._set_pos(ans)

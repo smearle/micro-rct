@@ -1,8 +1,3 @@
-DEBUG = True
-if DEBUG:
-    from pdb import set_trace as T
-    import cv2
-
 import copy
 import math
 import os
@@ -276,7 +271,10 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:3, :, :] = np.clip(self.rct_env.park.map[:3, :, :] + 1, 0, 1)
+        # clip ride and path types
+        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
+        # adjust to show true numner of peeps (whereas before, 0 was represented as -1. Just cuz.
+        obs[2, :, :] = self.rct_env.park.map[2, :, :] + 1
         ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(
@@ -337,61 +335,6 @@ class RCT(core.Env):
        #reward = self.metrics['happiness']
         self.render()
         obs = self.get_observation()
-        if DEBUG:
-            def render_obs():
-                cv2.namedWindow('binary ride obs',cv2.WINDOW_NORMAL)
-                cv2.namedWindow('path obs',cv2.WINDOW_NORMAL)
-                cv2.namedWindow('peep obs',cv2.WINDOW_NORMAL)
-                cv2.imshow('binary ride obs', obs[0].transpose())
-                cv2.imshow('path obs', obs[1].transpose())
-                cv2.imshow('peep obs', obs[2].transpose())
-                cv2.waitKey(1)
-            render_obs()
-            cv2.resizeWindow('binary ride obs', 700,700)
-            cv2.resizeWindow('path obs', 700,700)
-            cv2.resizeWindow('peep obs', 700,700)
-            try:
-                for peep in self.rct_env.park.peepsList:
-                    assert self.rct_env.park.map[Map.PEEP, peep.position[0], peep.position[1]] != -1,\
-                            'peep {} in peepsList does not appear in map at {}'.format(
-                                    peep.id, peep.position)
-                peep_positions = [peep.position for peep in self.rct_env.park.peepsList]
-                for pos in np.vstack(np.where(self.rct_env.park.map[Map.PEEP] != -1)).transpose():
-                    assert tuple(pos) in peep_positions, 'peep on map is not in peepsList'
-                for pos, path in self.rct_env.park.path_net.items():
-                    assert self.rct_env.park.map[Map.PATH, pos[0], pos[1]] != -1,\
-                    'path {} in path_net not in map'
-                for pos in np.vstack(np.where(self.rct_env.park.map[Map.PATH] != -1)).transpose():
-                    assert tuple(pos) in self.rct_env.park.path_net,\
-                    'path {} in map not in path_net'.format(pos)
-                for pos, ride in self.rct_env.park.rides_by_pos.items():
-                    assert self.rct_env.park.map[Map.RIDE, pos[0], pos[1]] == ride.ride_i,\
-                    'ride in dict not in map'
-                for pos in np.vstack(np.where(self.rct_env.park.map[Map.RIDE] != -1)).transpose():
-                    assert tuple(pos) in self.rct_env.park.locs_to_rides,\
-                    'ride {} in map not in dict: {}'.format(pos,
-                            self.rct_env.park.locs_to_rides)
-                    ride_i = self.rct_env.park.map[Map.RIDE, pos[0], pos[1]]
-                    ride_pos = self.rct_env.park.locs_to_rides[tuple(pos)]
-                    ride = self.rct_env.park.rides_by_pos[ride_pos]
-                    assert ride_i == ride_i,\
-                    'ride in map has different index than in dict'
-                    assert ride.entrance in self.rct_env.park.path_net,\
-                    'ride entrance not in path_net'
-                    for loc in ride.locs:
-                        assert loc in self.rct_env.park.locs_to_rides,\
-                        'ride-occupied tile not listed in locs_to_rides dict'
-                        assert self.rct_env.park.locs_to_rides[loc] == ride.position,\
-                        'ride-occupied tile listed in locs_to_rides but does not point to correct posision'
-                        if loc != ride.entrance:
-                            assert loc not in self.rct_env.park.path_net,\
-                            'non-entrance ride-occupied tile in path_net'
-            except AssertionError as e:
-                print(e)
-                self.render()
-                render_obs()
-                cv2.waitKey(1)
-                T()
         info = {}
         self.n_step += 1
 
