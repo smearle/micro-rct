@@ -123,7 +123,7 @@ class RCT(core.Env):
             'happiness': 1,
         }
         self.metrics = copy.deepcopy(self.init_metrics)
-        N_OBS_CHAN = len(ride_list) + 3  # path and peeps, lack of ride
+        N_OBS_CHAN = len(ride_list) + 4  # path, peeps, ride present?, ride absent? 
         obs_shape = (N_OBS_CHAN, self.MAP_WIDTH, self.MAP_HEIGHT)
         low = np.zeros(obs_shape)
         high = np.ones(obs_shape)
@@ -272,14 +272,14 @@ class RCT(core.Env):
 
     def get_observation(self):
         obs = np.zeros(self.observation_space.shape)
-        obs[:2, :, :] = np.clip(self.rct_env.park.map[:2, :, :] + 1, 0, 1)
+        obs[:3, :, :] = np.clip(self.rct_env.park.map[:3, :, :] + 1, 0, 1)
         ride_obs = self.rct_env.park.map[Map.RIDE] + 1
         ride_obs = ride_obs.reshape((1, *ride_obs.shape))
         ride_obs_onehot = np.zeros(
             (len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT))
         xs, ys = np.indices(ride_obs.shape[1:])
         ride_obs_onehot[ride_obs, xs, ys] = 1
-        obs[2:, :, :] = ride_obs_onehot
+        obs[3:, :, :] = ride_obs_onehot
 
         return obs
 
