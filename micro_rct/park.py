@@ -61,6 +61,8 @@ class Park():
                     self.map[0, i, j] = -1
 
         self.peepsList = set()
+        #FIXME: dirty hack data structure. Just one peep per pos. For rendering.
+        self.peeps_by_pos = {}
 #       self.listOfRides = []
         self.avg_peep_happiness = 128
         self.path_net = {}
