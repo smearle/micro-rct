@@ -8,6 +8,7 @@ import gym
 import numpy as np
 #import torch
 import yaml
+from skbio.diversity.alpha import shannon
 from gym import core
 from micro_rct import map_utility
 from micro_rct.map_utility import placePath, placeRide
@@ -193,6 +194,14 @@ class RCT(core.Env):
 
     def demolish_tile(self, x, y):
         return map_utility.try_demolish_tile(self.rct_env.park, x, y)
+
+    def update_terminal_metrics(self):
+        self.net_vomits = self.rct_env.park.net_vomits
+        self.avg_ride_nausea =     np.mean([ride.nausea     for ride in self.rct_env.park.rides_by_pos.values()])
+        self.avg_ride_excitement = np.mean([ride.excitement for ride in self.rct_env.park.rides_by_pos.values()])
+        self.avg_ride_intensity =  np.mean([ride.intensity  for ride in self.rct_env.park.rides_by_pos.values()])
+        ride_type_counts = np.bincount([ride.ride_i for ride in self.rct_env.park.rides_by_pos.values()])
+        self.ride_diversity = shannon(ride_type_counts)
 
     def update_metrics(self):
         self.metrics = {
