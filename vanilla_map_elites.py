@@ -45,18 +45,10 @@ class MapElitesRunner:
     def initialize_from_save(self):
         checkpoint_path = self.settings.get('evolution', {}).get('checkpoint', {}).get('elite_path')
         gen_id = os.path.basename(checkpoint_path)
-        if 0:
-            for elite in [elite for elite in os.listdir(checkpoint_path) if elite.endswith('.p')]:
-                elite_path = os.path.join(checkpoint_path, elite)
-                with open(elite_path, 'rb') as f:
-                    chrome = pickle.load(f)
-                    key = self.get_dimension_key(chrome.dimensions)
-                    self.map[key] = MECell(chrome.dimensions, self.settings.get('evolution', {}).get('cell_pop_size'))
-                    self.map[key].set_chromosome(chrome)
-        else:
-            with open(checkpoint_path, 'rb') as f:
-                self.map = pickle.load(f)
-            gen_id = gen_id.split('.')[0]
+        
+        with open(checkpoint_path, 'rb') as f:
+            self.map = pickle.load(f)
+        gen_id = gen_id.split('.')[0]
         # init pop from elites
         self.mutate_generation()
         return gen_id
@@ -68,12 +60,12 @@ class MapElitesRunner:
             stats.append(statline)
         return stats
 
-    def assign_chromosomes(self):
+    def assign_chromosomes(self, gen):
         for chrome in self.pop:
             key = self.get_dimension_key(chrome.dimensions);
             if key not in self.map.keys():
-                self.map[key] = MECell(chrome.dimensions, self.settings.get('evolution', {}).get('cell_pop_size'))
-            self.map[key].set_chromosome(chrome)
+                self.map[key] = MECell(chrome.dimensions, self.settings.get('evolution', {}).get('cell_pop_size'), gen)
+            self.map[key].set_chromosome(chrome, self.settings.get('evolution', {}).get('replace_prob'))
 
     def eval_chromosome(self, index, child_conn=None):
         chrome = self.pop[index]
@@ -174,7 +166,7 @@ class MapElitesRunner:
             for i in range(0, len(self.pop)):
                 self.eval_chromosome(i)
         # map elite grid
-        self.assign_chromosomes()
+        self.assign_chromosomes(id)
         # [print(x) for x in self.get_grid()]
         # save gen
         if id % self.settings.get('evolution', {}).get('checkpoint', {}).get('save_nth_epoch') == 0 or id == int(self.settings.get('evolution', {}).get('gen_count')) - 1:
