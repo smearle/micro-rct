@@ -46,7 +46,6 @@ class Peep:
         self.visited = set()
         self.inFirstAid = False
         self.time_sick = 0
-        self.traversible_tiles = None
         self.curr_route = []
         self.path_finder = path_finder
         self.hasFood = False
@@ -68,9 +67,14 @@ class Peep:
                 return res
         return res
 
+    def _set_pos(self, new_pos):
+        old_pos = self.position
+        self.position = new_pos
+        self.park.map[Map.PEEP, old_pos[0], old_pos[1]] -= 1
+        self.park.map[Map.PEEP, new_pos[0], new_pos[1]] += 1
+
     def updatePosition(self, space, rides_by_pos, vomitPath):
         lst = rides_by_pos.values()
-        self.traversible_tiles = space
         res = []
 
         if self.inFirstAid:  # don't update position when peep interact with first aid
@@ -84,9 +88,9 @@ class Peep:
            #print(self.position)
            #print('path map')
            #print(self.park.map[Map.PATH])
-           #err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
-           #print(err_msg)
-           #T()
+            err_msg = "Peep {}'s current tile {} is not in path net.".format(self.id, self.position)
+            print(err_msg)
+            T()
            #raise Exception('peep\'s current tile is not in path net')
            #return res
 
@@ -109,12 +113,15 @@ class Peep:
         if self.curr_route:
             ans = self.curr_route.pop(0)
 
-           #if ans not in self.park.path_net:
-           #    # If path interrupted by live player, wander
-           #    # TODO: should re-evaluate rides instead
-           #    self.wander()
-           #else:
-            self.position = ans
+            if ans not in self.park.path_net:
+                err_msg = "peep is about to step to a tile {} that is not in the path net".format(ans)
+                # If path interrupted by live player, wander
+                # TODO: should re-evaluate rides instead
+                print(err_msg)
+                T()
+                self.wander()
+            else:
+                self._set_pos(ans)
 
         if target is None:
             return res
@@ -151,10 +158,6 @@ class Peep:
                 if not target.isShop:
                     self.visited.add(target.name)
             self.headingTo = None
-
-
-
-                
 
         return res
 
@@ -719,12 +722,13 @@ class Peep:
         if not distance or lst == [] or distance == float('inf'):
             res.append('Peep {} finds no satisfactory ride.'.format(self.id))
 
-            if self.traversible_tiles is not None:
-                # FIXME: Make this more true to OpenRCT2
-                self.wander()
-                pass
-            else:
-                res.append('no traversible tiles')
+            self.wander()
+           #if self.traversible_tiles is not None:
+           #    # FIXME: Make this more true to OpenRCT2
+           #    self.wander()
+           #    pass
+           #else:
+           #    res.append('no traversible tiles')
 
             return res
         closestRide = lst[distance.index(min(distance))]

@@ -25,9 +25,8 @@ def main(settings):
         env.reset()
         env.render()
 
-        for j in range(200):
+        for j in range(1000):
             env.step(env.action_space.sample())
-            env.step_sim()
             env.render()
         env.update_terminal_metrics()
         

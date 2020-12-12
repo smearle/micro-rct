@@ -123,15 +123,19 @@ def demolish_tile(park, x, y):
     pos = (x, y)
 
     if pos in park.path_net:
+        # remove from path_net dict
         path = park.path_net.pop(pos)
+        # make sure we have the pointers to adjacent paths
         path.get_connecting(park.path_net)
 
+        # update adjacent paths (this function uses path_net to get connections)
         for adj_path in path.links:
             if adj_path:
                 adj_path.get_connecting(park.path_net)
 
-#   if pos in park.interactiveSpace:
-#       park.interactiveSpace.pop(pos)
+   #if pos in park.interactiveSpace:
+   #    park.interactiveSpace.pop(pos)
+   #    park.freeSpace.add(pos)
 
     #FIXME: NO!!
 

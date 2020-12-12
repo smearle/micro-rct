@@ -1,3 +1,4 @@
+from pdb import set_trace as T
 import copy
 import datetime
 import random
@@ -222,7 +223,7 @@ class Park():
 
     def update(self, frame):
         res = []
-#       res += self.updatePeeps()
+        res += self.update_peeps()
         res += self.updateRides()
 	# actually updates avg_peep_happiness
         self.updateScore()
@@ -281,19 +282,17 @@ class Park():
        #    channel = 4
             
         if peep not in self.peepsList:
+            T()
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
-            self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
             res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
             res += peep.updateStatus(self.rides_by_pos)
         
        #self.updateMap(peep.position, (1,1), _mark
-        self.map[Map.PEEP, peep.position[0], peep.position[1]] = peep.type
 
         return res
 
-    # TODO: implement this using numpy game map!
     def printPark(self, frame=0):
         rides_by_pos = self.rides_by_pos
         res = 'print count: {} at {} frame\n'.format(self.printCount, frame)
