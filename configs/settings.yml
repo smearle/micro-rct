@@ -16,14 +16,20 @@ environment:
 experiments:
     ticks: [500]
 evolution:
-    population_size: 10
+    population_size: 2
     max_mutate_builds: 10
     fitness_type: 2
-    eval_ticks: 250
-    gen_count: 700
+    eval_ticks: 50
+    gen_count: 10
     save_path: results/
     action: evolve
-    dimension_keys: [ride_count, nausea]
+    dimensions: 
+        keys:
+            x: happiness
+            y: ride_count
+        skip:
+            x: 10
+            y: 1
     cell_pop_size: 3
     elite_prob: 0.5
     mutation_prob: 1.0
@@ -31,4 +37,4 @@ evolution:
     checkpoint:
         initialize_enabled: False
         elite_path: results/9.p
-        save_nth_epoch: 20
+        save_nth_epoch: 3

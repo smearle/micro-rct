@@ -143,6 +143,13 @@ class MapElitesRunner:
                 elite = random.choice(list(self.map.values())).get_chromosome(self.settings.get('evolution', {}).get('elite_prob'))
                 child = elite.mutate()
                 new_pop.append(child)
+
+            # TODO change this to add a chromosome without mutation       
+            else:
+                elite = random.choice(list(self.map.values())).get_chromosome(
+                    self.settings.get('evolution', {}).get('elite_prob')).clone()
+                child = elite.clone(elite.dimensions.keys())
+                new_pop.append(child)
         self.pop = new_pop
 
     def run_generation(self, id):
@@ -178,8 +185,9 @@ class MapElitesRunner:
             write_path = path = self.settings.get(
                 'evolution', {}).get('save_path')
             write_path = os.path.join(write_path, '{}_map.html'.format(id))
-            # visualizer.visualize(x='happiness', y='ride_count', val='fitness', write_path=write_path)
-            visualizer.visualize(x='shop_count', y='ride_count', val='fitness', write_path=write_path)
+            dimensions = self.settings.get('evolution', {}).get('dimensions')
+            visualizer.visualize(x=dimensions.get('keys', {}).get('x'), y=dimensions.get('keys', {}).get('y'),
+                x_skip=dimensions.get('skip', {}).get('x'), y_skip=dimensions.get('skip', {}).get('y'), val='fitness', write_path=write_path)
         # run mutation
         self.mutate_generation()
 
@@ -259,7 +267,8 @@ def main(settings_path):
     else:
         analyzer = MapElitesAnalysis(settings_path)
         for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
-            analyzer.render_elites(generation)
+            if generation.endswith('.p'):
+                analyzer.render_elites(generation)
 
 if __name__ == "__main__":
 
