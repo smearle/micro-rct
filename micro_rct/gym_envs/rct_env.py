@@ -100,26 +100,31 @@ class RCT(core.Env):
 	# were riding it every other tick
         max_income = 20 / 2 * settings['environment']['n_guests']
         max_happiness = 255
+        max_vomits = settings['environment']['n_guests'] * self.max_step / 5
         self.metric_trgs = {
             'income': max_income,
             'num_rides': max_num_rides,
             'happiness': max_happiness,
+            'num_vomits': max_vomits
         }
         self.param_bounds = {
             'income': (0,  max_income),
             'num_rides': (0, max_num_rides),
             'happiness': (0, max_happiness),
+            'num_vomits': (0, max_vomits),
         }
 	# this is not used, is it?
         self.init_metrics = {
             'income': 0,
             'num_rides': 0,
             'happiness': 128,
+            'num_vomits': 0,
         }
         self.weights = {
             'income': 10,
             'num_rides': 1,
             'happiness': 1,
+            'num_vomits': 1,
         }
         self.metrics = copy.deepcopy(self.init_metrics)
         N_OBS_CHAN = len(ride_list) + 4  # path, peeps, ride present?, ride absent? 
@@ -252,6 +257,7 @@ class RCT(core.Env):
             'income': self.avg_income,
             'num_rides': len(self.rct_env.park.rides_by_pos),
             'happiness': self.rct_env.park.avg_peep_happiness,
+            'num_vomits': self.rct_env.park.net_vomits,
         }
 
     def rand_act(self):
