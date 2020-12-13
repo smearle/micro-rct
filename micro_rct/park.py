@@ -69,6 +69,9 @@ class Park():
         self.last_money = self.money
         self.income = 0
         self.net_vomits = 0
+        # A super ad-hoc data-structure. Stores ONLY 1 peep per tile. For rendering (the "top-of-the-stack" peep on a
+        # given tile) only.
+        self.peeps_by_pos = {}
 
     def clone(self, settings):
         new_park = Park(settings)
@@ -278,12 +281,10 @@ class Park():
             self.peepsList.add(peep)
             print_msg(vars(peep), priority=3, verbose=self.settings['general']['verbose'])
         else:
-            self.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
             res += peep.updatePosition(self.path_net, self.rides_by_pos, self.vomit_paths)
             res += peep.updateStatus(self.rides_by_pos)
         
        #self.updateMap(peep.position, (1,1), _mark
-        self.map[Map.PEEP, peep.position[0], peep.position[1]] = peep.type
 
         return res
 

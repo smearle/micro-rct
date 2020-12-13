@@ -260,7 +260,7 @@ class RCT(core.Env):
                 self.place_path_tile(x, y)
             else:
                 self.demolish_tile(x, y)
-        self.delete_islands()
+    #   self.delete_islands()
 
     def delete_rand_ride(self):
         x, y = random.choice(list(self.rct_env.park.rides_by_pos.keys()))
