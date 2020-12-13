@@ -179,8 +179,8 @@ class RCT(core.Env):
 
     def place_path_tile(self, x, y, type_i=0):
         if type_i % 2 == 0:
-            map_utility.place_path_tile(self.rct_env.park, x, y)
-        self.rct_env.park.populate_path_net()
+            map_utility.try_place_path_tile(self.rct_env.park, x, y)
+#       self.rct_env.park.populate_path_net()
 
     def place_ride_tile(self, x, y, ride_i, rotation):
         ride = map_utility.place_ride_tile(self.rct_env.park, x, y, ride_i,
@@ -278,7 +278,7 @@ class RCT(core.Env):
         done = self.n_step >= self.max_step
         reward = 0
         if done:
-            self.rct_env.park.populate_path_net()
+#           self.rct_env.park.populate_path_net()
             for _ in range(RCT.N_SIM_STEP):
                 self.step_sim()
                 reward += self.rct_env.park.income

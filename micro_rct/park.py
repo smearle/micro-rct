@@ -43,7 +43,7 @@ class Park():
         # channels for rides, paths, peeps
         self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int) - 1
         self.freeSpace = defaultdict(str)
-        self.fixedSpace = defaultdict(str)
+        self.fixedSpace = set()
 #       self.interactiveSpace = defaultdict(str)
         self.rides_by_pos = {}
         self.locs_to_rides = {}
