@@ -143,6 +143,7 @@ class MapElitesRunner:
                     self.settings.get('evolution', {}).get('elite_prob')).clone()
                 child = elite.clone(elite.dimensions.keys())
                 new_pop.append(child)
+        # wipe out the last pop, replace with new one
         self.pop = new_pop
 
     def run_generation(self, id):
