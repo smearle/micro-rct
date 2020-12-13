@@ -157,14 +157,24 @@ class Map():
                     self.screen.blit(tile, (i_pix, j_pix))
 
 
-                if curr_peep_tile == 0:
-                    self.screen.blit(self.guest_tile, (i_pix, j_pix))
-                
-                if curr_peep_tile == 1:
-                    self.screen.blit(self.guest_tile_2, (i_pix, j_pix))
+                # hackishly render some peep
+                if curr_peep_tile > -1:
+#                   curr_peep_type = 0
+                    if (i, j) not in self.park.peeps_by_pos:
+#                       err_msg = 'The peeps_by_pos data structure is out of sync!'
+#                       raise Exception(err_msg)
+                        curr_peep_type = 0
+                    else:
+                        curr_peep = self.park.peeps_by_pos[i, j]
+                        curr_peep_type = curr_peep.type
+                    if curr_peep_type == 0:
+                        self.screen.blit(self.guest_tile, (i_pix, j_pix))
+                    
+                    if curr_peep_type == 1:
+                        self.screen.blit(self.guest_tile_2, (i_pix, j_pix))
 
-                if curr_peep_tile == 2:
-                    self.screen.blit(self.guest_tile_3, (i_pix, j_pix))
+                    if curr_peep_type == 2:
+                        self.screen.blit(self.guest_tile_3, (i_pix, j_pix))
 
                 j += 1
             i += 1
