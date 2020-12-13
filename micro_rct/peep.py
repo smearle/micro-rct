@@ -69,13 +69,13 @@ class Peep:
     def _set_pos(self, new_pos):
         old_pos = self.position
         self.position = new_pos
-        #FIXME: disgusting hack
-        if old_pos in self.park.peeps_by_pos:
+        self.park.map[Map.PEEP, old_pos[0], old_pos[1]] -= 1
+        self.park.map[Map.PEEP, new_pos[0], new_pos[1]] += 1
+        #FIXME: for rendering only, kind of whack
+        if old_pos in self.park.peeps_by_pos and self.park.map[Map.PEEP, old_pos[0], old_pos[1]] == -1:
             self.park.peeps_by_pos.pop(old_pos)
         if new_pos not in self.park.peeps_by_pos:
             self.park.peeps_by_pos[new_pos] = self
-        self.park.map[Map.PEEP, old_pos[0], old_pos[1]] -= 1
-        self.park.map[Map.PEEP, new_pos[0], new_pos[1]] += 1
 
     def updatePosition(self, space, rides_by_pos, vomitPath):
         lst = rides_by_pos.values()

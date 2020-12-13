@@ -96,9 +96,6 @@ class RCTEnv():
         self.park.peeps_by_pos[Peep.ORIGIN] = peep
         self.park.peepsList = peeps
 
-        for p in peeps:
-            self.park.updateHuman(p)
-
 #       if not self.render_map:
 #          #print('in rct env, initializing render map')
         self.render_map = Map(self.park,

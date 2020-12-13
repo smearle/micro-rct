@@ -43,7 +43,7 @@ class Park():
         # channels for rides, paths, peeps
         self.map = np.zeros((5, self.size[0], self.size[1]), dtype=int) - 1
         self.freeSpace = defaultdict(str)
-        self.fixedSpace = defaultdict(str)
+        self.fixedSpace = set()
 #       self.interactiveSpace = defaultdict(str)
         self.rides_by_pos = {}
         self.locs_to_rides = {}
@@ -71,6 +71,9 @@ class Park():
         self.last_money = self.money
         self.income = 0
         self.net_vomits = 0
+        # A super ad-hoc data-structure. Stores ONLY 1 peep per tile. For rendering (the "top-of-the-stack" peep on a
+        # given tile) only.
+        self.peeps_by_pos = {}
 
     def clone(self, settings):
         new_park = Park(settings)

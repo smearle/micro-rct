@@ -29,11 +29,13 @@ def placePath(park, margin, verbose=False):
                #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
+                park.fixedSpace.add((i, j))
             elif j == 1 or (i==margin and j!=margin):
                #freeSpace.pop((i,j))
                #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
+                park.fixedSpace.add((i, j))
 
     for i in range(margin, park.size[1] - margin):
         for j in range(margin, park.size[0] - margin):
@@ -42,6 +44,7 @@ def placePath(park, margin, verbose=False):
                #interactiveSpace[(i,j)] = PARK.pathMark
 #               park.map[Map.PATH, i, j] = 1
                 place_path_tile(park, i, j)
+                park.fixedSpace.add((i, j))
 
     return
 
@@ -298,9 +301,11 @@ def placeRide(park, ride_i, verbose=False):
 
         while startList and not placed:
             rand = startList.pop()
-            placed = checkCanPlaceOrNot(park,rand[0],rand[1],size[0],size[1], destructive=False)
+            placed = checkCanPlaceOrNot(park,rand[0],rand[1],size[0],size[1], destructive=True)
 
         if placed:
+            result = clear_for_placement(park, rand[0], rand[1], size[0], size[1])
+            assert result
             _ride.entrance = entrance
             _ride.position = rand
             _add_ride(park, _ride, rand[0], rand[1], ride_i, entrance)
@@ -342,6 +347,10 @@ def checkCanPlaceOrNot(park, startX, startY, width, length, destructive=True):
         if not destructive:
             if park.map[Map.RIDE, i, j] != -1 or park.map[Map.PATH, i, j] != -1:
                 return False
+
+        if (i, j) in park.fixedSpace:
+            # Do not demolish the sacred donut
+            return False
 
         if park.map[Map.RIDE, i, j] != -1:  # can overwrite rides
             ride_ij_pos = park.locs_to_rides[(i, j)]
