@@ -1,5 +1,5 @@
 general:
-    render: True
+    render: False
     verbose: False
     render_screen_width: 500
     render_screen_height: 500
@@ -12,7 +12,8 @@ environment:
     map_height: 30
     n_actions: 10
     ride_range: [3, 8]
-    fixed_path: True # all ride placements along fixed square path
+    fixed_path: True  # all ride placements along fixed square path
+    init_money: 15000  # how much money the park starts out with
 experiments:
     ticks: [500]
 evolution:

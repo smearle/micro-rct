@@ -25,7 +25,6 @@ class Park():
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
-    INIT_MONEY = 15000
     MARKS_TO_RIDES = {
             emptyMark: 'empty',
             wallMark: 'wall',
@@ -47,6 +46,7 @@ class Park():
 #       self.interactiveSpace = defaultdict(str)
         self.rides_by_pos = {}
         self.locs_to_rides = {}
+        self.INIT_MONEY = settings['environment']['init_money']
 
         for i in range(self.size[0]):
             for j in range(self.size[1]):
@@ -65,7 +65,7 @@ class Park():
         self.avg_peep_happiness = 0
         self.path_net = {}
         self.vomit_paths = {}
-        self.money = Park.INIT_MONEY
+        self.money = self.INIT_MONEY
         self.last_money = self.money
         self.income = 0
         self.net_vomits = 0
