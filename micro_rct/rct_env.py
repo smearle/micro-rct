@@ -107,9 +107,7 @@ class RCTEnv():
 
 
     def resetSim(self):
-        ''' This resets the park but leaves the map (path and ride placement) intact.
-        This allows for more efficient mutation during evolution, preventing us from
-        having to store potentially arbitrarily long build sequences. '''
+        ''' Put the peeps back in place.'''
         for peep in self.park.peepsList:
             self.park.map[Map.PEEP, peep.position[0], peep.position[1]] = -1
         for (x, y) in self.park.path_net:
@@ -137,7 +135,9 @@ class RCTEnv():
                               render=self.settings['general']['render'],
                               screen=self.screen)
        #self.render_map.reset(self.park)
-        self.park.money = Park.INIT_MONEY
+
+       # Don't reset park money, or we will effectively allow for cost-free mutation during MAP-Elites
+       #self.park.money = Park.INIT_MONEY
 
     def simulate(self, n_ticks=-1):
         if n_ticks != -1:

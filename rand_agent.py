@@ -20,17 +20,19 @@ def main(settings):
 
     print(settings, 'thems the settings in rand_agent.py')
     env = RCT(settings=settings, rank=1)
-
+    env.reset()
     while True:
-        env.reset()
+        env.resetSim()
         env.render()
 
         env.max_step = 1001 # so we don't hit a dedicated simulation step, and can watch builds/park sim in simultaneous action
         for j in range(500):
             env.act(env.action_space.sample())
+           #print(env.rct_env.park.money)
             env.render()
         for j in range(500):
             env.step_sim()
+           #print(env.rct_env.park.money)
             env.render()
         env.update_terminal_metrics()
         

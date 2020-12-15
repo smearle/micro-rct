@@ -25,7 +25,7 @@ class Park():
     emptyMark = ' '
     pathMark = '░'
     wallMark = '▓'
-    INIT_MONEY = 15000
+    INIT_MONEY = 10000
     MARKS_TO_RIDES = {
             emptyMark: 'empty',
             wallMark: 'wall',
