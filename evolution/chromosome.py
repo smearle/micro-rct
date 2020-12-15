@@ -105,7 +105,7 @@ class Chromosome:
             tmp = int(self.rct.avg_ride_intensity)
             self.dimensions['intensity'] = self.rebucket('intensity', tmp)
         if 'ride_diversity' in self.dimensions.keys():
-            tmp = int(self.rct.ride_diversity)
+            tmp = int(100 * self.rct.ride_diversity)
             self.dimensions['ride_diversity'] = self.rebucket('ride_diversity', tmp)
         
 
