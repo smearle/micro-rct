@@ -17,7 +17,7 @@ class Attraction:
         self.symbol = mark
         self.size = (size_x,size_y)
         self.consume_time = time*size_y*size_x
-        self.building_cost = cost*size_y*size_x
+        self.build_cost = cost*size_y*size_x
         self.price = price
         self.position = (position_x,position_y) #can assign later
         self.excitement = excitement

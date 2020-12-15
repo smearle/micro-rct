@@ -25,7 +25,8 @@ def main(settings):
         env.reset()
         env.render()
 
-        for j in range(200):
+        env.max_step = 1001 # so we don't hit a dedicated simulation step, and can watch builds/park sim in simultaneous action
+        for j in range(1000):
             env.step(env.action_space.sample())
             env.step_sim()
             env.render()

@@ -1,5 +1,5 @@
 general:
-    render: False
+    render: True
     verbose: False
     render_screen_width: 500
     render_screen_height: 500
