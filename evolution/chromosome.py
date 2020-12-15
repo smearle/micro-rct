@@ -118,5 +118,8 @@ class Chromosome:
             bucket = dimensions.get('skip', {}).get('x') 
         elif key == y:
             bucket = dimensions.get('skip', {}).get('y')
-        value = value // bucket * bucket
+        if type(bucket) is int:
+            value = value // bucket * bucket
+        else:
+            value = round(value, bucket)
         return value

@@ -3,7 +3,7 @@
 #SBATCH --job-name=RCT_ME
 #SBATCH --nodes=1 --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
-#SBATCH --time=48:00:00
+#SBATCH --time=24:00:00
 #SBATCH --mem=30GB
 #SBATCH --output=/scratch/mcg520/micro_rct_me/logs/%A.out
 #SBATCH --error=/scratch/mcg520/micro_rct_me/logs/%A.err
