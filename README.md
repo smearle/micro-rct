@@ -8,13 +8,13 @@ This code is the result of Maria's work adapting stable-baselines to our environ
 
 To run these models, first clone the repo with adapted version of [stable-baselines3](https://github.com/mariaannae/stable-baselines3/). Install the repo:
 
-`cd stable-baselines3`
-`python setup.py build `
-`python setup.py install`
+`cd stable-baselines3`<br />
+`python setup.py build `<br />
+`python setup.py install`<br />
 
 Then revisit the micro-rct repository you have already downloaded and installed following the below instructions. Files to run our adapted stable-baselines3 models are in the folder stable-baselines-models. To run one, move it from that directory to the root directory of the micro-rct repo. Then simply run it. For example, from the micro-rct directory, run the following commands:
 
-`cp stable-baselines-models/cnn.py .`
+`cp stable-baselines-models/cnn.py .`<br />
 `python cnn.py`
 
 To review the changes made to the stable-baselines3 library for these models, you can visit the file [torch_layers.py](https://github.com/mariaannae/stable-baselines3/blob/master/stable_baselines3/common/torch_layers.py) in that library, as most of the custom models have been built there.
