@@ -56,6 +56,7 @@ class Chromosome:
     def simulate(self, ticks=100):
         try:
             self.rct.simulate(ticks)
+            self.rct.update_terminal_metrics()
             self.calculate_fitness()
             self.calculate_dimensions()
         except Exception as e:
@@ -82,7 +83,6 @@ class Chromosome:
 
     def calculate_dimensions(self):
         # ride total
-        
         if 'ride_count' in self.dimensions.keys():
             tmp = self.rct.rct_env.park.n_unique_rides()
             self.dimensions['ride_count'] = self.rebucket('ride_count', tmp)
@@ -98,6 +98,16 @@ class Chromosome:
         if 'vomit' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(3))
             self.dimensions['vomit'] = self.rebucket('vomit', tmp)
+        if 'excitement' in self.dimensions.keys():
+            tmp = int(self.rct.avg_ride_excitement)
+            self.dimensions['excitement'] = self.rebucket('excitement', tmp)
+        if 'intensity' in self.dimensions.keys():
+            tmp = int(self.rct.avg_ride_intensity)
+            self.dimensions['intensity'] = self.rebucket('intensity', tmp)
+        if 'ride_diversity' in self.dimensions.keys():
+            tmp = int(100 * self.rct.ride_diversity)
+            self.dimensions['ride_diversity'] = self.rebucket('ride_diversity', tmp)
+        
 
     def rebucket(self, key, value):
         dimensions = self.settings.get('evolution', {}).get('dimensions')
@@ -108,5 +118,8 @@ class Chromosome:
             bucket = dimensions.get('skip', {}).get('x') 
         elif key == y:
             bucket = dimensions.get('skip', {}).get('y')
-        value = value // bucket * bucket
+        if type(bucket) is int:
+            value = value // bucket * bucket
+        else:
+            value = round(value, bucket)
         return value
