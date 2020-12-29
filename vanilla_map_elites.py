@@ -67,7 +67,7 @@ class MapElitesRunner:
             statline = '{} | fitness: {} | dimensions: {}'.format(i, chrome.fitness, chrome.dimensions)
             stats.append(statline)
         return stats
-
+      
     def assign_chromosomes(self):
         for chrome in self.pop:
             key = self.get_dimension_key(chrome.dimensions);
@@ -98,18 +98,10 @@ class MapElitesRunner:
             pickle.dump(chrome, save_file)
 
     def save_elites(self, gen_id):
-        if 0:
-            path = self.settings.get('evolution', {}).get('save_path')
-            path = os.path.join(path, '{}'.format(gen_id))
-            os.makedirs(path, exist_ok=True)
-            for dimension, cell in self.map.items():
-                save_path = os.path.join(path, '{}.p'.format(dimension))
-                self.save_chromosome(cell.elite, save_path)
-        else:
-            path = self.settings.get('evolution', {}).get('save_path')
-            path = os.path.join(path, '{}.p'.format(gen_id))
-            with open(path, 'wb') as f:
-                pickle.dump(self.map, f)
+        path = self.settings.get('evolution', {}).get('save_path')
+        path = os.path.join(path, '{}.p'.format(gen_id))
+        with open(path, 'wb') as f:
+            pickle.dump(self.map, f)
 
 
     def get_grid(self):
@@ -212,38 +204,63 @@ class MapElitesAnalysis:
 
     def render_elites(self, gen_id):
         filepath = self.settings.get('evolution', {}).get('save_path')
-        if 0:
-            gen_id = int(gen_id)
-            filepath = os.path.join(filepath, '{}'.format(gen_id))
-            for file in [entry for entry in os.listdir(filepath) if entry.endswith('.p')]:
+    
+        filepath = os.path.join(filepath, '{}'.format(gen_id))
+        os.makedirs(filepath.split('.')[0], exist_ok=True)
+        with open(filepath, 'rb') as f:
+            self.map = pickle.load(f)
+            for dim, cell in self.map.items():
+                cell.elite.settings['general']['render'] = True
+                cell.elite.rct.render_gui = True
+                cell.elite.rct.rct_env.set_rendering(True)
+                cell.elite.rct.rct_env.resetSim()
+                cell.elite.rct.rct_env.render_map.render_park()
+                img = cell.elite.rct.rct_env.screen
+                img_name = '{}.png'.format(dim)
+                # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                pygame.image.save(img, os.path.join(filepath.split('.')[0], img_name))
+    
+    def get_map_dimensions(self):
+        key = self.map.values()[0]
+      
+    def render_elite(self, gen_id, x_dimen, y_dimen):
+        filepath = self.settings.get('evolution', {}).get('save_path')
+        filepath = os.path.join(filepath, '{}'.format(gen_id))
+        os.makedirs(filepath.split('.')[0], exist_ok=True)
+        with open(filepath, 'rb') as f:
+            self.map = pickle.load(f)
             
-                with open(os.path.join(filepath, file), 'rb') as f:
-                    chrome = pickle.load(f)
-                    chrome.settings['general']['render'] = True
-                    chrome.rct.render_gui = True
-                    chrome.rct.rct_env.set_rendering(True)
-                    chrome.rct.rct_env.resetSim()
-                    chrome.rct.rct_env.render_map.render_park()
-                    img = chrome.rct.rct_env.screen
-                    img_name = '{}.png'.format(file.split('.')[0])
-                    # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-                    pygame.image.save(img, os.path.join(filepath, img_name))
-        else:
-            filepath = os.path.join(filepath, '{}'.format(gen_id))
-            os.makedirs(filepath.split('.')[0], exist_ok=True)
-            with open(filepath, 'rb') as f:
-                self.map = pickle.load(f)
-                for dim, cell in self.map.items():
-                    cell.elite.settings['general']['render'] = True
-                    cell.elite.rct.render_gui = True
-                    cell.elite.rct.rct_env.set_rendering(True)
-                    cell.elite.rct.rct_env.resetSim()
-                    cell.elite.rct.rct_env.render_map.render_park()
-                    img = cell.elite.rct.rct_env.screen
-                    img_name = '{}.png'.format(dim)
-                    # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-                    pygame.image.save(img, os.path.join(filepath.split('.')[0], img_name))
+                cell.elite.settings['general']['render'] = True
+                cell.elite.rct.render_gui = True
+                cell.elite.rct.rct_env.set_rendering(True)
+                cell.elite.rct.rct_env.resetSim()
+                cell.elite.rct.rct_env.render_map.render_park()
+                img = cell.elite.rct.rct_env.screen
+                img_name = '{}.png'.format(dim)
+                # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                pygame.image.save(img, os.path.join(filepath.split('.')[0], img_name))
+    def run(self):
+        # an input looper that can run many commands
+        cmd = input('Please enter a command: viz-1, viz-all, query, help, or quit')
+        while cmd != 'quit':
+            if cmd == 'viz-1':
+                print('* Single-chromosomal visualization mode enabled...')
+                gen_id = input('Please enter the generation number you wish to visualize:')
+                x = input('Please enter the x-dimension value of the chromosome:')
+                y  = input('Please enter the y-dimension value of the chromosome:')
+                
+                print('*')
+            elif cmd == 'viz-all':
+                print('* Multi-chromosomal visualization mode enabled...')
+                gen_id = input('Please enter the generation number that you wish to visualize:')
 
+                print('* Multi-chromosomal visualization endering process initiated...')
+                t = time.time()
+                render_elites(gen_id)
+                e = time.time()
+                print('* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
+            cmd = input('Please enter a command: viz-1, viz-all, query, help, or quit')
+        print('Goodbye for now!')
 def main(settings_path):
     with open(settings_path) as s_file:
         settings = yaml.load(s_file, yaml.FullLoader)
