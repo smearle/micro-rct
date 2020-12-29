@@ -1,10 +1,13 @@
 import random
 class MECell:
-    def __init__(self, dimensions, size):
+    def __init__(self, dimensions, size, gen):
         self.dimensions = dimensions
         self.size = size
         self.pop = []
+        self.gen = gen
         self.elite = None
+        self.replace_count = 0
+        self.challenge_count = 0
 
     def rank_selection(self, pop):
         # TODO order the population by fitness
@@ -27,11 +30,16 @@ class MECell:
             return self.elite  
         return self.rank_selection(self.pop)
         
-    def set_chromosome(self, chrome):
+    def set_chromosome(self, chrome, replace_prob):
+        self.challenge_count += 1
         if self.elite == None or chrome.fitness > self.elite.fitness:
+            if self.elite != None:
+                self.replace_count += 1
             self.elite = chrome
         else:
             self.elite.age += 1
-            if len(self.pop) > self.size:
-                self.pop.remove(random.choice(self.pop))
-            self.pop.append(chrome)
+            # randomly keep or throw away
+            if random.random() < replace_prob:
+                if len(self.pop) > self.size:
+                    self.pop.remove(random.choice(self.pop))
+                self.pop.append(chrome)
