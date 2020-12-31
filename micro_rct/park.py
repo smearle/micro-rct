@@ -65,6 +65,7 @@ class Park():
         self.avg_peep_happiness = 0
         self.path_net = {}
         self.vomit_paths = {}
+        self.ride_cost = settings['environment']['ride_cost']
         self.money = self.INIT_MONEY
         self.last_money = self.money
         self.income = 0
