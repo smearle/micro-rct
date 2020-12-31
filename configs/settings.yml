@@ -23,7 +23,7 @@ evolution:
     eval_ticks: 50
     gen_count: 10
     save_path: results/
-    action: evolve
+    action: analyze
     dimensions: 
         keys:
             x: happiness

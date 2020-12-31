@@ -228,13 +228,29 @@ class MapElitesAnalysis:
     def get_map_dimensions(self):
         key = self.map.values()[0]
 
+    def find_elite(self, x, y):
+        zero_key = list(self.map.keys())[0]
+        zero_key = zero_key.split(', ')
+        x_title = self.clean_dimen(zero_key[0].split(': ')[0])
+        y_title = self.clean_dimen(zero_key[1].split(': ')[0])
+
+        try:
+            self.map['{{x_title}: {x}, {y_title}: {y}}']
+
+    def clean_dimen(self, dimen):
+        dimen = dimen.replace('{', '')
+        dimen = dimen.replace('}', '')
+        dimen = dimen.replace('\"', '')
+        return dimen
+
     def render_elite(self, gen_id, x_dimen, y_dimen):
         filepath = self.settings.get('evolution', {}).get('save_path')
         filepath = os.path.join(filepath, '{}'.format(gen_id))
+        readpath = '{}.p'.format(filepath)
         os.makedirs(filepath.split('.')[0], exist_ok=True)
-        with open(filepath, 'rb') as f:
+        with open(readpath, 'rb') as f:
             self.map = pickle.load(f)
-
+            cell = self.find_elite(x_dimen, y_dimen)
             cell.elite.settings['general']['render'] = True
             cell.elite.rct.render_gui = True
             cell.elite.rct.rct_env.set_rendering(True)
@@ -249,22 +265,23 @@ class MapElitesAnalysis:
     def run(self):
         # an input looper that can run many commands
         cmd = input(
-            'Please enter a command: viz-1, viz-all, query, help, or quit')
+            'Please enter a command (viz-1, viz-all, query, help, or quit): ')
         while cmd != 'quit':
             if cmd == 'viz-1':
                 print('* Single-chromosomal visualization mode enabled...')
                 gen_id = input(
-                    'Please enter the generation number you wish to visualize:')
+                    'Please enter the generation number you wish to visualize: ')
                 x = input(
-                    'Please enter the x-dimension value of the chromosome:')
+                    'Please enter the x-dimension value of the chromosome: ')
                 y = input(
-                    'Please enter the y-dimension value of the chromosome:')
+                    'Please enter the y-dimension value of the chromosome: ')
 
-                print('*')
+                print('** Rendering...')
+                self.render_elite(gen_id, x, y)
             elif cmd == 'viz-all':
                 print('* Multi-chromosomal visualization mode enabled...')
                 gen_id = input(
-                    'Please enter the generation number that you wish to visualize:')
+                    'Please enter the generation number that you wish to visualize: ')
 
                 print('* Multi-chromosomal visualization endering process initiated...')
                 t = time.time()
@@ -273,7 +290,7 @@ class MapElitesAnalysis:
                 print(
                     '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
             cmd = input(
-                'Please enter a command: viz-1, viz-all, query, help, or quit')
+                'Please enter a command (viz-1, viz-all, query, help, or quit): ')
         print('Goodbye for now!')
 
 
@@ -299,9 +316,10 @@ def main(settings_path):
 
     else:
         analyzer = MapElitesAnalysis(settings_path)
-        for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
-            if generation.endswith('.p'):
-                analyzer.render_elites(generation)
+        analyzer.run()
+        # for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
+        #     if generation.endswith('.p'):
+        #         analyzer.render_elites(generation)
 
 
 if __name__ == "__main__":
