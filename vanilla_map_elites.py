@@ -211,6 +211,7 @@ class MapElitesAnalysis:
 
         filepath = os.path.join(filepath, '{}'.format(gen_id))
         os.makedirs(filepath.split('.')[0], exist_ok=True)
+        filepath = '{}.p'.format(filepath)
         with open(filepath, 'rb') as f:
             self.map = pickle.load(f)
             for dim, cell in self.map.items():
@@ -235,7 +236,9 @@ class MapElitesAnalysis:
         y_title = self.clean_dimen(zero_key[1].split(': ')[0])
 
         try:
-            self.map['{{x_title}: {x}, {y_title}: {y}}']
+            return self.map['{{\"{}\": {}, \"{}\": {}}}'.format(x_title, x, y_title, y)]
+        except:
+            return None
 
     def clean_dimen(self, dimen):
         dimen = dimen.replace('{', '')
@@ -251,16 +254,20 @@ class MapElitesAnalysis:
         with open(readpath, 'rb') as f:
             self.map = pickle.load(f)
             cell = self.find_elite(x_dimen, y_dimen)
-            cell.elite.settings['general']['render'] = True
-            cell.elite.rct.render_gui = True
-            cell.elite.rct.rct_env.set_rendering(True)
-            cell.elite.rct.rct_env.resetSim()
-            cell.elite.rct.rct_env.render_map.render_park()
-            img = cell.elite.rct.rct_env.screen
-            img_name = '{}.png'.format(dim)
-            # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-            pygame.image.save(img, os.path.join(
-                filepath.split('.')[0], img_name))
+            if cell is not None:
+                cell.elite.settings['general']['render'] = True
+                cell.elite.rct.render_gui = True
+                cell.elite.rct.rct_env.set_rendering(True)
+                cell.elite.rct.rct_env.resetSim()
+                cell.elite.rct.rct_env.render_map.render_park()
+                img = cell.elite.rct.rct_env.screen
+                img_name = '{}_{}.png'.format(x_dimen, y_dimen)
+                # with open(os.path.join(filepath, img_name), 'w+') as save_file:
+                pygame.image.save(img, os.path.join(
+                    filepath.split('.')[0], img_name))
+            else:
+                print('Invalid cell!')
+                print('Available cells:\n{}'.format(self.map.keys()))
 
     def run(self):
         # an input looper that can run many commands
@@ -283,9 +290,9 @@ class MapElitesAnalysis:
                 gen_id = input(
                     'Please enter the generation number that you wish to visualize: ')
 
-                print('* Multi-chromosomal visualization endering process initiated...')
+                print('* Multi-chromosomal visualization rendering process initiated...')
                 t = time.time()
-                render_elites(gen_id)
+                self.render_elites(gen_id)
                 e = time.time()
                 print(
                     '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
