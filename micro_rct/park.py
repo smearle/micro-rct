@@ -65,6 +65,7 @@ class Park():
         self.avg_peep_happiness = 0
         self.path_net = {}
         self.vomit_paths = {}
+        self.ride_cost = settings['environment']['ride_cost']
         self.money = self.INIT_MONEY
         self.last_money = self.money
         self.income = 0
@@ -83,6 +84,13 @@ class Park():
             new_park.map[Map.PEEP, peep.position[0],
                     peep.position[1]] = -1
 
+
+           #for loc in ride.locs:
+           #    new_park.locs_to_rides[loc] = pos
+           #new_park.rides_by_pos[(x, y)] = ride
+        for pos in self.path_net:
+            place_path_tile(new_park, pos[0], pos[1])
+
         for pos, ride in self.rides_by_pos.items():
 #           print('replicating ride', ride)
             x = ride.position[0]
@@ -93,12 +101,10 @@ class Park():
             place_ride_tile(new_park,
                              x,
                              y,
-                             ride_i)
-           #for loc in ride.locs:
-           #    new_park.locs_to_rides[loc] = pos
-           #new_park.rides_by_pos[(x, y)] = ride
-        for pos in self.path_net:
-            place_path_tile(new_park, pos[0], pos[1])
+                             ride_i,
+                             entrance=ride.entrance)
+
+        new_park.fixedSpace = copy.deepcopy(self.fixedSpace)
 
 
         return new_park

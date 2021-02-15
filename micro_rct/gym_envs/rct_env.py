@@ -88,7 +88,7 @@ class RCT(core.Env):
         self.ride_range = settings.get('environment', {}).get('ride_range', (0, 1))
 
         if self.render_gui:
-            print('render rank', self.render_gui, self.rank)
+#           print('render rank', self.render_gui, self.rank)
             pass
         self.width = self.map_width = self.MAP_WIDTH
         self.n_step = 0
@@ -115,7 +115,11 @@ class RCT(core.Env):
         high = np.zeros(act_shape)
         high[0] = self.MAP_WIDTH
         high[1] = self.MAP_HEIGHT
-        self.N_ACT_CHAN = len(ride_list) + 2  # build a ride, place path, or demolish
+        n_rides = len(ride_list)
+        self.N_ACT_CHAN = n_rides  # build a ride
+        if not self.FIXED_PATH:
+            self.N_ACT_CHAN += 1  # build a path
+        self.N_ACT_CHAN += settings['environment']['deletion_rate']  # delete, with a given frequency
         self.action_space = gym.spaces.MultiDiscrete(
                 (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_ACT_CHAN, 4)
                 )
