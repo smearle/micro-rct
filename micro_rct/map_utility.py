@@ -152,7 +152,8 @@ def demolish_tile(park, x, y):
         # important to do this here, lest we recursively demolish entire ride patch repeatedly
         ride = park.rides_by_pos.pop(center)
         # Deleting a ride gives the park a full refund on the ride's original cost
-        park.money += ride.build_cost
+        if park.ride_cost:
+            park.money += ride.build_cost
         assert center == ride.position
 
         for ride_pos in ride.locs:
@@ -225,7 +226,8 @@ def _add_ride(park, _ride, x, y, ride_i, entrance):
             _ride.locs.append((i, j))
    #park.updateMap((x, y), size, mark, _ride.entrance)
     assert _ride.entrance in park.path_net
-    park.money -= _ride.build_cost
+    if park.ride_cost:
+        park.money -= _ride.build_cost
     assert park.money >= 0
     return _ride
 
@@ -252,7 +254,10 @@ def place_ride_tile(park, x, y, ride_i, rotation=0, destructive=True):
     else:
         raise Exception('invalid entrance position index')
 
-    build_budget = park.money - _ride.build_cost
+    if park.ride_cost:
+        build_budget = park.money - _ride.build_cost
+    else:
+        build_budget = None
     if checkCanPlaceOrNot(park, x, y, size[0], size[1], destructive=destructive, budget=build_budget):
         result = clear_for_placement(park, x, y, size[0], size[1])
 #       print('clear_for_placement result:', result)
@@ -297,7 +302,10 @@ def placeRide(park, ride_i, verbose=False):
 
         while startList and not placed:
             rand = startList.pop()
-            build_budget = park.money - _ride.build_cost
+            if park.ride_cost:
+                build_budget = park.money - _ride.build_cost
+            else:
+                build_budget = None
             placed = checkCanPlaceOrNot(park,rand[0],rand[1],size[0],size[1], destructive=True, budget=build_budget)
 
         if placed:

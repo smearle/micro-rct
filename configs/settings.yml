@@ -1,5 +1,5 @@
 general:
-    render: False
+    render: True
     verbose: False
     render_screen_width: 500
     render_screen_height: 500
@@ -13,7 +13,9 @@ environment:
     n_actions: 10
     ride_range: [0, 4]
     fixed_path: True  # all ride placements along fixed square path
+    ride_cost: False  # whether or not rides cost money to build
     init_money: 15000  # how much money the park starts out with
+    deletion_rate: 2  # how many deletion actions (at present, there are 26 ride-placement actions -- one per ride type -- so "26" means 50/50 build/deletion rates)
 experiments:
     ticks: [500]
 evolution:
