@@ -5,7 +5,7 @@ general:
     render_screen_height: 500
 parallelism:
     enabled: True
-    threads: 3
+    threads: 48
 environment:
     n_guests: 20
     map_width: 30
@@ -40,5 +40,4 @@ evolution:
     print_map: False
     checkpoint:
         initialize_enabled: False
-        elite_path: results/9.p
         save_nth_epoch: 2500
