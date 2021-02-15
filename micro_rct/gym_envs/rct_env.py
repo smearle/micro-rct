@@ -88,7 +88,7 @@ class RCT(core.Env):
         self.ride_range = settings.get('environment', {}).get('ride_range', (0, 1))
 
         if self.render_gui:
-            print('render rank', self.render_gui, self.rank)
+#           print('render rank', self.render_gui, self.rank)
             pass
         self.width = self.map_width = self.MAP_WIDTH
         self.n_step = 0

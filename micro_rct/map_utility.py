@@ -231,7 +231,7 @@ def _add_ride(park, _ride, x, y, ride_i, entrance):
     assert park.money >= 0
     return _ride
 
-def place_ride_tile(park, x, y, ride_i, rotation=0, destructive=True):
+def place_ride_tile(park, x, y, ride_i, rotation=0, destructive=True, entrance=None):
     '''
     destructive: are we allowed to delete path and other rides?
     '''
@@ -243,16 +243,17 @@ def place_ride_tile(park, x, y, ride_i, rotation=0, destructive=True):
         ride_i = len(ride_list) + ride_i
     mark = str(symbol_list[ride_i])
 
-    if rotation == 0:
-        entrance = (x, y)
-    elif rotation == 1:
-        entrance = (x + size[0] - 1, y)
-    elif rotation == 2:
-        entrance = (x, y + size[1] - 1)
-    elif rotation == 3:
-        entrance = (x + size[0] - 1, y + size[1] - 1)
-    else:
-        raise Exception('invalid entrance position index')
+    if entrance is None:
+        if rotation == 0:
+            entrance = (x, y)
+        elif rotation == 1:
+            entrance = (x + size[0] - 1, y)
+        elif rotation == 2:
+            entrance = (x, y + size[1] - 1)
+        elif rotation == 3:
+            entrance = (x + size[0] - 1, y + size[1] - 1)
+        else:
+            raise Exception('invalid entrance position index')
 
     if park.ride_cost:
         build_budget = park.money - _ride.build_cost
