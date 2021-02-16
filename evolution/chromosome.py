@@ -83,12 +83,12 @@ class Chromosome:
 
     def calculate_dimensions(self):
         # ride total
-        if 'ride_count' in self.dimensions.keys():
+        if 'ridecount' in self.dimensions.keys():
             tmp = self.rct.rct_env.park.n_unique_rides()
-            self.dimensions['ride_count'] = self.rebucket('ride_count', tmp)
-        if 'shop_count' in self.dimensions.keys():
+            self.dimensions['ridecount'] = self.rebucket('ridecount', tmp)
+        if 'shopcount' in self.dimensions.keys():
             tmp = self.rct.rct_env.park.n_shop_rides()
-            self.dimensions['shop_count'] = self.rebucket('happiness', tmp)
+            self.dimensions['shopcount'] = self.rebucket('shopcount', tmp)
         if 'happiness' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore())
             self.dimensions['happiness'] = self.rebucket('happiness', tmp)
@@ -104,9 +104,9 @@ class Chromosome:
         if 'intensity' in self.dimensions.keys():
             tmp = int(self.rct.avg_ride_intensity)
             self.dimensions['intensity'] = self.rebucket('intensity', tmp)
-        if 'ride_diversity' in self.dimensions.keys():
+        if 'ridediversity' in self.dimensions.keys():
             tmp = int(10 * self.rct.ride_diversity)
-            self.dimensions['ride_diversity'] = self.rebucket('ride_diversity', tmp)
+            self.dimensions['ridediversity'] = self.rebucket('ridediversity', tmp)
         
 
     def rebucket(self, key, value):
