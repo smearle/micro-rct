@@ -65,7 +65,7 @@ class Chromosome:
     def reset_sim(self):
         self.rct.resetSim()
 
-    def clone(self, dimension_keys):
+    def clone(self, dimension_keys=None):
         new_env = self.rct.clone(rank=1, settings=self.settings)
         return Chromosome(self.settings, env=new_env)
 
@@ -93,8 +93,8 @@ class Chromosome:
             tmp = int(self.rct.rct_env.park.returnScore())
             self.dimensions['happiness'] = self.rebucket('happiness', tmp)
         if 'nausea' in self.dimensions.keys():
-            tmp = int(self.rct.rct_env.park.returnScore(2))
-            self.dimensions['nausea'] = self.rebucket('nausea', tmp)
+            tmp = int(self.rct.avg_ride_nausea)
+            self.dimensions['nausea']=self.rebucket('nausea', tmp)
         if 'vomit' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(3))
             self.dimensions['vomit'] = self.rebucket('vomit', tmp)
@@ -123,3 +123,25 @@ class Chromosome:
         else:
             value = round(value, bucket)
         return value
+    
+    def get_stats(self):
+        stats = {}
+        self.rct.update_terminal_metrics()
+
+        tmp = self.rct.rct_env.park.n_unique_rides()
+        stats['ridecount'] = tmp
+        tmp = self.rct.rct_env.park.n_shop_rides()
+        stats['shopcount'] = tmp
+        tmp = int(self.rct.rct_env.park.returnScore())
+        stats['happiness'] = tmp
+        tmp = int(self.rct.rct_env.park.returnScore(3))
+        stats['vomit'] = tmp
+        tmp = int(self.rct.avg_ride_excitement)
+        stats['excitement'] = tmp
+        tmp = int(self.rct.avg_ride_intensity)
+        stats['intensity'] = tmp
+        tmp = int(self.rct.avg_ride_nausea)
+        stats['nausea'] = tmp
+        tmp = int(10 * self.rct.ride_diversity)
+        stats['ridediversity'] = tmp
+        return stats
