@@ -1,3 +1,4 @@
+import random
 from micro_rct.rct_env import RCTEnv
 from micro_rct.gym_envs.rct_env import RCT
 
@@ -6,22 +7,24 @@ from micro_rct.rct_test_objects import object_list as ride_list
 
 import sys
 sys.path.append("..")
-import random
+
 
 class Chromosome:
     def __init__(self, settings, env=None):
         self.settings = settings
-        
+
         self.fitness_type = settings.get('evolution', {}).get('fitness_type')
         self.fitness = 0
         self.dimensions = {}
+        self.stats = {}
         self.age = 0
-        dimensions = self.settings.get('evolution', {}).get('dimensions').get('keys')
+        dimensions = self.settings.get(
+            'evolution', {}).get('dimensions').get('keys')
         self.dimensions[dimensions.get('x')] = 0
         self.dimensions[dimensions.get('y')] = 0
         # for key in settings.get('evolution', {}).get('dimension_keys'):
         #     self.dimensions[key] = 0
-        
+
         if env == None:
             self.rct = RCT(settings=self.settings)
             self.initialize()
@@ -41,7 +44,8 @@ class Chromosome:
 
         child.reset_sim()
 
-        n_builds = random.randint(1, self.settings.get('evolution', {}).get('max_mutate_builds'))
+        n_builds = random.randint(1, self.settings.get(
+            'evolution', {}).get('max_mutate_builds'))
         for i in range(n_builds):
             action = child.rct.action_space.sample()
 
@@ -52,13 +56,13 @@ class Chromosome:
         child.rct.delete_islands()
         return child
 
-
     def simulate(self, ticks=100):
         try:
             self.rct.simulate(ticks)
             self.rct.update_terminal_metrics()
             self.calculate_fitness()
             self.calculate_dimensions()
+            self.stats = self.get_stats()
         except Exception as e:
             self.fitness = -1
 
@@ -69,14 +73,15 @@ class Chromosome:
         new_env = self.rct.clone(rank=1, settings=self.settings)
         return Chromosome(self.settings, env=new_env)
 
-    ######## CALCULATION FUNCTIONS
+    # CALCULATION FUNCTIONS
     def calculate_fitness(self):
         if self.fitness_type == 0:
             # random fitness
             self.fitness = random.randrange(0, 1)
         elif self.fitness_type == 1:
             # happiness fitness
-            self.fitness = (0 if self.rct.rct_env.park.returnScore() < 0 else self.rct.rct_env.park.returnScore())
+            self.fitness = (0 if self.rct.rct_env.park.returnScore()
+                            < 0 else self.rct.rct_env.park.returnScore())
         elif self.fitness_type == 2:
             # park money fitness
             self.fitness = self.rct.rct_env.park.money
@@ -94,7 +99,7 @@ class Chromosome:
             self.dimensions['happiness'] = self.rebucket('happiness', tmp)
         if 'nausea' in self.dimensions.keys():
             tmp = int(self.rct.avg_ride_nausea)
-            self.dimensions['nausea']=self.rebucket('nausea', tmp)
+            self.dimensions['nausea'] = self.rebucket('nausea', tmp)
         if 'vomit' in self.dimensions.keys():
             tmp = int(self.rct.rct_env.park.returnScore(3))
             self.dimensions['vomit'] = self.rebucket('vomit', tmp)
@@ -106,8 +111,8 @@ class Chromosome:
             self.dimensions['intensity'] = self.rebucket('intensity', tmp)
         if 'ridediversity' in self.dimensions.keys():
             tmp = int(10 * self.rct.ride_diversity)
-            self.dimensions['ridediversity'] = self.rebucket('ridediversity', tmp)
-        
+            self.dimensions['ridediversity'] = self.rebucket(
+                'ridediversity', tmp)
 
     def rebucket(self, key, value):
         dimensions = self.settings.get('evolution', {}).get('dimensions')
@@ -115,7 +120,7 @@ class Chromosome:
         x = dimensions.get('keys', {}).get('x')
         y = dimensions.get('keys', {}).get('y')
         if key == x:
-            bucket = dimensions.get('skip', {}).get('x') 
+            bucket = dimensions.get('skip', {}).get('x')
         elif key == y:
             bucket = dimensions.get('skip', {}).get('y')
         if type(bucket) is int:
@@ -123,7 +128,7 @@ class Chromosome:
         else:
             value = round(value, bucket)
         return value
-    
+
     def get_stats(self):
         stats = {}
         self.rct.update_terminal_metrics()

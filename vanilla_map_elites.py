@@ -168,7 +168,6 @@ class MapElitesRunner:
                 self.eval_chromosome(i)
         # map elite grid
         self.assign_chromosomes(id)
-        # [print(x) for x in self.get_grid()]
         # save gen
         if id % self.settings.get('evolution', {}).get('checkpoint', {}).get('save_nth_epoch') == 0 or id == int(self.settings.get('evolution', {}).get('gen_count')) - 1:
             self.save_elites(gen_id=id)
@@ -195,165 +194,28 @@ class MapElitesRunner:
             [cell.elite.age for cell in self.map.values()], columns=['age'])
         df = df.join(fitness_df)
         df = df.join(age_df)
-        # for dimen, cell in self.map.items():
-        #     elite_df = pd.DataFrame([cell.elite.fitness], columns=[cell.elite])
-        #     df = df.join(elite_df)
+
         return df
-
-
-class MapElitesAnalysis:
-    def __init__(self, settings_path):
-        with open(settings_path) as s_file:
-            self.settings = yaml.load(s_file, yaml.FullLoader)
-
-    def render_elites(self, filepath):
-        for dim, cell in self.map.items():
-            elite = cell.elite.copy()
-            elite.settings['general']['render'] = True
-            elite.rct.render_gui = True
-            elite.rct.rct_env.set_rendering(True)
-            elite.rct.rct_env.resetSim()
-            elite.rct.rct_env.render_map.render_park()
-            img = elite.rct.rct_env.screen
-            img_name = '{}.png'.format(dim)
-            # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-            pygame.image.save(img, os.path.join(
-                filepath.split('.')[0], img_name))
-
-    def get_map_dimensions(self):
-        key = self.map.values()[0]
-
-    def find_elite(self, x, y):
-        zero_key = list(self.map.keys())[0]
-        zero_key = zero_key.split(', ')
-        x_title = self.clean_dimen(zero_key[0].split(': ')[0])
-        y_title = self.clean_dimen(zero_key[1].split(': ')[0])
-
-        try:
-            cell = self.map['{{\"{}\": {}, \"{}\": {}}}'.format(x_title, x, y_title, y)]
-            return cell.elite
-        except Exception as e:
-            print(e)
-            print('Invalid cell!')
-            print('Available cells:\n{}'.format(self.map.keys()))
-            return None
-
-    def clean_dimen(self, dimen):
-        dimen = dimen.replace('{', '')
-        dimen = dimen.replace('}', '')
-        dimen = dimen.replace('\"', '')
-        return dimen
-
-    def render_elite(self, filepath, x_dimen, y_dimen):
-    
-        elite = self.find_elite(x_dimen, y_dimen).clone()
-        if elite is None:
-            return
-        elite.settings['general']['render'] = True
-        elite.rct.render_gui = True
-        elite.rct.rct_env.set_rendering(True)
-        elite.rct.rct_env.resetSim()
-        elite.rct.rct_env.render_map.render_park()
-        img = elite.rct.rct_env.screen
-        img_name = '{}_{}.png'.format(x_dimen, y_dimen)
-        # with open(os.path.join(filepath, img_name), 'w+') as save_file:
-        pygame.image.save(img, os.path.join(
-            filepath.split('.')[0], img_name))
-    
-
-    def query_elite(self, x_dimen, y_dimen):
-        elite = self.find_elite(x_dimen, y_dimen)
-        if elite is None:
-            print('elite is none')
-            return
-        stats = elite.get_stats()
-        for key, value in stats.items():
-            print('{}: {}'.format(key, value))
-        
-    def run(self):
-        # an input looper that can run many commands
-        gen_id = input(
-            'Please enter the generation number you wish to analyze: ')
-        print('Loading generation. Please wait...')
-        
-        filepath = self.settings.get('evolution', {}).get('save_path')
-        filepath = os.path.join(filepath, '{}'.format(gen_id))
-        readpath = '{}.p'.format(filepath)
-        os.makedirs(filepath.split('.')[0], exist_ok=True)
-        with open(readpath, 'rb') as f:
-            self.map = pickle.load(f)
-        print('Generation loaded')
-        
-        cmd = input(
-            'Please enter a command (viz-1, viz-all, query, help, or quit): ')
-       
-        while cmd != 'quit':
-            if cmd == 'viz-1':
-                print('* Single-chromosomal visualization mode enabled...')
-                
-                x = input(
-                    'Please enter the x-dimension value of the chromosome: ')
-                y = input(
-                    'Please enter the y-dimension value of the chromosome: ')
-
-                print('** Rendering...')
-                self.render_elite(filepath, x, y)
-            elif cmd == 'viz-all':
-                print('* Multi-chromosomal visualization mode enabled...')
-                print('* Multi-chromosomal visualization rendering process initiated...')
-                t = time.time()
-                self.render_elites(filepath)
-                e = time.time()
-                print(
-                    '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
-            elif cmd == 'query':
-                print('* Query mode enabled...')
-
-                x = input(
-                    'Please enter the x-dimension value of the chromosome: ')
-                y = input(
-                    'Please enter the y-dimension value of the chromosome: ')
-
-                print('** Query information below...')
-                self.query_elite(x, y)
-            elif cmd == 'help':
-                print('To use this tool, enter one of the following commands:')
-                print('* \"viz-1\": vizualizes a specified cell\'s elite')
-                print('* \"viz-all\": vizualizes all of the elites in the map (caution! this may take a while!)')
-                print('* \"query\": displays metric information about a specified cell\'s elite')
-                print('* \"help\": displays this help text about all the commands')
-                print('* \"quit\": quits the program immediately')
-            cmd = input(
-                'Please enter a command (viz-1, viz-all, query, help, or quit): ')
-        print('Goodbye for now!')
 
 
 def main(settings_path):
     with open(settings_path) as s_file:
         settings = yaml.load(s_file, yaml.FullLoader)
-    if settings.get('evolution', {}).get('action') == 'evolve':
+    start = time.time()
+    runner = MapElitesRunner(settings_path)
+    gen_id = runner.initialize()
+    init_time = time.time() - start
+    print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, init_time))
+    # print(Fore.GREEN + '** POP BREAKDOWN **')
+    # print('\n'.join(map(str, runner.get_statistics())))
+    # print(runner.get_statistics())
+    for i in range(gen_id, settings.get('evolution', {}).get('gen_count') + gen_id):
         start = time.time()
-        runner = MapElitesRunner(settings_path)
-        gen_id = runner.initialize()
-        init_time = time.time() - start
-        print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, init_time))
-        # print(Fore.GREEN + '** POP BREAKDOWN **')
-        # print('\n'.join(map(str, runner.get_statistics())))
-        # print(runner.get_statistics())
-        for i in range(gen_id, settings.get('evolution', {}).get('gen_count') + gen_id):
-            start = time.time()
-            runner.run_generation(i)
-            end = time.time()
-            if settings.get('evolution', {}).get('print_map'):
-                print('\n'.join(map(str, runner.get_grid())))
-            print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, (end-start)))
-
-    else:
-        analyzer = MapElitesAnalysis(settings_path)
-        analyzer.run()
-        # for generation in os.listdir(analyzer.settings.get('evolution', {}).get('save_path')):
-        #     if generation.endswith('.p'):
-        #         analyzer.render_elites(generation)
+        runner.run_generation(i)
+        end = time.time()
+        if settings.get('evolution', {}).get('print_map'):
+            print('\n'.join(map(str, runner.get_grid())))
+        print('{}Time: {}{}'.format(Fore.MAGENTA, Fore.WHITE, (end-start)))
 
 
 if __name__ == "__main__":

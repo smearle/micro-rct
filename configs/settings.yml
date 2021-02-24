@@ -25,11 +25,10 @@ evolution:
     eval_ticks: 20
     gen_count: 10
     save_path: results/
-    action: analyze
     dimensions: 
         keys:
             x: happiness
-            y: ridediversity
+            y: ridecount
         skip:
             x: 10
             y: 1
