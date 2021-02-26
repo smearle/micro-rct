@@ -28,7 +28,7 @@ class MapElitesAnalysis:
     def get_map_dimensions(self):
         key = self.map.values()[0]
 
-    def find_elite(self, x, y):
+    def find_cell(self, x, y):
         zero_key = list(self.map.keys())[0]
         zero_key = zero_key.split(', ')
         x_title = self.clean_dimen(zero_key[0].split(': ')[0])
@@ -37,7 +37,7 @@ class MapElitesAnalysis:
         try:
             cell = self.map['{{\"{}\": {}, \"{}\": {}}}'.format(
                 x_title, x, y_title, y)]
-            return cell.elite
+            return cell
         except Exception as e:
             print(e)
             print('Invalid cell!')
@@ -51,8 +51,7 @@ class MapElitesAnalysis:
         return dimen
 
     def render_elite(self, filepath, x_dimen, y_dimen):
-
-        elite = self.find_elite(x_dimen, y_dimen).clone()
+        elite = self.find_cell(x_dimen, y_dimen).elite.clone()
         if elite is None:
             return
         elite.settings['general']['render'] = True
@@ -67,11 +66,16 @@ class MapElitesAnalysis:
             filepath.split('.')[0], img_name))
 
     def query_elite(self, x_dimen, y_dimen):
-        elite = self.find_elite(x_dimen, y_dimen)
+        cell = self.find_cell(x_dimen, y_dimen)
+        elite = cell.elite
         if elite is None:
             print('elite is none')
             return
         stats = elite.get_stats()
+        stats["challenge count"] = cell.challenge_count
+        stats["generation filled"] = cell.gen
+        stats["replace count"] = cell.replace_count
+        stats["dimensions"] = cell.dimensions
         for key, value in stats.items():
             print('{}: {}'.format(key, value))
 
@@ -93,43 +97,47 @@ class MapElitesAnalysis:
             'Please enter a command (viz-1, viz-all, query, help, or quit): ')
 
         while cmd != 'quit':
-            if cmd == 'viz-1':
-                print('* Single-chromosomal visualization mode enabled...')
+            try:
+                if cmd == 'viz-1':
+                    print('* Single-chromosomal visualization mode enabled...')
 
-                x = input(
-                    'Please enter the x-dimension value of the chromosome: ')
-                y = input(
-                    'Please enter the y-dimension value of the chromosome: ')
+                    x = input(
+                        'Please enter the x-dimension value of the chromosome: ')
+                    y = input(
+                        'Please enter the y-dimension value of the chromosome: ')
 
-                print('** Rendering...')
-                self.render_elite(filepath, x, y)
-            elif cmd == 'viz-all':
-                print('* Multi-chromosomal visualization mode enabled...')
-                print('* Multi-chromosomal visualization rendering process initiated...')
-                t = time.time()
-                self.render_elites(filepath)
-                e = time.time()
-                print(
-                    '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
-            elif cmd == 'query':
-                print('* Query mode enabled...')
+                    print('** Rendering...')
+                    self.render_elite(filepath, x, y)
+                elif cmd == 'viz-all':
+                    print('* Multi-chromosomal visualization mode enabled...')
+                    print(
+                        '* Multi-chromosomal visualization rendering process initiated...')
+                    t = time.time()
+                    self.render_elites(filepath)
+                    e = time.time()
+                    print(
+                        '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
+                elif cmd == 'query':
+                    print('* Query mode enabled...')
 
-                x = input(
-                    'Please enter the x-dimension value of the chromosome: ')
-                y = input(
-                    'Please enter the y-dimension value of the chromosome: ')
+                    x = input(
+                        'Please enter the x-dimension value of the chromosome: ')
+                    y = input(
+                        'Please enter the y-dimension value of the chromosome: ')
 
-                print('** Query information below...')
-                self.query_elite(x, y)
-            elif cmd == 'help':
-                print('To use this tool, enter one of the following commands:')
-                print('* \"viz-1\": vizualizes a specified cell\'s elite')
-                print(
-                    '* \"viz-all\": vizualizes all of the elites in the map (caution! this may take a while!)')
-                print(
-                    '* \"query\": displays metric information about a specified cell\'s elite')
-                print('* \"help\": displays this help text about all the commands')
-                print('* \"quit\": quits the program immediately')
+                    print('** Query information below...')
+                    self.query_elite(x, y)
+                elif cmd == 'help':
+                    print('To use this tool, enter one of the following commands:')
+                    print('* \"viz-1\": vizualizes a specified cell\'s elite')
+                    print(
+                        '* \"viz-all\": vizualizes all of the elites in the map (caution! this may take a while!)')
+                    print(
+                        '* \"query\": displays metric information about a specified cell\'s elite')
+                    print('* \"help\": displays this help text about all the commands')
+                    print('* \"quit\": quits the program immediately')
+            except Exception as e:
+                print(e)
             cmd = input(
                 'Please enter a command (viz-1, viz-all, query, help, or quit): ')
         print('Goodbye for now!')
