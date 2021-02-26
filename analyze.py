@@ -13,7 +13,7 @@ class MapElitesAnalysis:
 
     def render_elites(self, filepath):
         for dim, cell in self.map.items():
-            elite = cell.elite.copy()
+            elite = cell.elite.clone()
             elite.settings['general']['render'] = True
             elite.rct.render_gui = True
             elite.rct.rct_env.set_rendering(True)

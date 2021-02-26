@@ -80,7 +80,7 @@ class MapElitesRunner:
         chrome.simulate(ticks=self.settings.get(
             'evolution', {}).get('eval_ticks'))
         if child_conn:
-            child_conn.send((chrome.fitness, chrome.dimensions))
+            child_conn.send((chrome.fitness, chrome.dimensions, chrome.stats))
 
     def get_dimension_key(self, dimensions):
         return json.dumps(dimensions)
@@ -120,6 +120,7 @@ class MapElitesRunner:
             signal = parent_conn.recv()
             self.pop[i].fitness = signal[0]
             self.pop[i].dimensions = signal[1]
+            self.pop[i].stats = signal[2]
             p.join()
             p.close()
 
