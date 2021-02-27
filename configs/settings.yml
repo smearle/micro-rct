@@ -1,11 +1,11 @@
 general:
-    render: True
+    render: False
     verbose: False
     render_screen_width: 500
     render_screen_height: 500
 parallelism:
     enabled: True
-    threads: 3
+    threads: 48
 environment:
     n_guests: 20
     map_width: 30
@@ -19,17 +19,16 @@ environment:
 experiments:
     ticks: [500]
 evolution:
-    population_size: 2
+    population_size: 5
     max_mutate_builds: 10
     fitness_type: 2
-    eval_ticks: 50
+    eval_ticks: 20
     gen_count: 10
     save_path: results/
-    action: analyze
     dimensions: 
         keys:
             x: happiness
-            y: ride_count
+            y: ridecount
         skip:
             x: 10
             y: 1
@@ -40,5 +39,4 @@ evolution:
     print_map: False
     checkpoint:
         initialize_enabled: False
-        elite_path: results/9.p
-        save_nth_epoch: 3
+        save_nth_epoch: 2500
