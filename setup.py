@@ -1,4 +1,8 @@
 import setuptools
+import os
+
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
 
 setuptools.setup(
         name="micro-rct",
@@ -15,6 +19,7 @@ setuptools.setup(
             ],
         python_requires='>=3.6',
         include_package_data=True,
+        install_requires=required
         )
 
 

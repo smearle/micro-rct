@@ -4,12 +4,34 @@ import os
 import pickle
 import time
 import argparse
-
+import pandas as pd
+import random
+from evolution.visualization.grid_visualizer import GridVisualizer
 
 class MapElitesAnalysis:
     def __init__(self, settings_path):
         with open(settings_path) as s_file:
             self.settings = yaml.load(s_file, yaml.FullLoader)
+
+    def convert_map_to_df(self):
+        df = pd.DataFrame()
+
+        df = pd.DataFrame([[value for value in cell.elite.dimensions.values()] for cell in self.map.values()], columns=[
+            dimen for dimen in random.choice(list(self.map.values())).elite.dimensions.keys()])
+        fitness_df = pd.DataFrame(
+            [cell.elite.fitness for cell in self.map.values()], columns=['fitness'])
+        age_df = pd.DataFrame(
+            [cell.elite.age for cell in self.map.values()], columns=['age'])
+        replace_df = pd.DataFrame(
+            [cell.replace_count for cell in self.map.values()], columns=['replacement'])
+        challenge_df = pd.DataFrame(
+            [cell.challenge_count for cell in self.map.values()], columns=['challenge'])
+        df = df.join(fitness_df)
+        df = df.join(age_df)
+        df = df.join(replace_df)
+        df = df.join(challenge_df)
+
+        return df
 
     def render_elites(self, filepath):
         for dim, cell in self.map.items():
@@ -79,6 +101,24 @@ class MapElitesAnalysis:
         for key, value in stats.items():
             print('{}: {}'.format(key, value))
 
+    def calc_skip(self, df, column):
+        df = df.sort_values(by=column)
+        diff = df.diff(axis=0, periods=1)
+        diff = diff[column]
+        val = diff.iloc[diff.to_numpy().nonzero()[0]].iloc[1]
+        return int(val)
+
+    def fit_swap(self, filepath, fitness):
+        write_path = os.path.join(filepath, '{}_map.html'.format(fitness))
+        df = self.convert_map_to_df()
+        visualizer = GridVisualizer(df)
+        x = df.columns[0]
+        y = df.columns[1]
+        x_skip = self.calc_skip(df, x)
+        y_skip = self.calc_skip(df, y)
+        visualizer.visualize(x=x, y=y,
+            x_skip=x_skip, y_skip=y_skip, val=fitness, write_path=write_path)
+
     def run(self):
         # an input looper that can run many commands
         gen_id = input(
@@ -94,7 +134,7 @@ class MapElitesAnalysis:
         print('Generation loaded')
 
         cmd = input(
-            'Please enter a command (viz-1, viz-all, query, help, or quit): ')
+            'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit): ')
 
         while cmd != 'quit':
             try:
@@ -127,6 +167,13 @@ class MapElitesAnalysis:
 
                     print('** Query information below...')
                     self.query_elite(x, y)
+                elif cmd == 'fit-swap':
+                    print('* Fitness-Swap visualization mode enabled...')
+                    fitness = input("Please select one of the following value alternatives to visualize:\n* replacement\n* challenge\n* age\n")
+                    if fitness not in ['replacement', 'challenge', 'age']:
+                        print('Sorry, this is not a valid command.')
+                    print("* Valid command. Generating a new elite map using {} as an alternate value...".format(fitness))
+                    self.fit_swap(filepath, fitness)
                 elif cmd == 'help':
                     print('To use this tool, enter one of the following commands:')
                     print('* \"viz-1\": vizualizes a specified cell\'s elite')
@@ -139,7 +186,7 @@ class MapElitesAnalysis:
             except Exception as e:
                 print(e)
             cmd = input(
-                'Please enter a command (viz-1, viz-all, query, help, or quit): ')
+                'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit): ')
         print('Goodbye for now!')
 
 

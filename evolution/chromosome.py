@@ -18,8 +18,7 @@ class Chromosome:
         self.dimensions = {}
         self.stats = {}
         self.age = 0
-        dimensions = self.settings.get(
-            'evolution', {}).get('dimensions').get('keys')
+        dimensions = self.settings.get('evolution', {}).get('dimensions').get('keys')
         self.dimensions[dimensions.get('x')] = 0
         self.dimensions[dimensions.get('y')] = 0
         # for key in settings.get('evolution', {}).get('dimension_keys'):
