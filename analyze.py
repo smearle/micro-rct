@@ -7,25 +7,28 @@ import argparse
 import pandas as pd
 import random
 from evolution.visualization.grid_visualizer import GridVisualizer
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
 
 class MapElitesAnalysis:
     def __init__(self, settings_path):
         with open(settings_path) as s_file:
             self.settings = yaml.load(s_file, yaml.FullLoader)
 
-    def convert_map_to_df(self):
+    def convert_map_to_df(self, emap):
         df = pd.DataFrame()
 
-        df = pd.DataFrame([[value for value in cell.elite.dimensions.values()] for cell in self.map.values()], columns=[
-            dimen for dimen in random.choice(list(self.map.values())).elite.dimensions.keys()])
+        df = pd.DataFrame([[value for value in cell.elite.dimensions.values()] for cell in emap.values()], columns=[
+            dimen for dimen in random.choice(list(emap.values())).elite.dimensions.keys()])
         fitness_df = pd.DataFrame(
-            [cell.elite.fitness for cell in self.map.values()], columns=['fitness'])
+            [cell.elite.fitness for cell in emap.values()], columns=['fitness'])
         age_df = pd.DataFrame(
-            [cell.elite.age for cell in self.map.values()], columns=['age'])
+            [cell.elite.age for cell in emap.values()], columns=['age'])
         replace_df = pd.DataFrame(
-            [cell.replace_count for cell in self.map.values()], columns=['replacement'])
+            [cell.replace_count for cell in emap.values()], columns=['replacement'])
         challenge_df = pd.DataFrame(
-            [cell.challenge_count for cell in self.map.values()], columns=['challenge'])
+            [cell.challenge_count for cell in emap.values()], columns=['challenge'])
         df = df.join(fitness_df)
         df = df.join(age_df)
         df = df.join(replace_df)
@@ -110,7 +113,7 @@ class MapElitesAnalysis:
 
     def fit_swap(self, filepath, fitness):
         write_path = os.path.join(filepath, '{}_map.html'.format(fitness))
-        df = self.convert_map_to_df()
+        df = self.convert_map_to_df(self.map)
         visualizer = GridVisualizer(df)
         x = df.columns[0]
         y = df.columns[1]
@@ -118,76 +121,135 @@ class MapElitesAnalysis:
         y_skip = self.calc_skip(df, y)
         visualizer.visualize(x=x, y=y,
             x_skip=x_skip, y_skip=y_skip, val=fitness, write_path=write_path)
+        
+    def agg(self, writepath):
+        """Aggregates all available .p files in the results directory
+        """
+        with open("configs/drive_mapping.yml") as contents:
+            self.mapping = yaml.load(contents)
+        # do some authentication with google drive
+        gauth = GoogleAuth(settings_file='configs/googleapi_settings.json')
+        gauth.LocalWebserverAuth()
+
+        drive = GoogleDrive(gauth)
+        dimensions = input("Please enter a letter for a valid dimensional combination. Here are valid choices:\n\ta : happiness_vomit\n\tb : happiness_ridediversity\n\tc : excitement_intensity\n\td : excitement_nausea\nEnter Choice: ")
+        size = input("Please select an initial size choice (small or med).\nEnter choice: ")
+        cost = input("Please enter cost or no_cost.\nEnter choice: ")
+        agg_df = pd.DataFrame()
+        
+        # file_list = drive.ListFile({'q': "'{}' in parents and '{}' in parents and '{}' in parents and name = '9999.p'".format(
+        #     dimensions, size, cost
+        # )}).GetList()
+        folder_id = self.mapping.get(dimensions, {}).get(size, {}).get(cost)
+        file_list = drive.ListFile({'q': "'{}' in parents".format(folder_id)}).GetList()
+
+        for file in file_list:
+            print('title: {}, id: {}'.format(file['title'], file['id']))
+            exp_id = file['id']
+            print('exp_id ', exp_id)
+            exp_file_list = drive.ListFile({'q': "'{}' in parents".format(exp_id)}).GetList()
+            for generation_file in exp_file_list:
+                if generation_file['title'] == '9999.p':
+                    print('9999.p found in {}'.format(file['title']))
+                    filepath = "results/{}_{}_{}_{}.p".format(dimensions, size, cost, file['title'])
+                    generation_file.GetContentFile(
+                        filename=filepath
+                    )
+                    print("Loading map {}".format(filepath))
+                    with open(filepath, 'rb') as f:
+                            emap = pickle.load(f)
+                    columns = [dimen for dimen in random.choice(list(emap.values())).elite.dimensions.keys()]
+                    df = self.convert_map_to_df(emap)
+                    # remove emap from memory
+                    del emap
+                    os.remove(filepath)
+                    agg_df = pd.concat([agg_df, df]).groupby(columns, as_index=False)["fitness"].max()
+        visualizer = GridVisualizer(agg_df)
+        x = agg_df.columns[0]
+        y = agg_df.columns[1]
+        x_skip = self.calc_skip(agg_df, x)
+        y_skip = self.calc_skip(agg_df, y)
+
+        writepath = os.path.join(writepath, '{}_{}_{}.html'.format(dimensions, size, cost))
+        visualizer.visualize(x=x, y=y,
+            x_skip=x_skip, y_skip=y_skip, val='fitness', write_path=writepath)
+        return agg_df
 
     def run(self):
         # an input looper that can run many commands
-        gen_id = input(
-            'Please enter the generation number you wish to analyze: ')
-        print('Loading generation. Please wait...')
+        initial_action = input('Enter "aggregate" to perform an aggregation, or "analyze" to perform analysis on a single generation.\nEnter command: ')
+        if initial_action == "analyze":
+            gen_id = input(
+                'Please enter the generation number you wish to analyze: ')
+            print('Loading generation. Please wait...')
 
-        filepath = self.settings.get('evolution', {}).get('save_path')
-        filepath = os.path.join(filepath, '{}'.format(gen_id))
-        readpath = '{}.p'.format(filepath)
-        os.makedirs(filepath.split('.')[0], exist_ok=True)
-        with open(readpath, 'rb') as f:
-            self.map = pickle.load(f)
-        print('Generation loaded')
+            filepath = self.settings.get('evolution', {}).get('save_path')
+            filepath = os.path.join(filepath, '{}'.format(gen_id))
+            readpath = '{}.p'.format(filepath)
+            os.makedirs(filepath.split('.')[0], exist_ok=True)
+            with open(readpath, 'rb') as f:
+                self.map = pickle.load(f)
+            print('Generation loaded')
 
-        cmd = input(
-            'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit): ')
-
-        while cmd != 'quit':
-            try:
-                if cmd == 'viz-1':
-                    print('* Single-chromosomal visualization mode enabled...')
-
-                    x = input(
-                        'Please enter the x-dimension value of the chromosome: ')
-                    y = input(
-                        'Please enter the y-dimension value of the chromosome: ')
-
-                    print('** Rendering...')
-                    self.render_elite(filepath, x, y)
-                elif cmd == 'viz-all':
-                    print('* Multi-chromosomal visualization mode enabled...')
-                    print(
-                        '* Multi-chromosomal visualization rendering process initiated...')
-                    t = time.time()
-                    self.render_elites(filepath)
-                    e = time.time()
-                    print(
-                        '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
-                elif cmd == 'query':
-                    print('* Query mode enabled...')
-
-                    x = input(
-                        'Please enter the x-dimension value of the chromosome: ')
-                    y = input(
-                        'Please enter the y-dimension value of the chromosome: ')
-
-                    print('** Query information below...')
-                    self.query_elite(x, y)
-                elif cmd == 'fit-swap':
-                    print('* Fitness-Swap visualization mode enabled...')
-                    fitness = input("Please select one of the following value alternatives to visualize:\n* replacement\n* challenge\n* age\n")
-                    if fitness not in ['replacement', 'challenge', 'age']:
-                        print('Sorry, this is not a valid command.')
-                    print("* Valid command. Generating a new elite map using {} as an alternate value...".format(fitness))
-                    self.fit_swap(filepath, fitness)
-                elif cmd == 'help':
-                    print('To use this tool, enter one of the following commands:')
-                    print('* \"viz-1\": vizualizes a specified cell\'s elite')
-                    print(
-                        '* \"viz-all\": vizualizes all of the elites in the map (caution! this may take a while!)')
-                    print(
-                        '* \"query\": displays metric information about a specified cell\'s elite')
-                    print('* \"help\": displays this help text about all the commands')
-                    print('* \"quit\": quits the program immediately')
-            except Exception as e:
-                print(e)
             cmd = input(
-                'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit): ')
-        print('Goodbye for now!')
+                'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit).\nEnter command: ')
+
+            while cmd != 'quit':
+                try:
+                    if cmd == 'viz-1':
+                        print('* Single-chromosomal visualization mode enabled...')
+
+                        x = input(
+                            'Please enter the x-dimension value of the chromosome: ')
+                        y = input(
+                            'Please enter the y-dimension value of the chromosome: ')
+
+                        print('** Rendering...')
+                        self.render_elite(filepath, x, y)
+                    elif cmd == 'viz-all':
+                        print('* Multi-chromosomal visualization mode enabled...')
+                        print(
+                            '* Multi-chromosomal visualization rendering process initiated...')
+                        t = time.time()
+                        self.render_elites(filepath)
+                        e = time.time()
+                        print(
+                            '* Multi-chromosomal visualization completed in {} minutes...'.format((e-t)/60))
+                    elif cmd == 'query':
+                        print('* Query mode enabled...')
+
+                        x = input(
+                            'Please enter the x-dimension value of the chromosome: ')
+                        y = input(
+                            'Please enter the y-dimension value of the chromosome: ')
+
+                        print('** Query information below...')
+                        self.query_elite(x, y)
+                    elif cmd == 'fit-swap':
+                        print('* Fitness-Swap visualization mode enabled...')
+                        fitness = input("Please select one of the following value alternatives to visualize:\n* replacement\n* challenge\n* age\n")
+                        if fitness not in ['replacement', 'challenge', 'age']:
+                            print('Sorry, this is not a valid command.')
+                        print("* Valid command. Generating a new elite map using {} as an alternate value...".format(fitness))
+                        self.fit_swap(filepath, fitness)
+                    elif cmd == 'help':
+                        print('To use this tool, enter one of the following commands:')
+                        print('* \"viz-1\": vizualizes a specified cell\'s elite')
+                        print(
+                            '* \"viz-all\": vizualizes all of the elites in the map (caution! this may take a while!)')
+                        print(
+                            '* \"query\": displays metric information about a specified cell\'s elite')
+                        print('* \"help\": displays this help text about all the commands')
+                        print('* \"quit\": quits the program immediately')
+                except Exception as e:
+                    print(e)
+                cmd = input(
+                    'Please enter a command (viz-1, viz-all, fit-swap, query, help, or quit): ')
+            print('Goodbye for now!')
+        elif initial_action == "aggregate":
+            filepath = self.settings.get('evolution', {}).get('save_path')
+            self.agg(filepath)
+
 
 
 def main(settings_path):

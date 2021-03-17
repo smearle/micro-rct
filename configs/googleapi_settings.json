@@ -1,0 +1,6 @@
+{
+    "save_credentials": false, 
+    "client_config_file": "../creds/client_secrets.json", 
+    "client_config_backend": "file", 
+    "oauth_scope": ["https://www.googleapis.com/auth/drive"]
+}

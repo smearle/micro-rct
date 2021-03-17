@@ -1,0 +1,28 @@
+excitement_intensity:
+  med:
+    cost: 1ccIqqBjoVWlrN1chf1KaMQ9XbLhdJeY_
+    no_cost: 1f7Ms7SQ7aN9SQGYDXrncA8eTBAiOxBGe
+  small:
+    cost: 12Um9RfoVFnSCTH5VfpS8u9VRiJwEGviI
+    no_cost: 1rN6VpmN2V4sK4dNf35vZvHYs2UEhqR_l
+excitement_nausea:
+  med:
+    cost: 1jHZOGxolyX9JHxTLvHaX0Nm6dPXWQvUy
+    no_cost: 1QNE6jzQTXJVHQYpCLw-Ur--b99o41wDy
+  small:
+    cost: 1C8zhrgv33Lpw4NmCARb2YWdU8peAQWXw
+    no_cost: 1FK2tfTAgII4BQRiv90XcylnWy34r9B_U
+happiness_ridediversity:
+  med:
+    cost: 1WIZg1_0PX13L2WDkOUKJNZ4JGzffGbe9
+    no_cost: 1N8jTVSgzOtM2rfYerOLs5sLxBsKJriXn
+  small:
+    cost: 18oLeyHXofEgI0DmXmrnRFjSQrMCdg8Ig
+    no_cost: 1xntckVf7R_7V8-gOfAnWpQttx0F6OfOT
+happiness_vomit:
+  med:
+    cost: 1XfJXVjmlJ2_dRTyA40PEFu_AcsNn__Dd
+    no_cost: 1BGeodfGmq6Evb97FWtmAw8hzjCtARCxQ
+  small:
+    cost: 1IW-Kp4ktINArmV-oKyiokX93rVGlfjTM
+    no_cost: 1uQO2sDMqFhClEI25PkfSPrQIAtu9lmvd
