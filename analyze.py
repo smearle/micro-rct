@@ -36,8 +36,8 @@ class MapElitesAnalysis:
 
         return df
 
-    def render_elites(self, filepath):
-        for dim, cell in self.map.items():
+    def render_elites(self, emap, filepath):
+        for dim, cell in emap.items():
             elite = cell.elite.clone()
             elite.settings['general']['render'] = True
             elite.rct.render_gui = True
@@ -131,7 +131,7 @@ class MapElitesAnalysis:
 
         drive = GoogleDrive(gauth)
         return drive 
-        
+
     def agg(self, writepath):
         """Aggregates all available .p files in the results directory
         """
@@ -177,9 +177,32 @@ class MapElitesAnalysis:
                     columns = [dimen for dimen in random.choice(list(emap.values())).elite.dimensions.keys()]
                     df = self.convert_map_to_df(emap)
                     # remove emap from memory
-                    del emap
                     os.remove(filepath)
                     agg_df = pd.concat([agg_df, df]).groupby(columns, as_index=False)["fitness"].max()
+
+                    # render all maps and upload
+                    render_path = 'results/parks/'
+                    render_elites(emap, render_path)
+                    del emap
+                    file_metadata = {
+                        'name': 'rendered',
+                        'mimeType': 'application/vnd.google-apps.folder',
+                        'parents': [exp_id]
+                    }
+                    render_folder = drive.files().create(body=file_metadata, fields='id').execute()
+                    for root, folders, files in os.walk(render_path):
+                        for park_image in files:
+                            image_metadata = {
+                                'title': park_image,
+                                'parents': [render_folder.id],
+                                'mimeType': 'image/png'
+                            }
+
+                            image_file = drive.CreateFile(image_metadata)
+                            image_file.SetContentFile(os.path.join(root, park_image))
+                            image_file.Upload()
+                            
+
         visualizer = GridVisualizer(agg_df)
         x = agg_df.columns[0]
         y = agg_df.columns[1]
