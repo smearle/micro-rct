@@ -212,6 +212,8 @@ class MapElitesAnalysis:
         writepath = os.path.join(writepath, '{}_{}_{}.html'.format(dimensions, size, cost))
         visualizer.visualize(x=x, y=y,
             x_skip=x_skip, y_skip=y_skip, val='fitness', write_path=writepath)
+        
+        print(agg_df.describe)
 
     def run(self):
         # an input looper that can run many commands
