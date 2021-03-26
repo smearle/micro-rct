@@ -122,9 +122,7 @@ class MapElitesAnalysis:
         visualizer.visualize(x=x, y=y,
             x_skip=x_skip, y_skip=y_skip, val=fitness, write_path=write_path)
         
-    def agg(self, writepath):
-        """Aggregates all available .p files in the results directory
-        """
+    def auth_drive(self):
         with open("configs/drive_mapping.yml") as contents:
             self.mapping = yaml.load(contents)
         # do some authentication with google drive
@@ -132,6 +130,12 @@ class MapElitesAnalysis:
         gauth.LocalWebserverAuth()
 
         drive = GoogleDrive(gauth)
+        return drive 
+        
+    def agg(self, writepath):
+        """Aggregates all available .p files in the results directory
+        """
+        drive = self.auth_drive()
         dimensions = input("Please enter a letter for a valid dimensional combination. Here are valid choices:\n\ta : happiness_vomit\n\tb : happiness_ridediversity\n\tc : excitement_intensity\n\td : excitement_nausea\n\te : all\nEnter Choice: ")
         if dimensions != "all":
 
