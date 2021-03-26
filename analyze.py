@@ -132,11 +132,23 @@ class MapElitesAnalysis:
         gauth.LocalWebserverAuth()
 
         drive = GoogleDrive(gauth)
-        dimensions = input("Please enter a letter for a valid dimensional combination. Here are valid choices:\n\ta : happiness_vomit\n\tb : happiness_ridediversity\n\tc : excitement_intensity\n\td : excitement_nausea\nEnter Choice: ")
-        size = input("Please select an initial size choice (small or med).\nEnter choice: ")
-        cost = input("Please enter cost or no_cost.\nEnter choice: ")
+        dimensions = input("Please enter a letter for a valid dimensional combination. Here are valid choices:\n\ta : happiness_vomit\n\tb : happiness_ridediversity\n\tc : excitement_intensity\n\td : excitement_nausea\n\te : all\nEnter Choice: ")
+        if dimensions != "all":
+
+            size = input("Please select an initial size choice (small or med).\nEnter choice: ")
+            cost = input("Please enter cost or no_cost.\nEnter choice: ")
+            self.run_agg_function(drive, writepath, dimensions, size, cost)
+        else:
+            print("All dimension combos selected. Running everything...")
+            for dkey, dvalue in self.mapping.items():
+                for skey, svalue in self.mapping.get(dkey).items():
+                    for ckey, cvalue in self.mapping.get(dkey, {}).get(skey).items():
+                        print('** Doing {} {} {}'.format(dkey, skey, ckey))
+                        self.run_agg_function(drive, writepath, dkey, skey, ckey)
+
+    def run_agg_function(self, drive, writepath, dimensions, size, cost):
         agg_df = pd.DataFrame()
-        
+            
         # file_list = drive.ListFile({'q': "'{}' in parents and '{}' in parents and '{}' in parents and name = '9999.p'".format(
         #     dimensions, size, cost
         # )}).GetList()
@@ -173,7 +185,6 @@ class MapElitesAnalysis:
         writepath = os.path.join(writepath, '{}_{}_{}.html'.format(dimensions, size, cost))
         visualizer.visualize(x=x, y=y,
             x_skip=x_skip, y_skip=y_skip, val='fitness', write_path=writepath)
-        return agg_df
 
     def run(self):
         # an input looper that can run many commands
