@@ -18,10 +18,13 @@ from micro_rct.pathfinding import PathFinder
 from micro_rct.peep import Peep
 from micro_rct.peeps_generator import generate
 from micro_rct.rct_env import RCTEnv
+from pdb import set_trace as T
 from micro_rct.rct_test_objects import object_list as ride_list
 from micro_rct.rct_test_objects import symbol_list
 from micro_rct.tilemap import Map
 
+#FIXME FUKNO
+RENDER = False
 
 def main(settings):
 
@@ -71,6 +74,7 @@ class RCT(core.Env):
     ACTION_SPACE = 1
     N_SIM_STEP = 100
     def __init__(self, **kwargs):
+        kwargs['render_gui'] = RENDER
         self.rank = kwargs.get('rank', 0)
         settings = kwargs.get('settings', None)
 
@@ -80,6 +84,7 @@ class RCT(core.Env):
         else:
             self.render_gui = kwargs['render'] = kwargs.get('render_gui', True) and self.rank == RCT.RENDER_RANK
             settings = parse_kwargs(kwargs)
+#       self.render_gui = kwargs['render'] = False
         self.rct_env = RCTEnv(settings)
         core.Env.__init__(self)
         self.max_step = kwargs.get('max_step', 200)
@@ -105,7 +110,8 @@ class RCT(core.Env):
             'income': max_income,
             'num_rides': max_num_rides,
             'happiness': max_happiness,
-            'num_vomits': max_vomits
+#           'num_vomits': max_vomits
+            'num_vomits': 0
         }
         self.param_bounds = {
             'income': (0,  max_income),
@@ -128,6 +134,7 @@ class RCT(core.Env):
         }
         self.metrics = copy.deepcopy(self.init_metrics)
         N_OBS_CHAN = len(ride_list) + 4  # path, peeps, ride present?, ride absent? 
+        self.num_tiles = N_OBS_CHAN
         obs_shape = (N_OBS_CHAN, self.MAP_WIDTH, self.MAP_HEIGHT)
         low = np.zeros(obs_shape)
         high = np.ones(obs_shape)
@@ -149,6 +156,9 @@ class RCT(core.Env):
                 (self.MAP_WIDTH, self.MAP_HEIGHT, self.N_TOOLS, self.N_ROTATIONS)
                 )
         self.avg_income = 0
+
+    def get_num_tiles(self):
+        return self.num_tiles
 
     def get_ints_to_actions(self):
         ''' Ravels the action int in the same order as the pytorch model
@@ -287,13 +297,18 @@ class RCT(core.Env):
             (len(ride_list) + 1, self.MAP_WIDTH, self.MAP_HEIGHT))
         xs, ys = np.indices(ride_obs.shape[1:])
         ride_obs_onehot[ride_obs, xs, ys] = 1
+#       obs[3:3+ride_obs_onehot.shape[0], :, :] = ride_obs_onehot
         obs[3:, :, :] = ride_obs_onehot
 
         return obs
 
+        #NOTE: action has random size 1 0th dimention it's size [1, width, height, builds, rotations]
     def act(self, action):
         if RCT.ACTION_SPACE == 0:
-            x, y, build, rotation = self.ints_to_actions[action]
+            if len(action_space) > 1:
+                x, y, build, rotation = action 
+            else:
+                x, y, build, rotation = self.ints_to_actions[action]
         elif RCT.ACTION_SPACE == 1:
             # FIXME: hack to support gym-city implementation
             if len(action.shape) > 1:
@@ -371,3 +386,10 @@ class RCT(core.Env):
         new_env.rct_env.park = self.rct_env.park.clone(new_env.rct_env.settings)
 
         return new_env
+
+    # dummi for PCGRL compatibility
+    def adjust_param(self, **kwargs):
+        return
+
+    def get_border_tile(self):
+        return
